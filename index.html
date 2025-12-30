@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#2A593E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Premium Organic Seeds & Spices">
     <title>Lightsprouts | Premium Seeds</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,77 +35,30 @@
                         mint: '#F0FFE9',          
                         sand: '#fcfdfa',
                         dark: '#081C15',
-                        spices: '#C2410C',
-                        hybrid: '#7C3AED',
-                        glass: {
-                            100: 'rgba(255, 255, 255, 0.1)',
-                            200: 'rgba(255, 255, 255, 0.2)',
-                            300: 'rgba(255, 255, 255, 0.3)',
-                            400: 'rgba(255, 255, 255, 0.4)',
-                            border: 'rgba(255, 255, 255, 0.4)',
-                        }
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
                     },
                     boxShadow: {
-                        'soft': '0 10px 40px -10px rgba(42, 89, 62, 0.15)',
-                        'glow': '0 0 20px rgba(126, 217, 87, 0.4)',
-                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
-                        'float': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                        'popup': '0 25px 50px -12px rgba(42, 89, 62, 0.25), 0 0 50px rgba(126, 217, 87, 0.15)',
+                        'soft': '0 10px 40px -10px rgba(42, 89, 62, 0.1)',
+                        'glow': '0 0 15px rgba(126, 217, 87, 0.3)',
+                        'nav': '0 4px 30px rgba(0,0,0,0.03)',
+                        'float': '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'bounce-sm': 'bounceSmall 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        'float': 'float 6s ease-in-out infinite',
-                        'bloom': 'bloom 2s ease-in-out infinite',
-                        'gentle-pulse': 'gentlePulse 3s ease-in-out infinite',
-                        'text-glow': 'textGlow 2s ease-in-out infinite',
-                        'marquee-scroll': 'marqueeScroll 40s linear infinite',
-                        'marquee-scroll-reverse': 'marqueeScrollReverse 40s linear infinite',
-                        'icon-spin': 'iconSpin 8s linear infinite',
-                        'gradient-shift': 'gradientShift 4s ease infinite alternate',
-                        'shimmer': 'shimmer 2s linear infinite',
-                        'pop-in': 'popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'popup-enter': 'popupEnter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-                        'glow-pulse': 'glowPulse 2s ease-in-out infinite',
-                        'slide-left': 'slideLeft 0.5s ease-out forwards',
-                        'slide-right': 'slideRight 0.5s ease-out forwards',
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'bounce-sm': 'bounceSmall 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                        'marquee': 'marquee 30s linear infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
                         slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                        popIn: { '0%': { transform: 'scale(0.9)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
                         bounceSmall: { '0%, 100%': { transform: 'scale(1)' }, '50%': { transform: 'scale(0.95)' } },
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
-                        bloom: { '0%, 100%': { transform: 'scale(1)', opacity: '0.8' }, '50%': { transform: 'scale(1.05)', opacity: '1' } },
-                        gentlePulse: { '0%, 100%': { opacity: 0.6 }, '50%': { opacity: 1 } },
-                        textGlow: { '0%, 100%': { 'text-shadow': '0 0 10px rgba(126, 217, 87, 0.5)' }, '50%': { 'text-shadow': '0 0 20px rgba(126, 217, 87, 0.8)' } },
-                        marqueeScroll: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-                        marqueeScrollReverse: { '0%': { transform: 'translateX(-50%)' }, '100%': { transform: 'translateX(0)' } },
-                        iconSpin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
-                        gradientShift: { '0%': { 'background-position': '0% 50%' }, '100%': { 'background-position': '100% 50%' } },
-                        shimmer: { '100%': { transform: 'translateX(100%)' } },
-                        popupEnter: { 
-                            '0%': { transform: 'scale(0.3) rotate(-2deg)', opacity: '0' }, 
-                            '70%': { transform: 'scale(1.05) rotate(1deg)' },
-                            '100%': { transform: 'scale(1) rotate(0)', opacity: '1' } 
-                        },
-                        glowPulse: {
-                            '0%, 100%': { 'box-shadow': '0 0 20px rgba(126, 217, 87, 0.3)' },
-                            '50%': { 'box-shadow': '0 0 40px rgba(126, 217, 87, 0.6)' }
-                        },
-                        slideLeft: {
-                            '0%': { transform: 'translateX(100px)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' }
-                        },
-                        slideRight: {
-                            '0%': { transform: 'translateX(-100px)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' }
-                        }
+                        marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
                     }
                 }
             }
@@ -113,7 +66,7 @@
     </script>
 
     <style>
-        /* BASE STYLES */
+        /* CORE OPTIMIZATIONS */
         :root {
             --safe-bottom: env(safe-area-inset-bottom);
             --safe-top: env(safe-area-inset-top);
@@ -125,838 +78,400 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            /* Texture */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-        }
-
-        /* Prevent selection and dragging */
-        * {
+            user-select: none; /* Disable text selection */
             -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-        }
-        
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
-            pointer-events: none;
-        }
-        
-        /* Allow selection for input fields only */
-        input, textarea {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
         }
 
+        /* Prevent image dragging and context menu */
+        img {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-select: none;
+        }
+
+        /* Performance Optimizations */
+        .hardware-accel {
+            transform: translateZ(0);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* GLASS MORPHISM */
+        /* Modern Glass Effect - Optimized */
         .glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(42, 89, 62, 0.05);
-        }
+        /* Tap Effects */
+        .tap-active { transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tap-active:active { transform: scale(0.95); }
 
-        /* ANIMATIONS */
-        .tap-active:active { transform: scale(0.96); transition: transform 0.1s; }
-
-        /* LOADER */
+        /* Loader */
         .loader-container {
-            background: linear-gradient(135deg, #f0ffe9 0%, #d1ffbd 50%, #7ed957 100%);
-            overflow: hidden;
+            background: linear-gradient(135deg, #f0ffe9 0%, #ffffff 100%);
         }
 
-        .gif-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 0 60px rgba(126, 217, 87, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.8);
-            animation: bloom 2s ease-in-out infinite;
+        /* Enhanced Inputs */
+        .input-premium {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            transition: all 0.3s ease;
+        }
+        .input-premium:focus {
+            background: #FFFFFF;
+            border-color: #7ED957;
+            box-shadow: 0 0 0 4px rgba(126, 217, 87, 0.1);
         }
 
-        .loader-gif {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .petal {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #7ed957, #d1ffbd);
-            border-radius: 50% 0 50% 50%;
-            opacity: 0.7;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* ENHANCED MARQUEE STYLES */
-        .marquee-container {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(90deg, #2A593E 0%, #3a7a56 50%, #2A593E 100%);
-            animation: gradientShift 4s ease infinite alternate;
-            box-shadow: 0 4px 15px rgba(42, 89, 62, 0.2);
-        }
+        /* Marquee */
+        .marquee-track { display: flex; width: max-content; }
         
-        .marquee-container::before, .marquee-container::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #7ED957, transparent);
-            z-index: 10;
-        }
-        .marquee-container::before { top: 0; }
-        .marquee-container::after { bottom: 0; }
-
-        .marquee-track {
-            display: flex;
-            align-items: center;
-            width: max-content;
-            padding: 4px 0;
-        }
-
-        .marquee-item {
-            display: flex;
-            align-items: center;
-            margin: 0 1.5rem;
-            white-space: nowrap;
-        }
-
-        .marquee-text {
-            color: #ffffff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 0.2rem 0.6rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 99px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .marquee-primary { animation: marquee-scroll 35s linear infinite; }
-        .marquee-secondary { animation: marquee-scroll-reverse 40s linear infinite; }
-
-        .marquee-track:hover { animation-play-state: paused; }
-
-        /* MODAL & DRAWER TRANSITIONS */
-        .modal-enter {
+        /* Modal Transitions */
+        .modal-base {
+            transition: opacity 0.3s ease, visibility 0.3s;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .modal-enter.active {
+        .modal-base.active {
             opacity: 1;
             visibility: visible;
         }
-        .modal-enter .sheet-content {
-            transform: translateY(100%);
+        .modal-content {
+            transform: scale(0.95) translateY(10px);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .modal-enter.active .sheet-content {
+        .modal-base.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Bottom Sheet */
+        .sheet-base {
+            transition: opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .sheet-base.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sheet-content {
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sheet-base.active .sheet-content {
             transform: translateY(0);
         }
-        
-        /* Mobile Nav */
-        .bottom-nav { 
-            padding-bottom: calc(10px + var(--safe-bottom)); 
-            padding-top: 10px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
-        }
 
-        /* Skeleton Shimmer */
-        .skeleton {
-            background: #f0f0f0;
-            position: relative;
-            overflow: hidden;
-        }
-        .skeleton::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-            transform: translateX(-100%);
-            animation: shimmer 2s infinite;
-        }
-
-        /* Promo Pop-up Specifics */
-        .promo-overlay {
-            background: rgba(8, 28, 21, 0.8);
-            backdrop-filter: blur(20px);
-        }
-
-        ::selection { background: #D1FFBD; color: #2A593E; }
-        
-        /* Optimized animations */
-        .will-change-transform {
-            will-change: transform;
-        }
-        
-        /* Mobile optimized buttons */
-        .mobile-btn {
-            min-height: 44px;
-            min-width: 44px;
-            touch-action: manipulation;
-        }
-        
-        .mobile-text {
-            font-size: 16px; /* Prevents iOS zoom on input */
-        }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen relative flex flex-col pb-24 md:pb-0">
+<body class="font-sans antialiased min-h-screen relative flex flex-col pb-24 md:pb-0 selection:bg-leaf selection:text-white" oncontextmenu="return false;">
 
     <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 z-[100] loader-container flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="petal" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
-            <div class="petal" style="top: 60%; right: 20%; animation-delay: 1s;"></div>
-            <div class="petal" style="bottom: 15%; left: 30%; animation-delay: 2s;"></div>
-        </div>
-        
-        <div class="relative mb-8">
-            <div class="gif-container">
-                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3Q1NnZyN21kMm1yNTJ2aGdwdDltcmlxamtqNDYxMzZmM2xrYngzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B2bZ5FhOnTRvvkOIZn/giphy.gif" alt="Loading..." class="loader-gif">
-            </div>
-            <div class="absolute inset-0 -z-10 bg-white/40 rounded-full blur-3xl animate-gentle-pulse"></div>
-        </div>
-        
-        <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest mb-2 animate-text-glow text-center">
-            lightsprouts<span class="text-leaf">.</span>
-        </h1>
-        <p class="text-forest/80 font-medium tracking-wider text-xs md:text-sm uppercase">Growing Your Green Dreams</p>
-    </div>
-
-    <!-- AUTH MODAL (Login/Register) -->
-    <div id="auth-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-500">
-        <div class="absolute inset-0 bg-gradient-to-br from-forest/90 via-dark/90 to-forest/80 backdrop-blur-xl transition-opacity" onclick="closeAuthModal()"></div>
-        
-        <div class="relative w-full max-w-md bg-gradient-to-b from-white via-mint/30 to-white rounded-3xl shadow-popup overflow-hidden transform scale-95 transition-all duration-500 pointer-events-auto flex flex-col max-h-[85vh] border-2 border-leaf/30 animate-popup-enter">
-            
-            <!-- Close Button -->
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 z-30 w-10 h-10 rounded-full bg-white flex items-center justify-center text-forest border-2 border-forest/20 hover:bg-forest hover:text-white hover:border-forest transition-all duration-300 tap-active shadow-lg group/close mobile-btn">
-                <i data-lucide="x" class="w-5 h-5 group-hover/close:rotate-90 transition-transform"></i>
-            </button>
-
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-200">
-                <button id="login-tab" class="flex-1 py-4 text-center font-bold text-forest border-b-2 border-forest transition-all mobile-btn" onclick="switchAuthTab('login')">
-                    Login
-                </button>
-                <button id="register-tab" class="flex-1 py-4 text-center font-bold text-gray-400 transition-all mobile-btn" onclick="switchAuthTab('register')">
-                    Register
-                </button>
-            </div>
-
-            <!-- Login Form -->
-            <div id="login-form" class="p-6">
-                <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-mint rounded-full flex items-center justify-center mx-auto mb-4 text-leaf animate-bounce-sm">
-                        <i data-lucide="sprout" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-2xl font-serif font-bold text-forest">Welcome Back</h3>
-                    <p class="text-gray-400 text-sm mt-2">Sign in to continue your green journey</p>
-                </div>
-
-                <form id="login-email-form" class="space-y-4" onsubmit="loginWithEmail(event)">
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Email</label>
-                        <input type="email" id="login-email" required placeholder="your@email.com" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Password</label>
-                        <input type="password" id="login-password" required placeholder="••••••••" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="remember-me" checked
-                                   class="w-4 h-4 text-leaf bg-gray-100 border-gray-300 rounded focus:ring-leaf/20 focus:ring-2">
-                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                        </label>
-                        <button type="button" class="text-sm text-forest hover:text-leaf font-medium mobile-btn" onclick="showForgotPassword()">Forgot password?</button>
-                    </div>
-                    
-                    <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl mt-4 shadow-xl tap-active hover:bg-[#1e3f2d] transition-colors mobile-btn">
-                        Sign In
-                    </button>
-                </form>
-
-                <!-- Divider -->
-                <div class="flex items-center my-6">
-                    <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="mx-4 text-gray-400 text-sm">Or continue with</span>
-                    <div class="flex-grow border-t border-gray-200"></div>
-                </div>
-
-                <!-- Google Sign In -->
-                <button onclick="signInWithGoogle()" class="w-full bg-white border border-gray-200 text-forest font-bold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors mobile-btn">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    Sign in with Google
-                </button>
-                
-                <!-- Facebook Sign In -->
-                <button onclick="signInWithFacebook()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-blue-700 transition-colors mobile-btn mt-3">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                    Sign in with Facebook
-                </button>
-            </div>
-
-            <!-- Register Form -->
-            <div id="register-form" class="p-6 hidden">
-                <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-mint rounded-full flex items-center justify-center mx-auto mb-4 text-leaf animate-bounce-sm">
-                        <i data-lucide="seedling" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-2xl font-serif font-bold text-forest">Join Our Community</h3>
-                    <p class="text-gray-400 text-sm mt-2">Start your green journey with us</p>
-                </div>
-
-                <form id="register-email-form" class="space-y-4" onsubmit="registerWithEmail(event)">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-forest mb-1">First Name</label>
-                            <input type="text" id="register-firstname" required placeholder="John" 
-                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-forest mb-1">Last Name</label>
-                            <input type="text" id="register-lastname" required placeholder="Doe" 
-                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Phone Number</label>
-                        <input type="tel" id="register-phone" required placeholder="+91 9876543210" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Address</label>
-                        <textarea id="register-address" required rows="2" placeholder="Your complete delivery address" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text resize-none"></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Email</label>
-                        <input type="email" id="register-email" required placeholder="your@email.com" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Password</label>
-                        <input type="password" id="register-password" required placeholder="••••••••" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                        <p class="text-xs text-gray-400 mt-1">Minimum 6 characters</p>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-forest mb-1">Confirm Password</label>
-                        <input type="password" id="register-confirm-password" required placeholder="••••••••" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                    </div>
-                    
-                    <label class="flex items-start">
-                        <input type="checkbox" id="terms" required
-                               class="w-4 h-4 text-leaf bg-gray-100 border-gray-300 rounded focus:ring-leaf/20 focus:ring-2 mt-1">
-                        <span class="ml-2 text-sm text-gray-600">I agree to the <a href="#" class="text-forest hover:text-leaf font-medium">Terms of Service</a> and <a href="#" class="text-forest hover:text-leaf font-medium">Privacy Policy</a></span>
-                    </label>
-                    
-                    <button type="submit" class="w-full bg-leaf text-forest font-bold py-4 rounded-xl mt-4 shadow-xl tap-active hover:bg-[#6ec248] transition-colors mobile-btn">
-                        Create Account
-                    </button>
-                </form>
-
-                <!-- Divider -->
-                <div class="flex items-center my-6">
-                    <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="mx-4 text-gray-400 text-sm">Or sign up with</span>
-                    <div class="flex-grow border-t border-gray-200"></div>
-                </div>
-
-                <!-- Google Sign Up -->
-                <button onclick="signInWithGoogle()" class="w-full bg-white border border-gray-200 text-forest font-bold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors mobile-btn">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    Sign up with Google
-                </button>
+    <div id="loader" class="fixed inset-0 z-[100] loader-container flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative w-24 h-24 mb-6">
+            <div class="absolute inset-0 border-4 border-mint rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-leaf rounded-full border-t-transparent animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-forest animate-pulse">
+                <i data-lucide="sprout" class="w-10 h-10 fill-current"></i>
             </div>
         </div>
-    </div>
-
-    <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgot-password-modal" class="fixed inset-0 z-[1000] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-500">
-        <div class="absolute inset-0 bg-gradient-to-br from-forest/90 via-dark/90 to-forest/80 backdrop-blur-xl transition-opacity" onclick="closeForgotPassword()"></div>
-        
-        <div class="relative w-full max-w-md bg-gradient-to-b from-white via-mint/30 to-white rounded-3xl shadow-popup overflow-hidden transform scale-95 transition-all duration-500 pointer-events-auto flex flex-col max-h-[85vh] border-2 border-leaf/30 animate-popup-enter p-6">
-            
-            <button onclick="closeForgotPassword()" class="absolute top-5 right-5 z-30 w-10 h-10 rounded-full bg-white flex items-center justify-center text-forest border-2 border-forest/20 hover:bg-forest hover:text-white hover:border-forest transition-all duration-300 tap-active shadow-lg group/close mobile-btn">
-                <i data-lucide="x" class="w-5 h-5 group-hover/close:rotate-90 transition-transform"></i>
-            </button>
-
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-mint rounded-full flex items-center justify-center mx-auto mb-4 text-leaf animate-bounce-sm">
-                    <i data-lucide="key" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-serif font-bold text-forest">Reset Password</h3>
-                <p class="text-gray-400 text-sm mt-2">Enter your email to reset your password</p>
-            </div>
-
-            <form id="forgot-password-form" class="space-y-4" onsubmit="resetPassword(event)">
-                <div>
-                    <label class="block text-sm font-medium text-forest mb-1">Email Address</label>
-                    <input type="email" id="reset-email" required placeholder="your@email.com" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 mobile-text">
-                </div>
-                
-                <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl mt-4 shadow-xl tap-active hover:bg-[#1e3f2d] transition-colors mobile-btn">
-                    Send Reset Link
-                </button>
-                
-                <button type="button" onclick="closeForgotPassword(); switchAuthTab('login')" 
-                        class="w-full text-forest hover:text-leaf font-medium py-2 mobile-btn">
-                    Back to Login
-                </button>
-            </form>
-        </div>
+        <h1 class="text-3xl font-serif font-bold text-forest tracking-tight">lightsprouts<span class="text-leaf">.</span></h1>
     </div>
 
     <!-- APP HEADER -->
-    <header class="fixed top-0 left-0 w-full z-40 transition-all duration-300 shadow-nav bg-white/80 backdrop-blur-xl">
-        
-        <!-- ENHANCED MARQUEE -->
-        <div class="marquee-container z-50">
-            <!-- Primary Track -->
-            <div class="marquee-track marquee-primary">
-                <div class="marquee-item"><i data-lucide="sprout" class="w-3 h-3 text-lime mr-2 animate-spin-slow"></i><span class="marquee-text">Premium Organic Seeds</span></div>
-                <div class="marquee-item"><i data-lucide="check-circle" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">95% Germination Guarantee</span></div>
-                <div class="marquee-item"><i data-lucide="truck" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Free Shipping ₹500+</span></div>
-                <div class="marquee-item"><i data-lucide="shield" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Certified Organic</span></div>
-                <!-- Duplicate -->
-                <div class="marquee-item"><i data-lucide="sprout" class="w-3 h-3 text-lime mr-2 animate-spin-slow"></i><span class="marquee-text">Premium Organic Seeds</span></div>
-                <div class="marquee-item"><i data-lucide="check-circle" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">95% Germination Guarantee</span></div>
-                <div class="marquee-item"><i data-lucide="truck" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Free Shipping ₹500+</span></div>
-                <div class="marquee-item"><i data-lucide="shield" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Certified Organic</span></div>
+    <header class="fixed top-0 left-0 w-full z-40 transition-all duration-300 bg-white/90 backdrop-blur-md shadow-nav">
+        <!-- Marquee -->
+        <div class="bg-forest text-white overflow-hidden py-1.5 relative z-50">
+            <div class="marquee-track animate-marquee">
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="zap" class="w-3 h-3 text-leaf"></i> Flash Sale: 20% Off Hybrid Seeds</span>
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="truck" class="w-3 h-3 text-leaf"></i> Free Delivery on Orders ₹499+</span>
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3 text-leaf"></i> 100% Germination Guarantee</span>
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="zap" class="w-3 h-3 text-leaf"></i> Flash Sale: 20% Off Hybrid Seeds</span>
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="truck" class="w-3 h-3 text-leaf"></i> Free Delivery on Orders ₹499+</span>
+                <span class="mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3 text-leaf"></i> 100% Germination Guarantee</span>
             </div>
         </div>
 
-        <!-- Main Nav Bar -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 md:h-16 flex justify-between items-center relative">
-            
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center relative">
             <!-- Logo -->
-            <a href="#" onclick="window.scrollTo(0,0); playSound('click'); return false;" class="text-xl md:text-2xl font-serif font-bold text-forest flex items-center gap-1 tap-active select-none mobile-btn">
-                <div class="w-8 h-8 rounded-full bg-forest flex items-center justify-center text-lime shadow-lg">
+            <a href="#" onclick="window.scrollTo(0,0); playSound('click'); return false;" class="text-2xl font-serif font-bold text-forest flex items-center gap-1 tap-active">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-forest to-dark flex items-center justify-center text-white shadow-lg">
                     <i data-lucide="sprout" class="w-5 h-5 fill-current"></i>
                 </div>
                 lightsprouts
             </a>
 
-            <!-- Desktop Menu -->
-            <nav class="hidden md:flex items-center gap-1 bg-gray-100/50 p-1 rounded-full border border-gray-200">
-                <button onclick="filterProducts('all')" class="nav-pill px-5 py-2 rounded-full text-sm font-bold transition-all bg-white text-forest shadow-sm border border-gray-100 mobile-btn">All</button>
-                <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 mobile-btn">Fruits</button>
-                <button onclick="filterProducts('vegetable-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 mobile-btn">Veg</button>
-                <button onclick="filterProducts('plant-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 mobile-btn">Herbs</button>
-                <button onclick="filterProducts('spices-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 mobile-btn">Spices</button>
-                <button onclick="filterProducts('hybrid-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 mobile-btn">Hybrid</button>
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-2 bg-gray-50 p-1.5 rounded-full border border-gray-200">
+                <button onclick="filterProducts('all')" class="nav-pill px-6 py-2 rounded-full text-sm font-bold transition-all bg-white text-forest shadow-md">All</button>
+                <button onclick="filterProducts('spices')" class="nav-pill px-6 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white">Spices</button>
+                <button onclick="filterProducts('hybrid')" class="nav-pill px-6 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white">Hybrid</button>
+                <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-6 py-2 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white">Fruits</button>
             </nav>
 
             <!-- Actions -->
-            <div class="flex items-center gap-2 md:gap-3">
-                <!-- User Profile -->
-                <div id="user-profile" class="hidden items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-mint flex items-center justify-center text-leaf font-bold shadow-sm mobile-btn" id="user-avatar">
-                        U
-                    </div>
-                    <div class="hidden md:block">
-                        <p class="text-xs font-bold text-forest" id="user-name">User</p>
-                        <button onclick="logout()" class="text-[10px] text-gray-400 hover:text-red-500 mobile-btn">Logout</button>
-                    </div>
+            <div class="flex items-center gap-3">
+                <div id="user-display" class="hidden md:flex items-center gap-2 mr-2">
+                    <span id="user-name-display" class="text-xs font-bold text-forest bg-mint px-3 py-1 rounded-full"></span>
                 </div>
 
-                <!-- Login Button -->
-                <button id="login-button" onclick="openAuthModal()" class="flex items-center gap-2 px-3 py-2 rounded-full text-sm font-semibold text-forest hover:bg-forest/5 transition-colors tap-active mobile-btn">
-                    <i data-lucide="log-in" class="w-4 h-4"></i>
-                    <span class="hidden md:inline">Login</span>
+                <button onclick="toggleSound()" class="w-10 h-10 hidden md:flex items-center justify-center rounded-full hover:bg-gray-100 text-forest transition-colors tap-active">
+                    <i id="sound-icon" data-lucide="volume-2" class="w-5 h-5"></i>
                 </button>
 
-                <!-- Sound Toggle -->
-                <button onclick="toggleSound()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-forest/5 text-forest transition-colors tap-active hidden md:flex mobile-btn" title="Toggle Sound">
-                    <i id="sound-icon-desktop" data-lucide="volume-2" class="w-5 h-5"></i>
-                </button>
-
-                <button onclick="openSearch()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-forest/5 text-forest transition-colors tap-active hidden md:flex mobile-btn">
-                    <i data-lucide="search" class="w-5 h-5"></i>
-                </button>
-
-                <button onclick="openCart()" class="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-forest text-white shadow-glow hover:bg-forest/90 transition-all tap-active group mobile-btn">
+                <button onclick="openCart()" class="relative w-11 h-11 flex items-center justify-center rounded-full bg-forest text-white shadow-lg shadow-forest/20 tap-active hover:scale-105 transition-transform">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-leaf text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-0 transition-all duration-300 border border-white shadow-sm">0</span>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-leaf text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white scale-0 transition-transform duration-300">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Sticky Mobile Categories -->
-        <div class="md:hidden w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 py-2 px-4 overflow-x-auto no-scrollbar flex gap-2 snap-x shadow-sm">
-            <button onclick="filterProducts('all')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-forest text-white shadow-sm transition-all border border-transparent mobile-btn">All Seeds</button>
-            <button onclick="filterProducts('fruit-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all mobile-btn">Fruits</button>
-            <button onclick="filterProducts('vegetable-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all mobile-btn">Vegetables</button>
-            <button onclick="filterProducts('plant-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all mobile-btn">Herbs</button>
-            <button onclick="filterProducts('spices-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-white text-spices border border-spices/20 transition-all mobile-btn">Spices</button>
-            <button onclick="filterProducts('hybrid-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold bg-white text-hybrid border border-hybrid/20 transition-all mobile-btn">Hybrid</button>
+        <!-- Mobile Categories (Scrollable) -->
+        <div class="md:hidden w-full bg-white border-b border-gray-100 py-3 px-4 overflow-x-auto no-scrollbar flex gap-3 snap-x">
+            <button onclick="filterProducts('all')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-xs font-bold bg-forest text-white shadow-md transition-all">All</button>
+            <button onclick="filterProducts('spices')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 shadow-sm transition-all">Spices</button>
+            <button onclick="filterProducts('hybrid')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 shadow-sm transition-all">Hybrid</button>
+            <button onclick="filterProducts('vegetable-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 shadow-sm transition-all">Veg</button>
+            <button onclick="filterProducts('fruit-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 shadow-sm transition-all">Fruits</button>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-[8.5rem] md:pt-36 px-4 sm:px-6 w-full max-w-7xl mx-auto z-10 relative">
+    <main class="flex-grow pt-[8.5rem] md:pt-32 px-4 sm:px-6 w-full max-w-7xl mx-auto z-10 relative">
         
-        <!-- Hero Section -->
-        <section class="relative w-full h-[50vh] md:h-[450px] rounded-[2rem] overflow-hidden mb-8 shadow-float group">
-            <img id="hero-img" src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
+        <!-- Hero -->
+        <section class="relative w-full h-[400px] md:h-[450px] rounded-[2.5rem] overflow-hidden mb-10 shadow-float group">
+            <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-r from-dark/90 via-dark/40 to-transparent"></div>
             
-            <div class="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-start text-white">
-                <div class="flex items-center gap-2 mb-3 animate-fade-in">
-                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] font-bold uppercase tracking-wider">New Arrival</span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-leaf animate-pulse"></span>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-serif font-bold mb-3 leading-tight animate-fade-in" style="animation-delay: 0.1s">
-                    Grow your <br><span class="text-lime italic">sanctuary.</span>
+            <div class="absolute bottom-0 left-0 w-full p-8 md:p-16 flex flex-col items-start text-white">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-leaf/20 backdrop-blur-md border border-leaf/30 text-leaf text-xs font-bold uppercase tracking-widest mb-4">New Season</span>
+                <h1 class="text-4xl md:text-7xl font-serif font-bold mb-4 leading-none hardware-accel">
+                    Cultivate <br><span class="text-leaf italic">Excellence.</span>
                 </h1>
-                <p class="max-w-md mb-6 text-sm opacity-90 leading-relaxed animate-fade-in hidden md:block" style="animation-delay: 0.2s">
-                    Premium organic seeds sourced from sustainable farms. 95% germination guarantee.
+                <p class="max-w-md mb-8 text-white/80 text-sm md:text-base font-medium leading-relaxed">
+                    Premium organic seeds, rare spices, and high-yield hybrids delivered directly to your doorstep.
                 </p>
-                <button onclick="scrollToGrid()" class="bg-leaf text-forest font-bold py-3 px-6 rounded-xl hover:bg-lime transition-all flex items-center gap-2 shadow-glow tap-active animate-fade-in group/btn text-sm md:text-base mobile-btn" style="animation-delay: 0.3s">
-                    Start Growing <i data-lucide="arrow-down" class="w-4 h-4 group-hover/btn:translate-y-1 transition-transform"></i>
+                <button onclick="scrollToGrid()" class="h-14 bg-leaf text-forest font-bold px-8 rounded-2xl hover:bg-white transition-all flex items-center gap-3 shadow-glow tap-active group/btn text-base">
+                    Shop Collection <i data-lucide="arrow-down" class="w-5 h-5 group-hover/btn:translate-y-1 transition-transform"></i>
                 </button>
             </div>
         </section>
 
-        <!-- Stats Bar -->
-        <div class="grid grid-cols-3 gap-2 mb-8 bg-white/60 p-4 rounded-2xl border border-white/50 shadow-sm backdrop-blur-sm animate-fade-in">
-            <div class="text-center">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">95%</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Germination</p>
-            </div>
-            <div class="text-center border-l border-gray-200">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">100%</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Organic</p>
-            </div>
-            <div class="text-center border-l border-gray-200">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">24/7</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Support</p>
-            </div>
-        </div>
-
         <!-- Product Grid Header -->
-        <div id="grid-anchor" class="flex items-end justify-between mb-4 px-1">
-            <div>
-                <h2 class="text-xl md:text-2xl font-serif font-bold text-forest flex items-center gap-2">
-                    Curated Seeds
-                    <span id="item-count-badge" class="bg-forest/10 text-forest text-xs px-2 py-1 rounded-full font-sans font-bold align-middle">12</span>
-                </h2>
-            </div>
-            <button class="text-forest/60 hover:text-forest text-xs font-bold uppercase tracking-wider flex items-center gap-1 bg-white px-3 py-2 rounded-full shadow-sm border border-gray-100 mobile-btn">
-                Sort <i data-lucide="chevron-down" class="w-3 h-3"></i>
-            </button>
+        <div id="grid-anchor" class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest">Discover</h2>
+            <div class="text-xs font-bold text-gray-400 uppercase tracking-widest"><span id="count-display">0</span> Items</div>
         </div>
 
         <!-- Product Grid -->
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-24">
-            <!-- Loading Skeletons -->
-            <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
-            <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
-            <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
-            <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-24">
+            <!-- Items injected by JS -->
         </div>
 
     </main>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 z-40 bottom-nav flex justify-around items-center pt-3 pb-1">
-        <button onclick="switchTab('home')" class="nav-item active flex flex-col items-center gap-1 text-forest w-16 tap-active transition-colors mobile-btn">
-            <i data-lucide="home" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">Home</span>
-        </button>
-        <button onclick="openSearch()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors mobile-btn">
-            <i data-lucide="search" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Search</span>
-        </button>
-        <button onclick="openAuthModal()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors mobile-btn">
-            <i id="user-icon-mobile" data-lucide="user" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Account</span>
-        </button>
-        <button onclick="openCart()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active relative transition-colors mobile-btn">
-            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Cart</span>
-            <span id="cart-badge-mobile" class="absolute top-0 right-3.5 w-2 h-2 bg-leaf rounded-full opacity-0 ring-2 ring-white"></span>
-        </button>
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-100 z-50 pb-[env(safe-area-inset-bottom)] shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+        <div class="flex justify-around items-center h-16">
+            <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 h-full text-forest tap-active">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </button>
+            <button onclick="openCart()" class="flex flex-col items-center justify-center w-16 h-full text-gray-400 hover:text-forest tap-active relative">
+                <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                <span id="mobile-cart-badge" class="absolute top-3 right-3 w-2.5 h-2.5 bg-leaf rounded-full border-2 border-white scale-0 transition-transform"></span>
+            </button>
+            <button onclick="checkAuthAndOpen()" class="flex flex-col items-center justify-center w-16 h-full text-gray-400 hover:text-forest tap-active">
+                <i id="mobile-auth-icon" data-lucide="user" class="w-6 h-6"></i>
+            </button>
+        </div>
     </nav>
 
-    <!-- PRODUCT DETAIL SHEET/MODAL -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-dark/40 backdrop-blur-sm transition-opacity" onclick="closeModal('product-modal')"></div>
-        
-        <div class="sheet-content pointer-events-auto bg-[#FAFAF9] w-full md:w-[900px] md:h-[600px] rounded-t-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[92vh] md:max-h-[85vh]">
+    <!-- AUTH MODAL (Login/Register) -->
+    <div id="auth-modal" class="fixed inset-0 z-[100] flex items-center justify-center px-4 pointer-events-none modal-base">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm transition-opacity" onclick="closeModal('auth-modal')"></div>
+        <div class="modal-content relative w-full max-w-md bg-white rounded-3xl shadow-2xl pointer-events-auto overflow-hidden">
             
-            <div class="md:hidden absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-20"></div>
-            
-            <button onclick="closeModal('product-modal')" class="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-forest hover:text-white transition-colors text-forest backdrop-blur-sm tap-active shadow-sm border border-gray-100 mobile-btn">
+            <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-50 text-forest hover:bg-gray-100 transition-colors tap-active">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <!-- Image Side -->
-            <div class="w-full md:w-1/2 h-72 md:h-full bg-gray-100 relative group">
-                <img id="modal-img" src="" class="w-full h-full object-cover">
-                <div class="absolute bottom-4 left-4 right-4 flex gap-2">
-                    <span id="modal-tag" class="glass-card px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wide text-forest backdrop-blur-md border-white/40">Organic</span>
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-100">
+                <button id="tab-login" onclick="switchAuthMode('login')" class="flex-1 py-5 text-center font-bold text-forest border-b-2 border-forest transition-colors">Login</button>
+                <button id="tab-register" onclick="switchAuthMode('register')" class="flex-1 py-5 text-center font-bold text-gray-400 transition-colors">Register</button>
+            </div>
+
+            <div class="p-6 md:p-8 max-h-[75vh] overflow-y-auto">
+                
+                <!-- LOGIN FORM -->
+                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold text-forest">Welcome Back</h3>
+                        <p class="text-sm text-gray-400">Access your saved details for faster checkout</p>
+                    </div>
+                    
+                    <input type="email" id="l-email" required placeholder="Email Address" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+                    <input type="password" id="l-password" required placeholder="Password" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+                    
+                    <button type="submit" class="w-full h-14 bg-forest text-white font-bold rounded-xl shadow-lg tap-active hover:bg-dark transition-colors">Sign In</button>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold text-forest">Create Account</h3>
+                        <p class="text-sm text-gray-400">Your details will be auto-saved</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="r-name" required placeholder="Full Name" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+                        <input type="tel" id="r-phone" required placeholder="Phone" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+                    </div>
+                    
+                    <textarea id="r-address" required rows="2" placeholder="Full Delivery Address (Auto-saved)" class="w-full p-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none resize-none"></textarea>
+                    
+                    <input type="email" id="r-email" required placeholder="Email Address" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+                    <input type="password" id="r-password" required placeholder="Password (Min 6 chars)" class="w-full h-14 px-4 rounded-xl input-premium text-forest placeholder:text-gray-400 font-medium outline-none">
+
+                    <button type="submit" class="w-full h-14 bg-leaf text-forest font-bold rounded-xl shadow-lg tap-active hover:bg-lime transition-colors">Create & Save</button>
+                </form>
+
+                <div class="relative my-6 text-center">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
+                    <span class="relative px-3 bg-white text-xs font-bold text-gray-400 uppercase">Or</span>
+                </div>
+
+                <button onclick="handleGoogleAuth()" class="w-full h-14 bg-white border border-gray-200 text-forest font-bold rounded-xl flex items-center justify-center gap-3 tap-active hover:bg-gray-50 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+                    Continue with Google
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAILS SHEET -->
+    <div id="product-sheet" class="fixed inset-0 z-[90] flex justify-end items-end md:items-center md:justify-center pointer-events-none sheet-base">
+        <div class="absolute inset-0 bg-dark/40 backdrop-blur-sm transition-opacity" onclick="closeSheet('product-sheet')"></div>
+        
+        <div class="sheet-content pointer-events-auto bg-[#FAFAF9] w-full md:w-[900px] md:rounded-[2.5rem] rounded-t-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[90vh] md:h-[600px]">
+            
+            <button onclick="closeSheet('product-sheet')" class="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-forest shadow-lg tap-active">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Image -->
+            <div class="w-full md:w-1/2 h-64 md:h-full relative bg-gray-100">
+                <img id="sheet-img" src="" class="w-full h-full object-cover">
+                <div class="absolute bottom-4 left-4">
+                    <span id="sheet-tag" class="px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur text-xs font-bold uppercase tracking-wider text-forest shadow-sm">Organic</span>
                 </div>
             </div>
 
-            <!-- Content Side -->
-            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col overflow-y-auto pb-24 md:pb-10 bg-gradient-to-b from-white to-mint/20">
-                <div class="mb-2 flex items-center gap-2 opacity-60">
-                    <span id="modal-cat" class="text-xs font-bold uppercase tracking-widest text-forest">Category</span>
-                    <span class="w-1 h-1 bg-forest rounded-full"></span>
-                    <div class="flex items-center text-yellow-500">
+            <!-- Details -->
+            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col bg-white overflow-y-auto pb-safe">
+                <div class="mb-2 flex items-center gap-2">
+                    <span id="sheet-cat" class="text-[10px] font-bold uppercase tracking-widest text-leaf">Category</span>
+                    <div class="flex items-center text-yellow-400 gap-1">
                         <i data-lucide="star" class="w-3 h-3 fill-current"></i>
-                        <span class="text-xs text-forest ml-1 font-bold" id="modal-rating-text">4.8</span>
+                        <span class="text-xs font-bold text-forest">4.9</span>
                     </div>
                 </div>
                 
-                <h2 id="modal-title" class="text-3xl md:text-4xl font-serif font-bold text-forest mb-2 leading-tight">Product Name</h2>
+                <h2 id="sheet-title" class="text-3xl font-serif font-bold text-forest mb-2 leading-tight">Product Name</h2>
                 
                 <div class="flex items-baseline gap-3 mb-6">
-                    <span id="modal-price" class="text-2xl font-bold text-leaf">₹0.00</span>
-                    <span id="modal-original-price" class="text-gray-400 text-sm line-through decoration-red-400">₹0.00</span>
+                    <span id="sheet-price" class="text-2xl font-bold text-forest">₹0.00</span>
+                    <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded">In Stock</span>
                 </div>
 
-                <p id="modal-desc" class="text-forest/70 text-sm leading-relaxed mb-8 font-medium">
-                    Description goes here...
-                </p>
+                <p id="sheet-desc" class="text-forest/70 text-sm leading-relaxed mb-8 font-medium">Description...</p>
 
-                <!-- Info Grid -->
-                <div class="grid grid-cols-2 gap-3 mb-8">
-                    <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
-                            <i data-lucide="sun" class="w-4 h-4"></i>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] font-bold text-gray-400 uppercase">Season</span>
-                            <span id="modal-season" class="text-xs font-bold text-forest">All Year</span>
-                        </div>
-                    </div>
-                    <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
-                            <i data-lucide="clock" class="w-4 h-4"></i>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] font-bold text-gray-400 uppercase">Harvest</span>
-                            <span id="modal-harvest" class="text-xs font-bold text-forest">60 Days</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="mt-auto pt-4 border-t border-forest/5">
-                    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-                        <!-- Qty -->
-                        <div class="flex items-center bg-white border border-gray-200 rounded-xl px-1 h-12 shadow-sm shrink-0 md:w-auto w-full justify-center">
-                            <button onclick="adjustQty(-1)" class="w-12 h-full flex items-center justify-center text-forest/60 hover:text-forest active:scale-90 mobile-btn"><i data-lucide="minus" class="w-4 h-4"></i></button>
-                            <span id="qty-display" class="w-12 text-center font-bold text-forest text-base">1</span>
-                            <button onclick="adjustQty(1)" class="w-12 h-full flex items-center justify-center text-forest/60 hover:text-forest active:scale-90 mobile-btn"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                <!-- Footer Actions -->
+                <div class="mt-auto pt-4 border-t border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center bg-gray-50 rounded-xl h-14 border border-gray-100 px-2">
+                            <button onclick="adjustQty(-1)" class="w-10 h-full flex items-center justify-center text-forest/50 hover:text-forest tap-active"><i data-lucide="minus" class="w-5 h-5"></i></button>
+                            <span id="sheet-qty" class="w-8 text-center font-bold text-forest text-lg">1</span>
+                            <button onclick="adjustQty(1)" class="w-10 h-full flex items-center justify-center text-forest/50 hover:text-forest tap-active"><i data-lucide="plus" class="w-5 h-5"></i></button>
                         </div>
                         
-                        <!-- Main Action -->
-                        <div class="flex flex-col gap-2 flex-grow">
-                            <button onclick="buyNowDirect()" class="h-12 bg-leaf text-forest font-bold rounded-xl shadow-lg shadow-leaf/20 tap-active flex items-center justify-center gap-2 hover:bg-[#6ec248] transition-colors mobile-btn">
-                                Buy Now on WhatsApp
-                                <i data-lucide="message-circle" class="w-5 h-5"></i>
-                            </button>
-                            
-                            <button onclick="addToCart()" class="h-12 bg-forest text-white font-bold rounded-xl shadow-lg shadow-forest/20 tap-active flex items-center justify-center gap-2 hover:bg-[#1e3f2d] transition-colors mobile-btn">
-                                Add to Cart <span id="add-price" class="text-xs font-normal opacity-70"></span>
-                            </button>
-                        </div>
+                        <button onclick="addToCart()" class="flex-grow h-14 bg-forest text-white font-bold rounded-xl shadow-lg shadow-forest/20 tap-active hover:bg-[#1e3f2d] transition-colors flex items-center justify-center gap-2 text-lg">
+                            Add to Cart
+                        </button>
                     </div>
+                    <button onclick="instantBuy()" class="w-full mt-3 h-12 border-2 border-forest text-forest font-bold rounded-xl tap-active hover:bg-forest hover:text-white transition-colors flex items-center justify-center gap-2">
+                        Buy Now <i data-lucide="zap" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL (If data missing) -->
+    <div id="checkout-data-modal" class="fixed inset-0 z-[110] flex items-center justify-center px-4 pointer-events-none modal-base">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm transition-opacity" onclick="closeModal('checkout-data-modal')"></div>
+        <div class="modal-content relative w-full max-w-md bg-white rounded-3xl shadow-2xl pointer-events-auto p-6 md:p-8">
+            <button onclick="closeModal('checkout-data-modal')" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-forest tap-active">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-mint rounded-full flex items-center justify-center mx-auto mb-4 text-leaf animate-bounce-sm">
+                    <i data-lucide="map-pin" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-serif font-bold text-forest">One Last Thing</h3>
+                <p class="text-sm text-gray-400">We need these details for your delivery.</p>
+            </div>
+
+            <form onsubmit="saveAndCheckout(event)" class="space-y-4">
+                <input type="text" id="checkout-name" required placeholder="Your Name" class="w-full h-12 px-4 rounded-xl input-premium text-forest outline-none">
+                <input type="tel" id="checkout-phone" required placeholder="Phone Number" class="w-full h-12 px-4 rounded-xl input-premium text-forest outline-none">
+                <textarea id="checkout-address" required rows="3" placeholder="Full Address" class="w-full p-4 rounded-xl input-premium text-forest outline-none resize-none"></textarea>
+                <button type="submit" class="w-full h-14 bg-forest text-white font-bold rounded-xl shadow-lg tap-active flex items-center justify-center gap-2">
+                    Proceed to WhatsApp <i data-lucide="message-circle" class="w-5 h-5"></i>
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- CART DRAWER -->
-    <div id="cart-drawer" class="fixed inset-0 z-[60] flex justify-end pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-dark/20 backdrop-blur-sm transition-opacity" onclick="closeModal('cart-drawer')"></div>
-        <div class="sheet-content bg-[#FAFAF9] w-full max-w-md h-full shadow-2xl pointer-events-auto flex flex-col translate-x-full" style="transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div id="cart-drawer" class="fixed inset-0 z-[100] flex justify-end pointer-events-none sheet-base">
+        <div class="absolute inset-0 bg-dark/20 backdrop-blur-sm transition-opacity" onclick="closeSheet('cart-drawer')"></div>
+        <div class="sheet-content pointer-events-auto bg-[#FAFAF9] w-full max-w-md h-full shadow-2xl flex flex-col translate-x-full md:translate-x-0 md:translate-y-0 transition-transform duration-300">
             
-            <div class="p-6 flex justify-between items-center bg-white border-b border-gray-100 sticky top-0 z-10">
-                <h3 class="text-xl font-serif font-bold text-forest flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-mint flex items-center justify-center text-leaf">
-                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                    </div>
-                    My Basket
-                </h3>
-                <button onclick="closeModal('cart-drawer')" class="p-2 rounded-full hover:bg-gray-100 text-forest/60 transition-colors tap-active mobile-btn">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+            <div class="p-5 flex justify-between items-center bg-white border-b border-gray-100">
+                <h3 class="text-xl font-serif font-bold text-forest">My Basket</h3>
+                <button onclick="closeSheet('cart-drawer')" class="p-2 rounded-full hover:bg-gray-100 text-forest tap-active">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
 
-            <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-3 bg-gray-50/50">
-                <!-- Items injected here -->
+            <div id="cart-container" class="flex-grow overflow-y-auto p-4 space-y-3 bg-gray-50">
+                <!-- Items -->
             </div>
 
-            <div class="p-6 bg-white border-t border-gray-100 mt-auto shadow-[0_-4px_20px_rgba(0,0,0,0.03)] pb-8 md:pb-6">
+            <div class="p-6 bg-white border-t border-gray-100 pb-safe">
                 <div class="flex justify-between items-baseline mb-4">
-                    <span class="text-gray-500 text-sm font-medium">Total Estimate</span>
-                    <span id="cart-total-price" class="text-2xl font-bold text-forest">₹0.00</span>
+                    <span class="text-gray-500 font-bold text-sm">Total</span>
+                    <span id="cart-total" class="text-2xl font-bold text-forest">₹0.00</span>
                 </div>
-                <button onclick="initCheckout()" class="w-full bg-leaf text-forest font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-leaf/20 tap-active hover:bg-[#6ec248] transition-colors mobile-btn">
-                    Checkout on WhatsApp
-                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <button onclick="processCheckout()" class="w-full h-16 bg-leaf text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-leaf/30 tap-active hover:bg-lime hover:text-forest transition-colors text-lg">
+                    Checkout <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </button>
             </div>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed top-24 right-4 md:right-8 z-[80] bg-white/90 backdrop-blur-md border border-gray-200 shadow-float rounded-2xl p-4 flex items-center gap-3 translate-x-[150%] transition-transform duration-500 max-w-[90vw] w-auto">
-        <div class="w-8 h-8 rounded-full bg-leaf text-white flex items-center justify-center shrink-0 shadow-sm">
-            <i data-lucide="check" class="w-4 h-4"></i>
-        </div>
-        <div>
-            <h4 class="font-bold text-forest text-sm" id="toast-title">Success</h4>
-            <p class="text-xs text-gray-500" id="toast-message">Action completed.</p>
-        </div>
-    </div>
-
-    <!-- SIMPLE IMAGE CAROUSEL POP-UP -->
-    <div id="promo-popup" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-500">
-        <!-- Sound Element (Hidden) -->
-        <audio id="popup-sound" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
-        
-        <!-- Backdrop -->
-        <div class="absolute inset-0 bg-gradient-to-br from-forest/90 via-dark/90 to-forest/80 backdrop-blur-xl transition-opacity" onclick="closePromo()"></div>
-        
-        <!-- Simple Carousel Content -->
-        <div class="relative w-full max-w-sm md:max-w-md bg-gradient-to-b from-white via-mint/30 to-white rounded-3xl shadow-popup overflow-hidden transform scale-95 transition-all duration-500 pointer-events-auto flex flex-col max-h-[85vh] border-2 border-leaf/30 animate-popup-enter">
-            
-            <!-- Enhanced Close Button -->
-            <button onclick="closePromo()" class="absolute top-5 right-5 z-30 w-10 h-10 rounded-full bg-white flex items-center justify-center text-forest border-2 border-forest/20 hover:bg-forest hover:text-white hover:border-forest transition-all duration-300 tap-active shadow-lg group/close mobile-btn">
-                <i data-lucide="x" class="w-5 h-5 group-hover/close:rotate-90 transition-transform"></i>
-                <span class="sr-only">Close</span>
-            </button>
-
-            <!-- Image Section -->
-            <div class="relative h-64 md:h-72 shrink-0 group overflow-hidden">
-                <!-- Navigation Arrows -->
-                <button onclick="prevPromoImage()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-forest border border-forest/20 hover:bg-forest hover:text-white transition-all tap-active mobile-btn">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                </button>
-                
-                <button onclick="nextPromoImage()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-forest border border-forest/20 hover:bg-forest hover:text-white transition-all tap-active mobile-btn">
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                </button>
-                
-                <!-- Image Counter -->
-                <div class="absolute bottom-4 right-4 z-20 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-forest">
-                    <span id="promo-counter">1/3</span>
-                </div>
-                
-                <!-- Image -->
-                <img id="promo-image" src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e10?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-dark/60 via-dark/20 to-transparent"></div>
-                
-                <!-- Title Overlay -->
-                <div class="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                    <h3 id="promo-title" class="font-serif text-3xl font-bold leading-tight mb-2 text-white">Monstera Albo</h3>
-                    <p id="promo-description" class="text-sm opacity-90">Rare variegated beauty that purifies air and transforms spaces</p>
-                </div>
-            </div>
-
-            <!-- Simple Text Section -->
-            <div class="p-6 pt-5 pb-6 bg-white relative z-10">
-                <!-- Image Indicator Dots -->
-                <div class="flex justify-center gap-2 mb-4">
-                    <div class="w-2 h-2 rounded-full bg-leaf cursor-pointer" data-index="0" onclick="goToPromoImage(0)"></div>
-                    <div class="w-2 h-2 rounded-full bg-gray-300 cursor-pointer" data-index="1" onclick="goToPromoImage(1)"></div>
-                    <div class="w-2 h-2 rounded-full bg-gray-300 cursor-pointer" data-index="2" onclick="goToPromoImage(2)"></div>
-                </div>
-                
-                <div class="text-center mb-4">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-mint/30 rounded-full">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-leaf"></i>
-                        <span class="text-sm font-bold text-forest">Featured Collection</span>
-                    </div>
-                </div>
-                
-                <p class="text-forest/80 text-center text-sm leading-relaxed mb-2 font-medium">
-                    Discover our most beloved plants. Swipe through to see more!
-                </p>
-                
-                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-4">
-                    <i data-lucide="info" class="w-3 h-3"></i>
-                    <span>Use <span class="font-bold text-forest">◀ ▶</span> arrows to navigate</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SEARCH MODAL -->
-    <div id="search-modal" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl modal-enter flex flex-col">
-        <div class="pt-12 px-4 pb-4 border-b border-gray-100 flex items-center gap-3">
-            <i data-lucide="search" class="text-gray-400 w-5 h-5"></i>
-            <input type="text" id="search-input" placeholder="Search for seeds..." class="flex-grow bg-transparent text-lg font-medium text-forest placeholder:text-gray-300 focus:outline-none mobile-text" oninput="handleSearch(this.value)">
-            <button onclick="closeModal('search-modal')" class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-2 rounded-full mobile-btn">Cancel</button>
-        </div>
-        <div id="search-results" class="flex-grow overflow-y-auto p-4 grid grid-cols-2 gap-3 content-start">
-            <!-- Results -->
         </div>
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
-        // Firebase Configuration
+        // --- CONFIG & STATE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAHrBE3doAhDni4mcNhylJD8o3r5cNZYSI",
             authDomain: "ls-mannage.firebaseapp.com",
@@ -965,983 +480,434 @@
             storageBucket: "ls-mannage.firebasestorage.app",
             messagingSenderId: "115534926798",
             appId: "1:115534926798:web:4ea3ab3c1a2d44e2e1d19f",
-            measurementId: "G-P2JQH8M41Y"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const database = firebase.database();
 
-        // --- DATA ---
+        // Extended Product Data
         const products = [
-            { id: 1, type: 'fruit-seeds', name: "Heirloom Tomato", price: 120, originalPrice: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "Juicy, rich-flavored tomatoes perfect for salads and sauces.", germ: "98%", time: "60 Days", rating: 4.8 },
-            { id: 2, type: 'vegetable-seeds', name: "Spicy Chilli", price: 80, originalPrice: 95, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600&auto=format&fit=crop", desc: "High heat variety, excellent for adding kick to your dishes.", germ: "95%", time: "75 Days", rating: 4.6 },
-            { id: 3, type: 'plant-seeds', name: "Fresh Coriander", price: 45, originalPrice: null, img: "https://images.unsplash.com/photo-1596043225276-2afc36c2d0b9?q=80&w=600&auto=format&fit=crop", desc: "Aromatic herb essential for garnishing and cooking.", germ: "90%", time: "35 Days", rating: 4.5 },
-            { id: 4, type: 'fruit-seeds', name: "Sweet Strawberry", price: 180, originalPrice: 220, img: "https://images.unsplash.com/photo-1543528176-61b239494933?q=80&w=600&auto=format&fit=crop", desc: "Red, sweet berries that grow well in pots or ground.", germ: "85%", time: "90 Days", rating: 4.9 },
-            { id: 5, type: 'vegetable-seeds', name: "Crunchy Carrot", price: 95, originalPrice: 110, img: "https://images.unsplash.com/photo-1598170845058-78131a90f4a6?q=80&w=600&auto=format&fit=crop", desc: "Vitamin-rich roots with a satisfying crunch.", germ: "92%", time: "70 Days", rating: 4.7 },
-            { id: 6, type: 'plant-seeds', name: "Holy Basil", price: 60, originalPrice: null, img: "https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600&auto=format&fit=crop", desc: "Sacred medicinal plant known for immunity boosting.", germ: "88%", time: "45 Days", rating: 4.8 },
-            { id: 7, type: 'fruit-seeds', name: "Watermelon", price: 110, originalPrice: 140, img: "https://images.unsplash.com/photo-1589596660126-e75c5e317c2f?q=80&w=600&auto=format&fit=crop", desc: "Summer favorite, grows large and sweet.", germ: "85%", time: "85 Days", rating: 4.5 },
-            { id: 8, type: 'vegetable-seeds', name: "Spinach", price: 55, originalPrice: 70, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=600&auto=format&fit=crop", desc: "Iron-packed leafy green, grows quickly.", germ: "95%", time: "40 Days", rating: 4.4 },
-            { id: 9, type: 'spices-seeds', name: "Black Pepper", price: 150, originalPrice: 180, img: "https://images.unsplash.com/photo-1615485500607-1758f56c0c8d?q=80&w=600&auto=format&fit=crop", desc: "King of spices, adds flavor to any dish.", germ: "80%", time: "120 Days", rating: 4.7 },
-            { id: 10, type: 'spices-seeds', name: "Cardamom", price: 220, originalPrice: 250, img: "https://images.unsplash.com/photo-1596043225276-2afc36c2d0b9?q=80&w=600&auto=format&fit=crop", desc: "Queen of spices, aromatic and flavorful.", germ: "75%", time: "150 Days", rating: 4.9 },
-            { id: 11, type: 'hybrid-seeds', name: "Hybrid Tomato F1", price: 200, originalPrice: 240, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "High yield disease resistant hybrid variety.", germ: "99%", time: "55 Days", rating: 4.8 },
-            { id: 12, type: 'hybrid-seeds', name: "Hybrid Chilli", price: 130, originalPrice: 160, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600&auto=format&fit=crop", desc: "High yielding hybrid with uniform fruit size.", germ: "96%", time: "70 Days", rating: 4.6 },
+            { id: 1, type: 'hybrid', name: "Hybrid Tomato F1", price: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600", desc: "High yield hybrid, disease resistant." },
+            { id: 2, type: 'spices', name: "Kerala Cardamom", price: 299, img: "https://images.unsplash.com/photo-1599940829887-8d0df6080753?q=80&w=600", desc: "Aromatic green pods from organic estates." },
+            { id: 3, type: 'fruit-seeds', name: "Sweet Strawberry", price: 180, img: "https://images.unsplash.com/photo-1543528176-61b239494933?q=80&w=600", desc: "Easy to grow, intensely sweet red berries." },
+            { id: 4, type: 'vegetable-seeds', name: "Crunchy Carrot", price: 95, img: "https://images.unsplash.com/photo-1598170845058-78131a90f4a6?q=80&w=600", desc: "Vitamin-rich roots, perfect for pots." },
+            { id: 5, type: 'spices', name: "Black Pepper", price: 250, img: "https://images.unsplash.com/photo-1551462147-37885acc36f1?q=80&w=600", desc: "The king of spices, spicy and pungent." },
+            { id: 6, type: 'hybrid', name: "Hybrid Chili", price: 120, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600", desc: "Extra spicy, prolific producer." },
+            { id: 7, type: 'spices', name: "Cinnamon Bark", price: 180, img: "https://images.unsplash.com/photo-1556702758-5272a514d80a?q=80&w=600", desc: "Authentic Ceylon cinnamon." },
+            { id: 8, type: 'fruit-seeds', name: "Watermelon Sugar", price: 110, img: "https://images.unsplash.com/photo-1589596660126-e75c5e317c2f?q=80&w=600", desc: "Sweet, juicy, summer refreshment." },
         ];
 
-        // --- PROMO CAROUSEL DATA ---
-        const promoImages = [
-            {
-                image: "https://images.unsplash.com/photo-1591857177580-dc82b9ac4e10?q=80&w=1000&auto=format&fit=crop",
-                title: "Monstera Albo",
-                description: "Rare variegated beauty that purifies air and transforms spaces"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2070&auto=format&fit=crop",
-                title: "Indoor Jungle",
-                description: "Create your own green sanctuary with our curated collection"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=2070&auto=format&fit=crop",
-                title: "Succulent Garden",
-                description: "Low-maintenance plants perfect for beginners and busy lifestyles"
-            }
-        ];
-
-        // --- STATE ---
         let state = {
             cart: JSON.parse(localStorage.getItem('ls_cart')) || [],
-            soundEnabled: JSON.parse(localStorage.getItem('ls_sound')) !== false,
-            currentItem: null,
-            tempQty: 1,
-            promoIndex: 0,
-            user: JSON.parse(localStorage.getItem('ls_user')) || null
+            user: JSON.parse(localStorage.getItem('ls_user')) || null, // Contains {uid, name, email, phone, address}
+            soundOn: true,
+            currentProduct: null,
+            tempQty: 1
         };
 
-        // --- OPTIMIZED FUNCTIONS ---
-        let renderTimeout;
-        function debounceRender() {
-            clearTimeout(renderTimeout);
-            renderTimeout = setTimeout(renderGrid, 50);
-        }
-
-        // --- AUTH FUNCTIONS ---
-        function openAuthModal() {
-            playSound('click');
-            const modal = document.getElementById('auth-modal');
-            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            modal.classList.add('opacity-100');
-            
-            const content = modal.querySelector('div.relative');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closeAuthModal() {
-            const modal = document.getElementById('auth-modal');
-            if(modal) {
-                const content = modal.querySelector('div.relative');
-                content.classList.remove('scale-100');
-                content.classList.add('scale-95');
-                
-                modal.classList.remove('opacity-100');
-                modal.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('invisible', 'pointer-events-none');
-                }, 500);
-                playSound('click');
-            }
-        }
-
-        function switchAuthTab(tab) {
-            const loginTab = document.getElementById('login-tab');
-            const registerTab = document.getElementById('register-tab');
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            
-            if(tab === 'login') {
-                loginTab.classList.add('text-forest', 'border-forest');
-                loginTab.classList.remove('text-gray-400');
-                registerTab.classList.remove('text-forest', 'border-forest');
-                registerTab.classList.add('text-gray-400');
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-            } else {
-                registerTab.classList.add('text-forest', 'border-forest');
-                registerTab.classList.remove('text-gray-400');
-                loginTab.classList.remove('text-forest', 'border-forest');
-                loginTab.classList.add('text-gray-400');
-                registerForm.classList.remove('hidden');
-                loginForm.classList.add('hidden');
-            }
-            playSound('click');
-        }
-
-        function showForgotPassword() {
-            closeAuthModal();
-            const modal = document.getElementById('forgot-password-modal');
-            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            modal.classList.add('opacity-100');
-            
-            const content = modal.querySelector('div.relative');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closeForgotPassword() {
-            const modal = document.getElementById('forgot-password-modal');
-            if(modal) {
-                const content = modal.querySelector('div.relative');
-                content.classList.remove('scale-100');
-                content.classList.add('scale-95');
-                
-                modal.classList.remove('opacity-100');
-                modal.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('invisible', 'pointer-events-none');
-                }, 500);
-                playSound('click');
-            }
-        }
-
-        async function saveUserDetails(userId, userData) {
-            try {
-                await database.ref('users/' + userId).set(userData);
-                console.log('User details saved to database');
-            } catch (error) {
-                console.error('Error saving user details:', error);
-            }
-        }
-
-        async function signInWithGoogle() {
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                const result = await auth.signInWithPopup(provider);
-                const user = result.user;
-                
-                const userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    phone: user.phoneNumber || '',
-                    address: '',
-                    provider: 'google'
-                };
-                
-                // Save to database
-                await saveUserDetails(user.uid, userData);
-                
-                state.user = userData;
-                localStorage.setItem('ls_user', JSON.stringify(state.user));
-                updateUIForUser();
-                closeAuthModal();
-                showToast('Welcome!', `Hello ${user.displayName || user.email}`);
-                playSound('success');
-            } catch (error) {
-                console.error('Google sign-in error:', error);
-                showToast('Error', error.message);
-            }
-        }
-
-        async function signInWithFacebook() {
-            try {
-                const provider = new firebase.auth.FacebookAuthProvider();
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                const result = await auth.signInWithPopup(provider);
-                const user = result.user;
-                
-                const userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    phone: user.phoneNumber || '',
-                    address: '',
-                    provider: 'facebook'
-                };
-                
-                await saveUserDetails(user.uid, userData);
-                
-                state.user = userData;
-                localStorage.setItem('ls_user', JSON.stringify(state.user));
-                updateUIForUser();
-                closeAuthModal();
-                showToast('Welcome!', `Hello ${user.displayName || user.email}`);
-                playSound('success');
-            } catch (error) {
-                console.error('Facebook sign-in error:', error);
-                showToast('Error', error.message);
-            }
-        }
-
-        async function loginWithEmail(event) {
-            event.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            try {
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Try to get user details from database
-                let userData = {};
-                try {
-                    const snapshot = await database.ref('users/' + user.uid).once('value');
-                    userData = snapshot.val() || {};
-                } catch (dbError) {
-                    console.log('No database data found');
-                }
-                
-                state.user = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: userData.displayName || user.displayName || email.split('@')[0],
-                    phone: userData.phone || '',
-                    address: userData.address || ''
-                };
-                
-                localStorage.setItem('ls_user', JSON.stringify(state.user));
-                updateUIForUser();
-                closeAuthModal();
-                showToast('Welcome Back!', `Good to see you again`);
-                playSound('success');
-            } catch (error) {
-                console.error('Login error:', error);
-                showToast('Login Failed', error.message);
-            }
-        }
-
-        async function registerWithEmail(event) {
-            event.preventDefault();
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-            const firstName = document.getElementById('register-firstname').value;
-            const lastName = document.getElementById('register-lastname').value;
-            const phone = document.getElementById('register-phone').value;
-            const address = document.getElementById('register-address').value;
-            
-            if (password !== confirmPassword) {
-                showToast('Error', 'Passwords do not match');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showToast('Error', 'Password must be at least 6 characters');
-                return;
-            }
-            
-            try {
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Update profile with name
-                await user.updateProfile({
-                    displayName: `${firstName} ${lastName}`
-                });
-                
-                const userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: `${firstName} ${lastName}`,
-                    phone: phone,
-                    address: address,
-                    provider: 'email'
-                };
-                
-                // Save to database
-                await saveUserDetails(user.uid, userData);
-                
-                state.user = userData;
-                localStorage.setItem('ls_user', JSON.stringify(state.user));
-                updateUIForUser();
-                closeAuthModal();
-                showToast('Welcome!', `Account created successfully`);
-                playSound('success');
-            } catch (error) {
-                console.error('Registration error:', error);
-                showToast('Registration Failed', error.message);
-            }
-        }
-
-        async function resetPassword(event) {
-            event.preventDefault();
-            const email = document.getElementById('reset-email').value;
-            
-            try {
-                await auth.sendPasswordResetEmail(email);
-                closeForgotPassword();
-                showToast('Email Sent', 'Check your inbox for reset instructions');
-                playSound('success');
-            } catch (error) {
-                console.error('Password reset error:', error);
-                showToast('Error', error.message);
-            }
-        }
-
-        async function logout() {
-            try {
-                await auth.signOut();
-                state.user = null;
-                localStorage.removeItem('ls_user');
-                updateUIForUser();
-                showToast('Logged Out', 'See you soon!');
-                playSound('click');
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-        }
-
-        function updateUIForUser() {
-            const userProfile = document.getElementById('user-profile');
-            const loginButton = document.getElementById('login-button');
-            const userIconMobile = document.getElementById('user-icon-mobile');
-            
-            if (state.user) {
-                userProfile.classList.remove('hidden');
-                loginButton.classList.add('hidden');
-                
-                document.getElementById('user-name').textContent = 
-                    state.user.displayName || state.user.email.split('@')[0];
-                
-                const avatar = document.getElementById('user-avatar');
-                if (state.user.photoURL) {
-                    avatar.innerHTML = `<img src="${state.user.photoURL}" class="w-full h-full rounded-full object-cover">`;
-                } else {
-                    const initials = state.user.displayName ? 
-                        state.user.displayName.split(' ').map(n => n[0]).join('').toUpperCase() :
-                        state.user.email[0].toUpperCase();
-                    avatar.textContent = initials;
-                }
-                
-                if (userIconMobile) {
-                    userIconMobile.setAttribute('data-lucide', 'user-check');
-                    lucide.createIcons();
-                }
-            } else {
-                userProfile.classList.add('hidden');
-                loginButton.classList.remove('hidden');
-                
-                if (userIconMobile) {
-                    userIconMobile.setAttribute('data-lucide', 'user');
-                    lucide.createIcons();
-                }
-            }
-        }
-
-        // Check auth state on page load
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // Try to get user details
-                database.ref('users/' + user.uid).once('value').then((snapshot) => {
-                    const userData = snapshot.val();
-                    if (userData) {
-                        state.user = userData;
-                    } else {
-                        state.user = {
-                            uid: user.uid,
-                            email: user.email,
-                            displayName: user.displayName,
-                            photoURL: user.photoURL,
-                            phone: user.phoneNumber || '',
-                            address: ''
-                        };
-                    }
-                    localStorage.setItem('ls_user', JSON.stringify(state.user));
-                    updateUIForUser();
-                }).catch(() => {
-                    state.user = {
-                        uid: user.uid,
-                        email: user.email,
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        phone: user.phoneNumber || '',
-                        address: ''
-                    };
-                    localStorage.setItem('ls_user', JSON.stringify(state.user));
-                    updateUIForUser();
-                });
-            } else {
-                state.user = null;
-                localStorage.removeItem('ls_user');
-                updateUIForUser();
-            }
-        });
-
-        // --- IMPROVED SOUND ENGINE ---
-        const soundEffects = {
-            click: () => {
-                if (!state.soundEnabled) return;
-                try {
-                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
-                    audio.volume = 0.3;
-                    audio.play().catch(e => console.log("Audio play failed:", e));
-                } catch(e){}
-            },
-            success: () => {
-                if (!state.soundEnabled) return;
-                try {
-                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
-                    audio.volume = 0.3;
-                    audio.play().catch(e => console.log("Audio play failed:", e));
-                } catch(e){}
-            },
-            popup: () => {
-                if (!state.soundEnabled) return;
-                try {
-                    const audio = document.getElementById('popup-sound');
-                    if (audio) {
-                        audio.volume = 0.2;
-                        audio.currentTime = 0;
-                        audio.play().catch(e => console.log("Audio play failed:", e));
-                    }
-                } catch(e){}
-            },
-            slide: () => {
-                if (!state.soundEnabled) return;
-                try {
-                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-swipe-light-1154.mp3');
-                    audio.volume = 0.2;
-                    audio.play().catch(e => console.log("Audio play failed:", e));
-                } catch(e){}
-            }
-        };
+        // --- SOUND ENGINE (Optimized) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
 
         function playSound(type) {
-            if(soundEffects[type]) soundEffects[type]();
+            if (!state.soundOn || ctx.state === 'suspended') ctx.resume();
+            
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            const now = ctx.currentTime;
+            
+            if (type === 'click') {
+                // Thocky mechanical click
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(50, now + 0.05);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'success') {
+                // Pleasant rising chime
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
         }
 
         function toggleSound() {
-            state.soundEnabled = !state.soundEnabled;
-            localStorage.setItem('ls_sound', JSON.stringify(state.soundEnabled));
-            updateSoundIcons();
-            showToast(state.soundEnabled ? 'Sound On' : 'Sound Off', 'Audio effects updated');
-        }
-
-        function updateSoundIcons() {
-            const iconD = document.getElementById('sound-icon-desktop');
-            const iconName = state.soundEnabled ? 'volume-2' : 'volume-x';
-            
-            if(iconD) {
-                iconD.setAttribute('data-lucide', iconName);
-                if(!state.soundEnabled) iconD.classList.add('text-gray-400');
-                else iconD.classList.remove('text-gray-400');
-            }
+            state.soundOn = !state.soundOn;
+            const icon = document.getElementById('sound-icon');
+            icon.setAttribute('data-lucide', state.soundOn ? 'volume-2' : 'volume-x');
             lucide.createIcons();
-        }
-
-        // --- INIT ---
-        window.addEventListener('load', () => {
-            // GIF Preloader logic
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').remove(), 1000);
-            }, 2500);
-            
-            // PROMO POP-UP LOGIC
-            setTimeout(() => {
-                const promo = document.getElementById('promo-popup');
-                if(promo) {
-                    playSound('popup');
-                    
-                    promo.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-                    promo.classList.add('opacity-100');
-                    
-                    const content = promo.querySelector('div.relative');
-                    content.classList.remove('scale-95');
-                    content.classList.add('scale-100');
-                    
-                    updatePromoDisplay();
-                }
-            }, 5000);
-            
-            setTimeout(() => {
-                renderGrid('all');
-            }, 500);
-
-            updateBadges();
-            updateSoundIcons();
-            updateUIForUser();
-            
-            // Marquee Hover Pause
-            document.querySelectorAll('.marquee-track').forEach(track => {
-                track.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
-                track.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
-            });
-
-            // Add keyboard navigation for promo
-            document.addEventListener('keydown', (e) => {
-                const promo = document.getElementById('promo-popup');
-                if(!promo.classList.contains('invisible')) {
-                    if(e.key === 'ArrowLeft') prevPromoImage();
-                    if(e.key === 'ArrowRight') nextPromoImage();
-                    if(e.key === 'Escape') closePromo();
-                }
-            });
-
-            lucide.createIcons();
-            
-            // Optimize performance
-            document.addEventListener('touchmove', (e) => {
-                if (e.scale !== 1) { e.preventDefault(); }
-            }, { passive: false });
-        });
-
-        // --- PROMO CAROUSEL FUNCTIONS ---
-        function updatePromoDisplay() {
-            const current = promoImages[state.promoIndex];
-            document.getElementById('promo-image').src = current.image;
-            document.getElementById('promo-title').textContent = current.title;
-            document.getElementById('promo-description').textContent = current.description;
-            document.getElementById('promo-counter').textContent = `${state.promoIndex + 1}/${promoImages.length}`;
-            
-            document.querySelectorAll('#promo-popup .flex.justify-center.gap-2 div').forEach((dot, index) => {
-                if(index === state.promoIndex) {
-                    dot.classList.remove('bg-gray-300');
-                    dot.classList.add('bg-leaf');
-                } else {
-                    dot.classList.remove('bg-leaf');
-                    dot.classList.add('bg-gray-300');
-                }
-            });
-            
-            const img = document.getElementById('promo-image');
-            img.classList.remove('animate-slide-left', 'animate-slide-right');
-            void img.offsetWidth;
-        }
-
-        function nextPromoImage() {
-            playSound('slide');
-            state.promoIndex = (state.promoIndex + 1) % promoImages.length;
-            const img = document.getElementById('promo-image');
-            img.classList.add('animate-slide-left');
-            updatePromoDisplay();
-        }
-
-        function prevPromoImage() {
-            playSound('slide');
-            state.promoIndex = (state.promoIndex - 1 + promoImages.length) % promoImages.length;
-            const img = document.getElementById('promo-image');
-            img.classList.add('animate-slide-right');
-            updatePromoDisplay();
-        }
-
-        function goToPromoImage(index) {
             playSound('click');
-            if(index !== state.promoIndex) {
-                if(index > state.promoIndex) {
-                    const img = document.getElementById('promo-image');
-                    img.classList.add('animate-slide-left');
-                } else {
-                    const img = document.getElementById('promo-image');
-                    img.classList.add('animate-slide-right');
-                }
-                state.promoIndex = index;
-                updatePromoDisplay();
+        }
+
+        // --- AUTH LOGIC ---
+        function switchAuthMode(mode) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+
+            playSound('click');
+
+            if (mode === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabLogin.classList.add('text-forest', 'border-forest');
+                tabLogin.classList.remove('text-gray-400');
+                tabRegister.classList.remove('text-forest', 'border-forest');
+                tabRegister.classList.add('text-gray-400');
+            } else {
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                tabRegister.classList.add('text-forest', 'border-forest');
+                tabRegister.classList.remove('text-gray-400');
+                tabLogin.classList.remove('text-forest', 'border-forest');
+                tabLogin.classList.add('text-gray-400');
             }
         }
 
-        function closePromo() {
-            const promo = document.getElementById('promo-popup');
-            if(promo) {
-                const content = promo.querySelector('div.relative');
-                content.classList.remove('scale-100');
-                content.classList.add('scale-95');
+        function saveUserLocally(userData) {
+            state.user = userData;
+            localStorage.setItem('ls_user', JSON.stringify(userData));
+            updateUserUI();
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('r-name').value;
+            const phone = document.getElementById('r-phone').value;
+            const address = document.getElementById('r-address').value;
+            const email = document.getElementById('r-email').value;
+            const password = document.getElementById('r-password').value;
+
+            try {
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCred.user;
                 
-                promo.classList.remove('opacity-100');
-                promo.classList.add('opacity-0');
-                setTimeout(() => {
-                    promo.classList.add('invisible', 'pointer-events-none');
-                }, 500);
-                playSound('click');
+                // Construct enhanced profile
+                const fullProfile = {
+                    uid: user.uid,
+                    name: name,
+                    email: email,
+                    phone: phone,     // Saving extra field
+                    address: address  // Saving extra field
+                };
+
+                saveUserLocally(fullProfile);
+                closeModal('auth-modal');
+                playSound('success');
+            } catch (err) {
+                alert(err.message);
             }
         }
 
-        // --- OPTIMIZED RENDER FUNCTIONS ---
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('l-email').value;
+            const password = document.getElementById('l-password').value;
+
+            try {
+                const userCred = await auth.signInWithEmailAndPassword(email, password);
+                // Attempt to merge with existing local data or fetch (simulated here since we lack DB write access)
+                // In a real app, we'd fetch address from DB here. 
+                // For this demo, we trust what's in localStorage or basic auth profile.
+                const existing = JSON.parse(localStorage.getItem('ls_user'));
+                const profile = {
+                    uid: userCred.user.uid,
+                    name: userCred.user.displayName || email.split('@')[0],
+                    email: email,
+                    phone: existing?.phone || '',
+                    address: existing?.address || ''
+                };
+                
+                saveUserLocally(profile);
+                closeModal('auth-modal');
+                playSound('success');
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        async function handleGoogleAuth() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                
+                const existing = JSON.parse(localStorage.getItem('ls_user'));
+                const profile = {
+                    uid: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    phone: existing?.phone || '',
+                    address: existing?.address || ''
+                };
+                
+                saveUserLocally(profile);
+                closeModal('auth-modal');
+                playSound('success');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function checkAuthAndOpen() {
+            playSound('click');
+            if(state.user) {
+                if(confirm("Logout?")) {
+                    auth.signOut();
+                    state.user = null;
+                    localStorage.removeItem('ls_user');
+                    updateUserUI();
+                    playSound('click');
+                }
+            } else {
+                document.getElementById('auth-modal').classList.add('active');
+            }
+        }
+
+        function updateUserUI() {
+            const display = document.getElementById('user-name-display');
+            const container = document.getElementById('user-display');
+            const mobIcon = document.getElementById('mobile-auth-icon');
+
+            if(state.user) {
+                container.classList.remove('hidden');
+                display.textContent = `Hi, ${state.user.name.split(' ')[0]}`;
+                mobIcon.classList.add('text-leaf', 'fill-current');
+            } else {
+                container.classList.add('hidden');
+                mobIcon.classList.remove('text-leaf', 'fill-current');
+            }
+        }
+
+        // --- GRID & PRODUCTS ---
         function renderGrid(filter) {
             const grid = document.getElementById('product-grid');
             const data = filter === 'all' ? products : products.filter(p => p.type === filter);
-            
-            const countBadge = document.getElementById('item-count-badge');
-            if(countBadge) countBadge.innerText = data.length;
+            document.getElementById('count-display').textContent = data.length;
 
+            // Highlight pills
             document.querySelectorAll('.cat-pill, .nav-pill').forEach(btn => {
-                const btnText = btn.textContent.toLowerCase();
-                let isActive = false;
-                
-                if (filter === 'all') {
-                    isActive = btnText.includes('all');
-                } else if (filter === 'fruit-seeds') {
-                    isActive = btnText.includes('fruit');
-                } else if (filter === 'vegetable-seeds') {
-                    isActive = btnText.includes('veg') || btnText.includes('vegetable');
-                } else if (filter === 'plant-seeds') {
-                    isActive = btnText.includes('herb') || btnText.includes('plant');
-                } else if (filter === 'spices-seeds') {
-                    isActive = btnText.includes('spice');
-                } else if (filter === 'hybrid-seeds') {
-                    isActive = btnText.includes('hybrid');
-                }
-                
-                if(isActive) {
-                    btn.classList.add('bg-forest', 'text-white', 'border-forest', 'shadow-sm');
-                    btn.classList.remove('bg-white', 'text-forest', 'text-gray-500');
+                const isActive = btn.textContent.toLowerCase() === filter.replace('-seeds','');
+                if(filter === 'all' && btn.textContent === 'All') btn.classList.add('bg-forest','text-white');
+                else if(filter !== 'all' && btn.textContent.toLowerCase().includes(filter.replace('-seeds',''))) {
+                    btn.classList.add('bg-forest','text-white');
+                    btn.classList.remove('bg-white','text-forest','text-gray-500');
                 } else {
-                    btn.classList.remove('bg-forest', 'text-white', 'border-forest', 'shadow-sm');
-                    if(btn.classList.contains('nav-pill')) {
-                        btn.classList.add('text-gray-500');
-                    } else {
-                        btn.classList.add('bg-white', 'text-forest');
-                    }
+                    btn.classList.remove('bg-forest','text-white');
+                    btn.classList.add('bg-white', btn.classList.contains('cat-pill') ? 'text-forest' : 'text-gray-500');
                 }
             });
 
-            // Use document fragment for better performance
-            const fragment = document.createDocumentFragment();
-            
-            data.forEach((p, idx) => {
-                const div = document.createElement('div');
-                div.className = 'group bg-white rounded-2xl p-2 md:p-3 border border-transparent hover:border-leaf/30 shadow-sm hover:shadow-soft transition-all duration-300 cursor-pointer animate-slide-up will-change-transform';
-                div.style.animationDelay = `${idx * 0.05}s`;
-                div.onclick = () => openProduct(p.id);
-                
-                div.innerHTML = `
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative bg-gray-100 mb-3">
-                        <img src="${p.img}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        ${p.originalPrice ? `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-sm">- ${(100 - (p.price/p.originalPrice)*100).toFixed(0)}%</div>` : ''}
-                        
-                        <div class="absolute bottom-2 right-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hidden md:block">
-                             <button class="w-10 h-10 rounded-full bg-white text-forest shadow-md flex items-center justify-center hover:bg-leaf hover:text-white transition-colors mobile-btn">
-                                <i data-lucide="plus" class="w-4 h-4"></i>
-                             </button>
-                        </div>
+            grid.innerHTML = data.map((p, idx) => `
+                <div onclick="openProduct(${p.id})" class="group bg-white rounded-2xl p-2.5 shadow-sm border border-transparent hover:border-leaf/20 hover:shadow-soft transition-all duration-300 tap-active animate-slide-up" style="animation-delay: ${idx*0.05}s">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden mb-3 relative bg-gray-100">
+                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <button class="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white text-forest shadow-md flex items-center justify-center translate-y-10 group-hover:translate-y-0 transition-transform duration-300">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                        </button>
                     </div>
                     <div class="px-1">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-bold text-forest text-sm md:text-base leading-tight line-clamp-1 group-hover:text-leaf transition-colors">${p.name}</h3>
-                            <div class="flex items-center gap-0.5 text-xs font-bold text-yellow-500 bg-yellow-50 px-2 py-0.5 rounded">
-                                <i data-lucide="star" class="w-3 h-3 fill-current"></i> ${p.rating}
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">${p.type.replace('-', ' ')}</p>
-                        <div class="flex items-baseline gap-2">
-                            <span class="text-base md:text-lg font-bold text-forest">₹${p.price}</span>
-                            ${p.originalPrice ? `<span class="text-xs text-gray-400 line-through">₹${p.originalPrice}</span>` : ''}
-                        </div>
+                        <p class="text-[10px] font-bold text-leaf uppercase tracking-wider mb-0.5">${p.type.replace('-seeds','')}</p>
+                        <h3 class="font-bold text-forest leading-tight mb-2 h-10 line-clamp-2">${p.name}</h3>
+                        <p class="text-lg font-bold text-forest">₹${p.price}</p>
                     </div>
-                `;
-                
-                fragment.appendChild(div);
-            });
-            
-            grid.innerHTML = '';
-            grid.appendChild(fragment);
-            
-            lucide.createIcons();
-        }
-
-        // --- ACTIONS ---
-        function openProduct(id) {
-            playSound('click');
-            const p = products.find(x => x.id === id);
-            if(!p) return;
-
-            state.currentItem = p;
-            state.tempQty = 1;
-
-            document.getElementById('modal-img').src = p.img;
-            document.getElementById('modal-title').innerText = p.name;
-            document.getElementById('modal-price').innerText = `₹${p.price}`;
-            document.getElementById('add-price').innerText = `(₹${p.price})`;
-            document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-harvest').innerText = p.time;
-            document.getElementById('qty-display').innerText = "1";
-            document.getElementById('modal-rating-text').innerText = p.rating;
-
-            if(p.originalPrice) {
-                document.getElementById('modal-original-price').innerText = `₹${p.originalPrice}`;
-                document.getElementById('modal-original-price').classList.remove('hidden');
-            } else {
-                document.getElementById('modal-original-price').classList.add('hidden');
-            }
-
-            const modal = document.getElementById('product-modal');
-            modal.classList.add('active');
-            lucide.createIcons();
-        }
-
-        function closeModal(id) {
-            playSound('click');
-            const modal = document.getElementById(id);
-            modal.classList.remove('active');
-            
-            const sheet = modal.querySelector('.sheet-content');
-            if(sheet && id === 'cart-drawer') {
-                sheet.style.transform = 'translateX(100%)';
-            }
-        }
-
-        function adjustQty(delta) {
-            if(state.tempQty + delta >= 1) {
-                state.tempQty += delta;
-                document.getElementById('qty-display').innerText = state.tempQty;
-                document.getElementById('add-price').innerText = `(₹${state.tempQty * state.currentItem.price})`;
-                playSound('click');
-            }
-        }
-
-        function addToCart() {
-            if(!state.currentItem) return;
-            
-            const existing = state.cart.find(i => i.id === state.currentItem.id);
-            if(existing) {
-                existing.qty += state.tempQty;
-            } else {
-                state.cart.push({...state.currentItem, qty: state.tempQty});
-            }
-            
-            saveState();
-            closeModal('product-modal');
-            showToast('Added', `${state.tempQty}x ${state.currentItem.name}`);
-            playSound('success');
-        }
-
-        function openCart() {
-            playSound('click');
-            const drawer = document.getElementById('cart-drawer');
-            const container = document.getElementById('cart-items-container');
-            const sheet = drawer.querySelector('.sheet-content');
-            
-            drawer.classList.add('active');
-            setTimeout(() => {
-                sheet.style.transform = 'translateX(0)';
-            }, 10);
-
-            if(state.cart.length === 0) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-64 text-gray-400">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-300">
-                            <i data-lucide="shopping-bag" class="w-8 h-8"></i>
-                        </div>
-                        <p class="font-bold text-gray-500">Your basket is empty</p>
-                        <p class="text-xs mt-1 text-gray-400">Time to add some green friends!</p>
-                    </div>
-                `;
-                document.getElementById('cart-total-price').innerText = '₹0.00';
-            } else {
-                let total = 0;
-                container.innerHTML = state.cart.map((item, idx) => {
-                    total += item.price * item.qty;
-                    return `
-                        <div class="flex gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm animate-fade-in relative overflow-hidden group">
-                            <img src="${item.img}" class="w-20 h-20 rounded-xl object-cover bg-gray-100">
-                            <div class="flex-grow flex flex-col justify-between">
-                                <div>
-                                    <h4 class="font-bold text-forest leading-tight">${item.name}</h4>
-                                    <p class="text-xs text-gray-400 mt-0.5">₹${item.price} / pack</p>
-                                </div>
-                                <div class="flex items-center justify-between mt-2">
-                                    <div class="flex items-center bg-gray-50 rounded-lg h-8 border border-gray-100">
-                                        <button onclick="updateCartItem(${idx}, -1)" class="w-8 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-l-lg mobile-btn"><i data-lucide="minus" class="w-3 h-3"></i></button>
-                                        <span class="text-xs font-bold w-8 text-center">${item.qty}</span>
-                                        <button onclick="updateCartItem(${idx}, 1)" class="w-8 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-r-lg mobile-btn"><i data-lucide="plus" class="w-3 h-3"></i></button>
-                                    </div>
-                                    <span class="font-bold text-forest">₹${item.price * item.qty}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                document.getElementById('cart-total-price').innerText = `₹${total}`;
-            }
-            lucide.createIcons();
-        }
-
-        function updateCartItem(idx, delta) {
-            playSound('click');
-            if(state.cart[idx].qty + delta > 0) {
-                state.cart[idx].qty += delta;
-            } else {
-                state.cart.splice(idx, 1);
-            }
-            saveState();
-            openCart();
-        }
-
-        // --- BUY NOW FUNCTION (DIRECT TO WHATSAPP) ---
-        function buyNowDirect() {
-            if(!state.currentItem) return;
-            
-            // Check if user is logged in and has address
-            if (!state.user || !state.user.address || !state.user.phone) {
-                showToast('Complete Profile', 'Please add address and phone in your profile');
-                closeModal('product-modal');
-                openAuthModal();
-                return;
-            }
-            
-            const item = state.currentItem;
-            const qty = state.tempQty;
-            const total = item.price * qty;
-            
-            // Create WhatsApp message
-            let message = `*NEW ORDER FROM LIGHTSPROUTS*\n\n`;
-            message += `*Customer:* ${state.user.displayName}\n`;
-            message += `*Phone:* ${state.user.phone}\n`;
-            message += `*Address:* ${state.user.address}\n\n`;
-            message += `*Order Details:*\n`;
-            message += `${qty}x ${item.name} - ₹${item.price} each\n`;
-            message += `*Total: ₹${total}*\n\n`;
-            message += `*Delivery Instructions:* Please deliver within 3-5 business days`;
-            
-            // Encode message for WhatsApp URL
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
-            
-            // Open WhatsApp in new tab
-            window.open(whatsappURL, '_blank');
-            
-            // Also add to cart for record
-            const existing = state.cart.find(i => i.id === item.id);
-            if(existing) {
-                existing.qty += qty;
-            } else {
-                state.cart.push({...item, qty: qty});
-            }
-            saveState();
-            
-            closeModal('product-modal');
-            showToast('Order Started', 'Opening WhatsApp...');
-            playSound('success');
-        }
-
-        function initCheckout() {
-            if(state.cart.length === 0) return;
-            
-            // Check if user is logged in and has address
-            if (!state.user || !state.user.address || !state.user.phone) {
-                showToast('Complete Profile', 'Please add address and phone in your profile');
-                openAuthModal();
-                return;
-            }
-            
-            let total = 0;
-            let message = `*NEW ORDER FROM LIGHTSPROUTS*\n\n`;
-            message += `*Customer:* ${state.user.displayName}\n`;
-            message += `*Phone:* ${state.user.phone}\n`;
-            message += `*Address:* ${state.user.address}\n\n`;
-            message += `*Order Details:*\n`;
-            
-            state.cart.forEach(item => {
-                const itemTotal = item.price * item.qty;
-                total += itemTotal;
-                message += `${item.qty}x ${item.name} - ₹${item.price} each = ₹${itemTotal}\n`;
-            });
-            
-            message += `\n*Total: ₹${total}*\n`;
-            message += `*Delivery Instructions:* Please deliver within 3-5 business days`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
-            
-            // Clear cart after checkout
-            state.cart = [];
-            saveState();
-            
-            closeModal('cart-drawer');
-            window.open(whatsappURL, '_blank');
-            showToast('Order Sent', 'Opening WhatsApp...');
-            playSound('success');
-        }
-
-        // --- SEARCH ---
-        function openSearch() {
-            playSound('click');
-            document.getElementById('search-modal').classList.add('active');
-            setTimeout(() => document.getElementById('search-input').focus(), 100);
-        }
-
-        function handleSearch(query) {
-            const container = document.getElementById('search-results');
-            if(!query) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            const results = products.filter(p => 
-                p.name.toLowerCase().includes(query.toLowerCase()) ||
-                p.desc.toLowerCase().includes(query.toLowerCase()) ||
-                p.type.toLowerCase().includes(query.toLowerCase())
-            );
-            
-            container.innerHTML = results.map(p => `
-                <div onclick="closeModal('search-modal'); openProduct(${p.id})" class="bg-gray-50 rounded-xl p-3 flex items-center gap-3 cursor-pointer active:scale-95 transition-transform hover:bg-gray-100 border border-gray-100 mobile-btn">
-                    <img src="${p.img}" class="w-12 h-12 object-cover rounded-lg">
-                    <div>
-                        <p class="font-bold text-sm text-forest">${p.name}</p>
-                        <p class="text-xs text-gray-500">₹${p.price}</p>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-gray-300"></i>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        // --- UTILS ---
-        function updateBadges() {
-            const cartCount = state.cart.reduce((a,b) => a + b.qty, 0);
-            
-            // Cart Badge
-            const cartBadge = document.getElementById('cart-badge');
-            const cartBadgeMobile = document.getElementById('cart-badge-mobile');
-            
-            cartBadge.innerText = cartCount;
-            if(cartCount > 0) {
-                cartBadge.classList.remove('opacity-0', 'scale-0');
-                cartBadgeMobile.classList.remove('opacity-0');
-            } else {
-                cartBadge.classList.add('opacity-0', 'scale-0');
-                cartBadgeMobile.classList.add('opacity-0');
+        function filterProducts(type) {
+            playSound('click');
+            renderGrid(type);
+            document.getElementById('grid-anchor').scrollIntoView({behavior:'smooth'});
+        }
+
+        function openProduct(id) {
+            playSound('click');
+            const p = products.find(x => x.id === id);
+            state.currentProduct = p;
+            state.tempQty = 1;
+
+            document.getElementById('sheet-img').src = p.img;
+            document.getElementById('sheet-title').innerText = p.name;
+            document.getElementById('sheet-price').innerText = `₹${p.price}`;
+            document.getElementById('sheet-desc').innerText = p.desc;
+            document.getElementById('sheet-qty').innerText = "1";
+            document.getElementById('sheet-tag').innerText = p.type.toUpperCase();
+
+            document.getElementById('product-sheet').classList.add('active');
+        }
+
+        // --- CART & CHECKOUT ---
+        function adjustQty(d) {
+            if(state.tempQty + d > 0) {
+                state.tempQty += d;
+                document.getElementById('sheet-qty').innerText = state.tempQty;
+                playSound('click');
             }
         }
 
-        function saveState() {
-            localStorage.setItem('ls_cart', JSON.stringify(state.cart));
-            updateBadges();
-        }
-
-        function showToast(title, msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-message').innerText = msg;
+        function addToCart() {
+            const existing = state.cart.find(x => x.id === state.currentProduct.id);
+            if(existing) existing.qty += state.tempQty;
+            else state.cart.push({...state.currentProduct, qty: state.tempQty});
             
-            toast.style.transform = 'translateX(0)';
-            setTimeout(() => {
-                toast.style.transform = 'translateX(150%)';
-            }, 3000);
+            updateCartUI();
+            closeSheet('product-sheet');
+            playSound('success');
         }
 
+        function instantBuy() {
+            addToCart(); // Add to cart logic first
+            // Wait slightly for UX then open cart/checkout
+            setTimeout(() => {
+                processCheckout();
+            }, 300);
+        }
+
+        function updateCartUI() {
+            localStorage.setItem('ls_cart', JSON.stringify(state.cart));
+            const count = state.cart.reduce((a,b)=>a+b.qty,0);
+            
+            // Badges
+            document.getElementById('cart-badge').innerText = count;
+            document.getElementById('cart-badge').classList.toggle('scale-0', count === 0);
+            document.getElementById('mobile-cart-badge').classList.toggle('scale-0', count === 0);
+
+            // Drawer Render
+            const container = document.getElementById('cart-container');
+            let total = 0;
+            
+            if(state.cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-400">Your basket is empty.</div>`;
+            } else {
+                container.innerHTML = state.cart.map(i => {
+                    total += i.price * i.qty;
+                    return `
+                    <div class="flex gap-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+                        <img src="${i.img}" class="w-16 h-16 rounded-xl object-cover bg-gray-100">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-forest text-sm">${i.name}</h4>
+                            <p class="text-xs text-gray-400 mb-2">₹${i.price} x ${i.qty}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-forest">₹${i.price*i.qty}</span>
+                                <button onclick="removeFromCart(${i.id})" class="text-xs font-bold text-red-400 p-2">Remove</button>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('cart-total').innerText = `₹${total}`;
+        }
+
+        function removeFromCart(id) {
+            state.cart = state.cart.filter(x => x.id !== id);
+            updateCartUI();
+            playSound('click');
+        }
+
+        function openCart() {
+            playSound('click');
+            document.getElementById('cart-drawer').classList.add('active');
+            updateCartUI();
+        }
+
+        function processCheckout() {
+            playSound('click');
+            if(state.cart.length === 0) return;
+
+            // Check if user is logged in AND has details saved
+            if (state.user && state.user.phone && state.user.address) {
+                // Direct WhatsApp
+                sendToWhatsApp(state.user.name, state.user.phone, state.user.address);
+            } else {
+                // Need details
+                closeSheet('cart-drawer');
+                // Pre-fill if some data exists
+                if(state.user) {
+                    document.getElementById('checkout-name').value = state.user.name || '';
+                    document.getElementById('checkout-phone').value = state.user.phone || '';
+                    document.getElementById('checkout-address').value = state.user.address || '';
+                }
+                document.getElementById('checkout-data-modal').classList.add('active');
+            }
+        }
+
+        function saveAndCheckout(e) {
+            e.preventDefault();
+            const name = document.getElementById('checkout-name').value;
+            const phone = document.getElementById('checkout-phone').value;
+            const address = document.getElementById('checkout-address').value;
+
+            // Save for next time even if not registered fully
+            if(state.user) {
+                state.user.phone = phone;
+                state.user.address = address;
+                localStorage.setItem('ls_user', JSON.stringify(state.user));
+            }
+
+            closeModal('checkout-data-modal');
+            sendToWhatsApp(name, phone, address);
+        }
+
+        function sendToWhatsApp(name, phone, address) {
+            let msg = `*New Order: Lightsprouts*\n\n*Customer:*\n${name}\n${phone}\n${address}\n\n*Items:*\n`;
+            let total = 0;
+            state.cart.forEach(i => {
+                msg += `- ${i.qty}x ${i.name} (₹${i.price * i.qty})\n`;
+                total += i.price * i.qty;
+            });
+            msg += `\n*TOTAL: ₹${total}*`;
+            
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+            
+            // Clear cart
+            state.cart = [];
+            updateCartUI();
+            playSound('success');
+        }
+
+        // --- UTILS ---
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            playSound('click');
+        }
+        
+        function closeSheet(id) {
+             document.getElementById(id).classList.remove('active');
+             playSound('click');
+        }
+        
         function scrollToGrid() {
             playSound('click');
             document.getElementById('grid-anchor').scrollIntoView({behavior: 'smooth'});
         }
 
-        function filterProducts(type) {
+        function switchTab(tab) {
+            if(tab === 'home') window.scrollTo({top:0, behavior:'smooth'});
             playSound('click');
-            debounceRender(type);
-            scrollToGrid();
         }
 
-        function switchTab(tab) {
-             playSound('click');
-             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('text-forest'));
-             event.currentTarget.classList.add('text-forest');
-             if(tab === 'home') window.scrollTo({top: 0, behavior: 'smooth'});
-        }
+        // --- INIT ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('loader').remove(), 700);
+            }, 1500);
+            
+            renderGrid('all');
+            updateUserUI();
+            updateCartUI();
+            lucide.createIcons();
+        });
 
     </script>
 </body>

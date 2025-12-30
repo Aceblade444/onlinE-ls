@@ -8,6 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Lightsprouts | Premium Seeds</title>
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -47,34 +52,19 @@
                         'glow': '0 0 20px rgba(126, 217, 87, 0.4)',
                         'nav': '0 -4px 20px rgba(0,0,0,0.05)',
                         'float': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        'popup': '0 25px 50px -12px rgba(42, 89, 62, 0.25), 0 0 50px rgba(126, 217, 87, 0.15)',
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'bounce-sm': 'bounceSmall 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        'float': 'float 6s ease-in-out infinite',
-                        'bloom': 'bloom 2s ease-in-out infinite',
-                        'gentle-pulse': 'gentlePulse 3s ease-in-out infinite',
-                        'text-glow': 'textGlow 2s ease-in-out infinite',
-                        'marquee-scroll': 'marqueeScroll 40s linear infinite',
-                        'marquee-scroll-reverse': 'marqueeScrollReverse 40s linear infinite',
-                        'icon-spin': 'iconSpin 8s linear infinite',
-                        'gradient-shift': 'gradientShift 4s ease infinite alternate',
-                        'shimmer': 'shimmer 2s linear infinite',
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'bounce-sm': 'bounceSmall 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                        'pop-in': 'popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(15px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        popIn: { '0%': { transform: 'scale(0.9)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
                         bounceSmall: { '0%, 100%': { transform: 'scale(1)' }, '50%': { transform: 'scale(0.95)' } },
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
-                        bloom: { '0%, 100%': { transform: 'scale(1)', opacity: '0.8' }, '50%': { transform: 'scale(1.05)', opacity: '1' } },
-                        gentlePulse: { '0%, 100%': { opacity: 0.6 }, '50%': { opacity: 1 } },
-                        textGlow: { '0%, 100%': { 'text-shadow': '0 0 10px rgba(126, 217, 87, 0.5)' }, '50%': { 'text-shadow': '0 0 20px rgba(126, 217, 87, 0.8)' } },
-                        marqueeScroll: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-                        marqueeScrollReverse: { '0%': { transform: 'translateX(-50%)' }, '100%': { transform: 'translateX(0)' } },
-                        iconSpin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
-                        gradientShift: { '0%': { 'background-position': '0% 50%' }, '100%': { 'background-position': '100% 50%' } },
-                        shimmer: { '100%': { transform: 'translateX(100%)' } },
                     }
                 }
             }
@@ -82,7 +72,7 @@
     </script>
 
     <style>
-        /* BASE STYLES */
+        /* OPTIMIZED BASE STYLES */
         :root {
             --safe-bottom: env(safe-area-inset-bottom);
             --safe-top: env(safe-area-inset-top);
@@ -94,211 +84,327 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            /* Texture */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            /* Remove heavy texture for performance */
         }
 
+        /* ENHANCED TOUCH TARGETS */
+        .touch-target {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        .btn-large {
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .btn-medium {
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+
+        /* PERFORMANCE OPTIMIZATIONS */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
+        img {
+            content-visibility: auto;
+        }
+        
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* GLASS MORPHISM */
+        /* SIMPLIFIED GLASS EFFECT */
         .glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(42, 89, 62, 0.05);
+        /* IMPROVED ANIMATIONS */
+        .tap-active {
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tap-active:active {
+            transform: scale(0.95);
         }
 
-        /* ANIMATIONS */
-        .tap-active:active { transform: scale(0.96); transition: transform 0.1s; }
-
-        /* LOADER */
+        /* LOADER SIMPLIFIED */
         .loader-container {
-            background: linear-gradient(135deg, #f0ffe9 0%, #d1ffbd 50%, #7ed957 100%);
-            overflow: hidden;
+            background: linear-gradient(135deg, #f0ffe9 0%, #d1ffbd 100%);
         }
 
-        .gif-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 0 60px rgba(126, 217, 87, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.8);
-            animation: bloom 2s ease-in-out infinite;
-        }
-
-        .loader-gif {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .petal {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #7ed957, #d1ffbd);
-            border-radius: 50% 0 50% 50%;
-            opacity: 0.7;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* ENHANCED MARQUEE STYLES */
-        .marquee-container {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(90deg, #2A593E 0%, #3a7a56 50%, #2A593E 100%);
-            animation: gradientShift 4s ease infinite alternate;
-            box-shadow: 0 4px 15px rgba(42, 89, 62, 0.2);
-        }
-        
-        .marquee-container::before, .marquee-container::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #7ED957, transparent);
-            z-index: 10;
-        }
-        .marquee-container::before { top: 0; }
-        .marquee-container::after { bottom: 0; }
-
-        .marquee-track {
-            display: flex;
-            align-items: center;
-            width: max-content;
-            padding: 4px 0;
-        }
-
-        .marquee-item {
-            display: flex;
-            align-items: center;
-            margin: 0 1.5rem;
-            white-space: nowrap;
-        }
-
-        .marquee-text {
-            color: #ffffff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 0.2rem 0.6rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 99px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .marquee-primary { animation: marquee-scroll 35s linear infinite; }
-        .marquee-secondary { animation: marquee-scroll-reverse 40s linear infinite; }
-
-        .marquee-track:hover { animation-play-state: paused; }
-
-        /* MODAL & DRAWER TRANSITIONS */
-        .modal-enter {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .modal-enter.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-enter .sheet-content {
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .modal-enter.active .sheet-content {
-            transform: translateY(0);
-        }
-        
-        /* Mobile Nav */
+        /* MOBILE NAV FIX */
         .bottom-nav { 
-            padding-bottom: calc(10px + var(--safe-bottom)); 
-            padding-top: 10px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+            padding-bottom: calc(15px + var(--safe-bottom));
+            padding-top: 12px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
         }
-
-        /* Skeleton Shimmer */
-        .skeleton {
-            background: #f0f0f0;
-            position: relative;
-            overflow: hidden;
+        
+        /* IMPROVED INPUTS FOR MOBILE */
+        input, textarea, button, select {
+            font-size: 16px; /* Prevents iOS zoom */
         }
-        .skeleton::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-            transform: translateX(-100%);
-            animation: shimmer 2s infinite;
+        
+        /* SMOOTH SCROLLING */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* OPTIMIZED MODAL */
+        .modal-content {
+            will-change: transform, opacity;
+        }
+        
+        /* REMOVE HEAVY EFFECTS */
+        .marquee-container {
+            background: #2A593E; /* Solid color instead of gradient */
         }
 
         ::selection { background: #D1FFBD; color: #2A593E; }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen relative flex flex-col pb-24 md:pb-0">
+<body class="font-sans antialiased min-h-screen relative flex flex-col pb-28 md:pb-0">
 
-    <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 z-[100] loader-container flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="petal" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
-            <div class="petal" style="top: 60%; right: 20%; animation-delay: 1s;"></div>
-            <div class="petal" style="bottom: 15%; left: 30%; animation-delay: 2s;"></div>
-        </div>
-        
-        <div class="relative mb-8">
-            <div class="gif-container">
-                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3Q1NnZyN21kMm1yNTJ2aGdwdDltcmlxamtqNDYxMzZmM2xrYngzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B2bZ5FhOnTRvvkOIZn/giphy.gif" alt="Loading..." class="loader-gif">
+    <!-- LOADER (Simplified) -->
+    <div id="loader" class="fixed inset-0 z-[100] loader-container flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="mb-8">
+            <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden">
+                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3Q1NnZyN21kMm1yNTJ2aGdwdDltcmlxamtqNDYxMzZmM2xrYngzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B2bZ5FhOnTRvvkOIZn/giphy.gif" 
+                     alt="Loading..." 
+                     class="w-full h-full object-cover">
             </div>
-            <div class="absolute inset-0 -z-10 bg-white/40 rounded-full blur-3xl animate-gentle-pulse"></div>
         </div>
         
-        <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest mb-2 animate-text-glow text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest mb-2">
             lightsprouts<span class="text-leaf">.</span>
         </h1>
         <p class="text-forest/80 font-medium tracking-wider text-xs md:text-sm uppercase">Growing Your Green Dreams</p>
     </div>
 
-    <!-- APP HEADER -->
-    <header class="fixed top-0 left-0 w-full z-40 transition-all duration-300 shadow-nav bg-white/80 backdrop-blur-xl">
+    <!-- AUTH MODAL (Updated with Phone/Address) -->
+    <div id="auth-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm transition-opacity" onclick="closeAuthModal()"></div>
         
-        <!-- ENHANCED MARQUEE -->
-        <div class="marquee-container z-50">
-            <!-- Primary Track -->
-            <div class="marquee-track marquee-primary">
-                <div class="marquee-item"><i data-lucide="sprout" class="w-3 h-3 text-lime mr-2 animate-spin-slow"></i><span class="marquee-text">Premium Organic Seeds</span></div>
-                <div class="marquee-item"><i data-lucide="check-circle" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">95% Germination Guarantee</span></div>
-                <div class="marquee-item"><i data-lucide="truck" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Free Shipping ₹500+</span></div>
-                <div class="marquee-item"><i data-lucide="shield" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Certified Organic</span></div>
-                <!-- Duplicate -->
-                <div class="marquee-item"><i data-lucide="sprout" class="w-3 h-3 text-lime mr-2 animate-spin-slow"></i><span class="marquee-text">Premium Organic Seeds</span></div>
-                <div class="marquee-item"><i data-lucide="check-circle" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">95% Germination Guarantee</span></div>
-                <div class="marquee-item"><i data-lucide="truck" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Free Shipping ₹500+</span></div>
-                <div class="marquee-item"><i data-lucide="shield" class="w-3 h-3 text-lime mr-2"></i><span class="marquee-text">Certified Organic</span></div>
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-popup overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto flex flex-col max-h-[90vh] border border-leaf/20 modal-content">
+            
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-white flex items-center justify-center text-forest border-2 border-forest/20 hover:bg-forest hover:text-white transition-all tap-active shadow-lg touch-target">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200">
+                <button id="login-tab" class="flex-1 py-4 text-center font-bold text-forest border-b-2 border-forest transition-all touch-target" onclick="switchAuthTab('login')">
+                    Login
+                </button>
+                <button id="register-tab" class="flex-1 py-4 text-center font-bold text-gray-400 transition-all touch-target" onclick="switchAuthTab('register')">
+                    Register
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-mint rounded-full flex items-center justify-center mx-auto mb-3 text-leaf">
+                        <i data-lucide="sprout" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-forest">Welcome Back</h3>
+                </div>
+
+                <form id="login-email-form" class="space-y-4" onsubmit="loginWithEmail(event)">
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Email</label>
+                        <input type="email" id="login-email" required placeholder="your@email.com" 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl mt-4 shadow-lg tap-active hover:bg-[#1e3f2d] transition-colors btn-large">
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center my-6">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="mx-4 text-gray-400 text-sm">Or continue with</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <!-- OAuth Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="signInWithGoogle()" class="bg-white border border-gray-200 text-forest font-semibold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors btn-medium touch-target">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </button>
+                    
+                    <button onclick="signInWithPhone()" class="bg-white border border-gray-200 text-forest font-semibold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors btn-medium touch-target">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                        Phone OTP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Register Form (Updated with Phone/Address) -->
+            <div id="register-form" class="p-6 hidden">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-mint rounded-full flex items-center justify-center mx-auto mb-3 text-leaf">
+                        <i data-lucide="seedling" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-forest">Join Our Community</h3>
+                </div>
+
+                <form id="register-email-form" class="space-y-4" onsubmit="registerWithEmail(event)">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-forest mb-1">First Name</label>
+                            <input type="text" id="register-firstname" required placeholder="John" 
+                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-forest mb-1">Last Name</label>
+                            <input type="text" id="register-lastname" required placeholder="Doe" 
+                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Phone Number</label>
+                        <input type="tel" id="register-phone" required placeholder="+91 9876543210" 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Address</label>
+                        <textarea id="register-address" required placeholder="Full delivery address" rows="2"
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all resize-none placeholder:text-gray-400 touch-target"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Email</label>
+                        <input type="email" id="register-email" required placeholder="your@email.com" 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-1">Password</label>
+                        <input type="password" id="register-password" required placeholder="••••••••" 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                        <p class="text-xs text-gray-400 mt-1">Minimum 6 characters</p>
+                    </div>
+                    
+                    <label class="flex items-start touch-target">
+                        <input type="checkbox" id="terms" required
+                               class="w-4 h-4 text-leaf bg-gray-100 border-gray-300 rounded focus:ring-leaf/20 focus:ring-2 mt-1">
+                        <span class="ml-2 text-sm text-gray-600">I agree to the Terms & Privacy Policy</span>
+                    </label>
+                    
+                    <button type="submit" class="w-full bg-leaf text-forest font-bold py-4 rounded-xl mt-4 shadow-lg tap-active hover:bg-[#6ec248] transition-colors btn-large">
+                        Create Account
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center my-6">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="mx-4 text-gray-400 text-sm">Or sign up with</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <!-- OAuth Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="signInWithGoogle()" class="bg-white border border-gray-200 text-forest font-semibold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors btn-medium touch-target">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </button>
+                    
+                    <button onclick="signInWithPhone()" class="bg-white border border-gray-200 text-forest font-semibold py-3.5 rounded-xl flex items-center justify-center gap-3 shadow-sm tap-active hover:bg-gray-50 transition-colors btn-medium touch-target">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                        Phone OTP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHONE OTP MODAL -->
+    <div id="phone-modal" class="fixed inset-0 z-[1000] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm transition-opacity" onclick="closePhoneModal()"></div>
+        
+        <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-popup overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto p-6 border border-leaf/20 modal-content">
+            
+            <button onclick="closePhoneModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-white flex items-center justify-center text-forest border-2 border-forest/20 hover:bg-forest hover:text-white transition-all tap-active shadow-lg touch-target">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-mint rounded-full flex items-center justify-center mx-auto mb-3 text-leaf">
+                    <i data-lucide="phone" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-serif font-bold text-forest">Phone Verification</h3>
+                <p class="text-gray-400 text-sm mt-2">Enter your phone number</p>
+            </div>
+
+            <form id="phone-form" class="space-y-4" onsubmit="sendOTP(event)">
+                <div>
+                    <label class="block text-sm font-medium text-forest mb-1">Phone Number</label>
+                    <input type="tel" id="phone-number" required placeholder="+91 9876543210" 
+                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400 touch-target">
+                </div>
+                
+                <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl shadow-lg tap-active hover:bg-[#1e3f2d] transition-colors btn-large">
+                    Send OTP
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APP HEADER (Wishlist removed) -->
+    <header class="fixed top-0 left-0 w-full z-40 transition-all duration-300 shadow-nav bg-white/90 backdrop-blur-lg glass">
+        
+        <!-- SIMPLIFIED MARQUEE -->
+        <div class="marquee-container py-2">
+            <div class="flex items-center justify-center gap-4 overflow-x-auto no-scrollbar px-4">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="sprout" class="w-3 h-3 text-lime"></i>
+                    <span class="text-white text-xs font-bold">Premium Organic Seeds</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-3 h-3 text-lime"></i>
+                    <span class="text-white text-xs font-bold">95% Germination</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="truck" class="w-3 h-3 text-lime"></i>
+                    <span class="text-white text-xs font-bold">Free Shipping ₹500+</span>
+                </div>
             </div>
         </div>
 
         <!-- Main Nav Bar -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 md:h-16 flex justify-between items-center relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 md:h-16 flex justify-between items-center">
             
             <!-- Logo -->
-            <a href="#" onclick="window.scrollTo(0,0); playSound('click'); return false;" class="text-xl md:text-2xl font-serif font-bold text-forest flex items-center gap-1 tap-active select-none">
+            <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); playSound('click'); return false;" class="text-xl md:text-2xl font-serif font-bold text-forest flex items-center gap-1 tap-active select-none touch-target">
                 <div class="w-8 h-8 rounded-full bg-forest flex items-center justify-center text-lime shadow-lg">
                     <i data-lucide="sprout" class="w-5 h-5 fill-current"></i>
                 </div>
@@ -307,29 +413,32 @@
 
             <!-- Desktop Menu -->
             <nav class="hidden md:flex items-center gap-1 bg-gray-100/50 p-1 rounded-full border border-gray-200">
-                <button onclick="filterProducts('all')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-bold transition-all bg-white text-forest shadow-sm border border-gray-100">All</button>
-                <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50">Fruits</button>
-                <button onclick="filterProducts('vegetable-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50">Veg</button>
-                <button onclick="filterProducts('plant-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50">Plants</button>
+                <button onclick="filterProducts('all')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-bold transition-all bg-white text-forest shadow-sm border border-gray-100 touch-target">All</button>
+                <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 touch-target">Fruits</button>
+                <button onclick="filterProducts('vegetable-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 touch-target">Veg</button>
+                <button onclick="filterProducts('plant-seeds')" class="nav-pill px-5 py-1.5 rounded-full text-sm font-semibold text-gray-500 hover:text-forest transition-all hover:bg-white/50 touch-target">Plants</button>
             </nav>
 
             <!-- Actions -->
             <div class="flex items-center gap-2 md:gap-3">
-                <!-- Sound Toggle -->
-                <button onclick="toggleSound()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-forest/5 text-forest transition-colors tap-active hidden md:flex" title="Toggle Sound">
-                    <i id="sound-icon-desktop" data-lucide="volume-2" class="w-5 h-5"></i>
+                <!-- User Profile -->
+                <div id="user-profile" class="hidden items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-mint flex items-center justify-center text-leaf font-bold shadow-sm touch-target" id="user-avatar">
+                        U
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-xs font-bold text-forest" id="user-name">User</p>
+                        <button onclick="logout()" class="text-[10px] text-gray-400 hover:text-red-500 touch-target">Logout</button>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <button id="login-button" onclick="openAuthModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-forest hover:bg-forest/5 transition-colors tap-active touch-target btn-medium">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Login</span>
                 </button>
 
-                <button onclick="openSearch()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-forest/5 text-forest transition-colors tap-active hidden md:flex">
-                    <i data-lucide="search" class="w-5 h-5"></i>
-                </button>
-                
-                <button onclick="toggleWishlist()" class="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-forest/5 text-forest transition-colors tap-active hidden md:flex">
-                    <i data-lucide="heart" class="w-5 h-5"></i>
-                    <span id="wishlist-badge-desktop" class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full opacity-0 transition-opacity border border-white"></span>
-                </button>
-
-                <button onclick="openCart()" class="relative w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-forest text-white shadow-glow hover:bg-forest/90 transition-all tap-active group">
+                <button onclick="openCart()" class="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-forest text-white shadow-lg hover:bg-forest/90 transition-all tap-active touch-target group">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                     <span id="cart-badge" class="absolute -top-1 -right-1 bg-leaf text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center opacity-0 scale-0 transition-all duration-300 border border-white shadow-sm">0</span>
                 </button>
@@ -337,11 +446,11 @@
         </div>
 
         <!-- Sticky Mobile Categories -->
-        <div class="md:hidden w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 py-2 px-4 overflow-x-auto no-scrollbar flex gap-2 snap-x shadow-sm">
-            <button onclick="filterProducts('all')" class="cat-pill snap-start whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-forest text-white shadow-sm transition-all border border-transparent">All Seeds</button>
-            <button onclick="filterProducts('fruit-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all">Fruits</button>
-            <button onclick="filterProducts('vegetable-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all">Vegetables</button>
-            <button onclick="filterProducts('plant-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold bg-white text-forest border border-gray-200 transition-all">Herbs</button>
+        <div class="md:hidden w-full bg-white/95 backdrop-blur-lg border-b border-gray-100 py-3 px-4 overflow-x-auto no-scrollbar flex gap-2 snap-x">
+            <button onclick="filterProducts('all')" class="cat-pill snap-start whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-bold bg-forest text-white shadow-sm transition-all border border-transparent touch-target">All Seeds</button>
+            <button onclick="filterProducts('fruit-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-bold bg-white text-forest border border-gray-200 transition-all touch-target">Fruits</button>
+            <button onclick="filterProducts('vegetable-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-bold bg-white text-forest border border-gray-200 transition-all touch-target">Vegetables</button>
+            <button onclick="filterProducts('plant-seeds')" class="cat-pill snap-start whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-bold bg-white text-forest border border-gray-200 transition-all touch-target">Herbs</button>
         </div>
     </header>
 
@@ -349,40 +458,35 @@
     <main class="flex-grow pt-[8.5rem] md:pt-36 px-4 sm:px-6 w-full max-w-7xl mx-auto z-10 relative">
         
         <!-- Hero Section -->
-        <section class="relative w-full h-[50vh] md:h-[450px] rounded-[2rem] overflow-hidden mb-8 shadow-float group">
-            <img id="hero-img" src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105">
+        <section class="relative w-full h-[40vh] md:h-[400px] rounded-2xl overflow-hidden mb-6 shadow-lg">
+            <img id="hero-img" src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2070&auto=format&fit=crop&w=800" 
+                 loading="lazy"
+                 class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
             
-            <div class="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-col items-start text-white">
-                <div class="flex items-center gap-2 mb-3 animate-fade-in">
-                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] font-bold uppercase tracking-wider">New Arrival</span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-leaf animate-pulse"></span>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-serif font-bold mb-3 leading-tight animate-fade-in" style="animation-delay: 0.1s">
+            <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col items-start text-white">
+                <h1 class="text-3xl md:text-5xl font-serif font-bold mb-3 leading-tight">
                     Grow your <br><span class="text-lime italic">sanctuary.</span>
                 </h1>
-                <p class="max-w-md mb-6 text-sm opacity-90 leading-relaxed animate-fade-in hidden md:block" style="animation-delay: 0.2s">
-                    Premium organic seeds sourced from sustainable farms. 95% germination guarantee.
-                </p>
-                <button onclick="scrollToGrid()" class="bg-leaf text-forest font-bold py-3 px-6 rounded-xl hover:bg-lime transition-all flex items-center gap-2 shadow-glow tap-active animate-fade-in group/btn text-sm md:text-base" style="animation-delay: 0.3s">
-                    Start Growing <i data-lucide="arrow-down" class="w-4 h-4 group-hover/btn:translate-y-1 transition-transform"></i>
+                <button onclick="scrollToGrid()" class="bg-leaf text-forest font-bold py-3 px-6 rounded-xl hover:bg-lime transition-all flex items-center gap-2 shadow-lg tap-active btn-large mt-2">
+                    Start Growing <i data-lucide="arrow-down" class="w-4 h-4"></i>
                 </button>
             </div>
         </section>
 
         <!-- Stats Bar -->
-        <div class="grid grid-cols-3 gap-2 mb-8 bg-white/60 p-4 rounded-2xl border border-white/50 shadow-sm backdrop-blur-sm animate-fade-in">
+        <div class="grid grid-cols-3 gap-2 mb-8 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
             <div class="text-center">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">95%</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Germination</p>
+                <p class="text-2xl font-serif font-bold text-forest">95%</p>
+                <p class="text-xs font-bold text-gray-400 uppercase">Germination</p>
             </div>
             <div class="text-center border-l border-gray-200">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">100%</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Organic</p>
+                <p class="text-2xl font-serif font-bold text-forest">100%</p>
+                <p class="text-xs font-bold text-gray-400 uppercase">Organic</p>
             </div>
             <div class="text-center border-l border-gray-200">
-                <p class="text-xl md:text-2xl font-serif font-bold text-forest">24/7</p>
-                <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Support</p>
+                <p class="text-2xl font-serif font-bold text-forest">24/7</p>
+                <p class="text-xs font-bold text-gray-400 uppercase">Support</p>
             </div>
         </div>
 
@@ -391,16 +495,13 @@
             <div>
                 <h2 class="text-xl md:text-2xl font-serif font-bold text-forest flex items-center gap-2">
                     Curated Seeds
-                    <span id="item-count-badge" class="bg-forest/10 text-forest text-[10px] px-2 py-0.5 rounded-full font-sans font-bold align-middle">8</span>
+                    <span id="item-count-badge" class="bg-forest/10 text-forest text-xs px-2 py-0.5 rounded-full font-sans font-bold align-middle">8</span>
                 </h2>
             </div>
-            <button class="text-forest/60 hover:text-forest text-xs font-bold uppercase tracking-wider flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
-                Sort <i data-lucide="chevron-down" class="w-3 h-3"></i>
-            </button>
         </div>
 
         <!-- Product Grid -->
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-24">
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-24">
             <!-- Loading Skeletons -->
             <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
             <div class="rounded-2xl overflow-hidden aspect-[4/5] skeleton"></div>
@@ -412,85 +513,68 @@
 
     <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 z-40 bottom-nav flex justify-around items-center pt-3 pb-1">
-        <button onclick="switchTab('home')" class="nav-item active flex flex-col items-center gap-1 text-forest w-16 tap-active transition-colors">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nav-item flex flex-col items-center gap-1 text-forest w-16 tap-active transition-colors touch-target">
             <i data-lucide="home" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">Home</span>
+            <span class="text-xs font-medium">Home</span>
         </button>
-        <button onclick="openSearch()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors">
+        <button onclick="openSearch()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors touch-target">
             <i data-lucide="search" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Search</span>
+            <span class="text-xs font-medium">Search</span>
         </button>
-        <button onclick="toggleWishlist()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active relative transition-colors">
-            <i data-lucide="heart" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Saved</span>
-            <span id="wishlist-badge-mobile" class="absolute top-0 right-3.5 w-2 h-2 bg-red-500 rounded-full opacity-0 ring-2 ring-white"></span>
-        </button>
-        <button onclick="toggleSound()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors">
-             <i id="sound-icon-mobile" data-lucide="volume-2" class="w-6 h-6"></i>
-            <span class="text-[10px] font-medium">Sound</span>
+        <button onclick="openAuthModal()" class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active transition-colors touch-target">
+            <i id="user-icon-mobile" data-lucide="user" class="w-6 h-6"></i>
+            <span class="text-xs font-medium">Account</span>
         </button>
     </nav>
 
-    <!-- PRODUCT DETAIL SHEET/MODAL -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none modal-enter">
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-dark/40 backdrop-blur-sm transition-opacity" onclick="closeModal('product-modal')"></div>
         
-        <div class="sheet-content pointer-events-auto bg-[#FAFAF9] w-full md:w-[900px] md:h-[600px] rounded-t-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[92vh] md:max-h-[85vh]">
+        <div class="modal-content pointer-events-auto bg-white w-full md:w-[800px] md:h-[550px] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[90vh] md:max-h-[80vh] transform translate-y-full md:translate-y-0 md:scale-95 transition-all duration-300">
             
             <div class="md:hidden absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-20"></div>
             
-            <button onclick="closeModal('product-modal')" class="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-forest hover:text-white transition-colors text-forest backdrop-blur-sm tap-active shadow-sm border border-gray-100">
+            <button onclick="closeModal('product-modal')" class="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-forest hover:text-white transition-colors text-forest backdrop-blur-sm tap-active shadow-sm border border-gray-100 touch-target">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
             <!-- Image Side -->
-            <div class="w-full md:w-1/2 h-72 md:h-full bg-gray-100 relative group">
-                <img id="modal-img" src="" class="w-full h-full object-cover">
-                <div class="absolute bottom-4 left-4 right-4 flex gap-2">
-                    <span id="modal-tag" class="glass-card px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide text-forest backdrop-blur-md border-white/40">Organic</span>
-                </div>
+            <div class="w-full md:w-1/2 h-64 md:h-full bg-gray-100 relative">
+                <img id="modal-img" src="" loading="lazy" class="w-full h-full object-cover">
             </div>
 
             <!-- Content Side -->
-            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col overflow-y-auto pb-24 md:pb-10 bg-gradient-to-b from-white to-mint/20">
-                <div class="mb-2 flex items-center gap-2 opacity-60">
-                    <span id="modal-cat" class="text-xs font-bold uppercase tracking-widest text-forest">Category</span>
-                    <span class="w-1 h-1 bg-forest rounded-full"></span>
-                    <div class="flex items-center text-yellow-500">
-                        <i data-lucide="star" class="w-3 h-3 fill-current"></i>
-                        <span class="text-xs text-forest ml-1 font-bold" id="modal-rating-text">4.8</span>
-                    </div>
-                </div>
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col overflow-y-auto pb-24 md:pb-8">
+                <h2 id="modal-title" class="text-2xl md:text-3xl font-serif font-bold text-forest mb-2 leading-tight">Product Name</h2>
                 
-                <h2 id="modal-title" class="text-3xl md:text-4xl font-serif font-bold text-forest mb-2 leading-tight">Product Name</h2>
-                
-                <div class="flex items-baseline gap-3 mb-6">
+                <div class="flex items-baseline gap-3 mb-4">
                     <span id="modal-price" class="text-2xl font-bold text-leaf">₹0.00</span>
-                    <span id="modal-original-price" class="text-gray-400 text-sm line-through decoration-red-400">₹0.00</span>
+                    <span id="modal-original-price" class="text-gray-400 text-sm line-through decoration-red-400 hidden">₹0.00</span>
                 </div>
 
-                <p id="modal-desc" class="text-forest/70 text-sm leading-relaxed mb-8 font-medium">
+                <p id="modal-desc" class="text-forest/70 text-sm leading-relaxed mb-6 font-medium">
                     Description goes here...
                 </p>
 
                 <!-- Info Grid -->
-                <div class="grid grid-cols-2 gap-3 mb-8">
-                    <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
                             <i data-lucide="sun" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-gray-400 uppercase">Season</span>
-                            <span id="modal-season" class="text-xs font-bold text-forest">All Year</span>
+                            <span class="block text-xs font-bold text-gray-400 uppercase">Season</span>
+                            <span id="modal-season" class="text-sm font-bold text-forest">All Year</span>
                         </div>
                     </div>
-                    <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3">
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
                             <i data-lucide="clock" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-gray-400 uppercase">Harvest</span>
-                            <span id="modal-harvest" class="text-xs font-bold text-forest">60 Days</span>
+                            <span class="block text-xs font-bold text-gray-400 uppercase">Harvest</span>
+                            <span id="modal-harvest" class="text-sm font-bold text-forest">60 Days</span>
                         </div>
                     </div>
                 </div>
@@ -500,18 +584,14 @@
                     <div class="flex items-center gap-3">
                         <!-- Qty -->
                         <div class="flex items-center bg-white border border-gray-200 rounded-xl px-1 h-12 shadow-sm shrink-0">
-                            <button onclick="adjustQty(-1)" class="w-10 h-full flex items-center justify-center text-forest/60 hover:text-forest active:scale-90"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                            <button onclick="adjustQty(-1)" class="w-10 h-full flex items-center justify-center text-forest/60 hover:text-forest tap-active touch-target"><i data-lucide="minus" class="w-4 h-4"></i></button>
                             <span id="qty-display" class="w-6 text-center font-bold text-forest text-sm">1</span>
-                            <button onclick="adjustQty(1)" class="w-10 h-full flex items-center justify-center text-forest/60 hover:text-forest active:scale-90"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                            <button onclick="adjustQty(1)" class="w-10 h-full flex items-center justify-center text-forest/60 hover:text-forest tap-active touch-target"><i data-lucide="plus" class="w-4 h-4"></i></button>
                         </div>
                         
                         <!-- Main Action -->
-                        <button onclick="addToCart()" class="flex-grow h-12 bg-forest text-white font-bold rounded-xl shadow-lg shadow-forest/20 tap-active flex items-center justify-center gap-2 hover:bg-[#1e3f2d] transition-colors">
-                            Add <span id="add-price" class="text-xs font-normal opacity-70"></span>
-                        </button>
-
-                        <button onclick="toggleWishlistItem(currentItem.id)" id="modal-heart-btn" class="h-12 w-12 shrink-0 rounded-xl border border-gray-200 bg-white flex items-center justify-center text-forest hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors tap-active shadow-sm">
-                            <i data-lucide="heart" class="w-5 h-5"></i>
+                        <button onclick="addToCart()" class="flex-grow h-12 bg-forest text-white font-bold rounded-xl shadow-lg tap-active flex items-center justify-center gap-2 hover:bg-[#1e3f2d] transition-colors btn-medium touch-target">
+                            Add to Cart <span id="add-price" class="text-xs font-normal opacity-70"></span>
                         </button>
                     </div>
                 </div>
@@ -520,18 +600,18 @@
     </div>
 
     <!-- CART DRAWER -->
-    <div id="cart-drawer" class="fixed inset-0 z-[60] flex justify-end pointer-events-none modal-enter">
+    <div id="cart-drawer" class="fixed inset-0 z-[60] flex justify-end pointer-events-none opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-dark/20 backdrop-blur-sm transition-opacity" onclick="closeModal('cart-drawer')"></div>
-        <div class="sheet-content bg-[#FAFAF9] w-full max-w-md h-full shadow-2xl pointer-events-auto flex flex-col translate-x-full" style="transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div class="modal-content bg-white w-full max-w-md h-full shadow-2xl pointer-events-auto flex flex-col transform translate-x-full transition-transform duration-300">
             
             <div class="p-6 flex justify-between items-center bg-white border-b border-gray-100 sticky top-0 z-10">
                 <h3 class="text-xl font-serif font-bold text-forest flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-mint flex items-center justify-center text-leaf">
-                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <div class="w-9 h-9 rounded-full bg-mint flex items-center justify-center text-leaf">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                     </div>
                     My Basket
                 </h3>
-                <button onclick="closeModal('cart-drawer')" class="p-2 rounded-full hover:bg-gray-100 text-forest/60 transition-colors tap-active">
+                <button onclick="closeModal('cart-drawer')" class="p-2 rounded-full hover:bg-gray-100 text-forest/60 transition-colors tap-active touch-target">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -540,12 +620,12 @@
                 <!-- Items injected here -->
             </div>
 
-            <div class="p-6 bg-white border-t border-gray-100 mt-auto shadow-[0_-4px_20px_rgba(0,0,0,0.03)] pb-8 md:pb-6">
+            <div class="p-6 bg-white border-t border-gray-100 mt-auto shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
                 <div class="flex justify-between items-baseline mb-4">
                     <span class="text-gray-500 text-sm font-medium">Total Estimate</span>
                     <span id="cart-total-price" class="text-2xl font-bold text-forest">₹0.00</span>
                 </div>
-                <button onclick="initCheckout()" class="w-full bg-leaf text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-leaf/20 tap-active hover:bg-[#6ec248] transition-colors">
+                <button onclick="processCheckout()" class="w-full bg-leaf text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg tap-active hover:bg-[#6ec248] transition-colors btn-large touch-target">
                     Checkout on WhatsApp
                     <i data-lucide="message-circle" class="w-5 h-5"></i>
                 </button>
@@ -554,7 +634,7 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed top-24 right-4 md:right-8 z-[80] bg-white/90 backdrop-blur-md border border-gray-200 shadow-float rounded-2xl p-4 flex items-center gap-3 translate-x-[150%] transition-transform duration-500 max-w-[90vw] w-auto">
+    <div id="toast" class="fixed top-24 right-4 md:right-8 z-[80] bg-white/90 backdrop-blur-md border border-gray-200 shadow-lg rounded-xl p-4 flex items-center gap-3 translate-x-[150%] transition-transform duration-300 max-w-[90vw] w-auto">
         <div class="w-8 h-8 rounded-full bg-leaf text-white flex items-center justify-center shrink-0 shadow-sm">
             <i data-lucide="check" class="w-4 h-4"></i>
         </div>
@@ -564,41 +644,12 @@
         </div>
     </div>
 
-    <!-- CHECKOUT FORM MODAL -->
-    <div id="checkout-modal" class="fixed inset-0 z-[80] flex items-center justify-center p-4 pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-forest/80 backdrop-blur-md transition-opacity" onclick="closeModal('checkout-modal')"></div>
-        <div class="sheet-content pointer-events-auto bg-white rounded-3xl w-full max-w-md p-8 relative shadow-2xl scale-95 opacity-0 transition-all duration-300 transform-gpu">
-            
-            <button onclick="closeModal('checkout-modal')" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-forest transition-colors tap-active">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-mint rounded-full flex items-center justify-center mx-auto mb-4 text-leaf animate-bounce-sm">
-                    <i data-lucide="truck" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-serif font-bold text-forest">Delivery Details</h3>
-                <p class="text-gray-400 text-sm mt-2">Enter details to generate WhatsApp order.</p>
-            </div>
-
-            <form onsubmit="processOrder(event)" class="space-y-4">
-                <input type="text" id="c-name" required placeholder="Full Name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400">
-                <input type="tel" id="c-phone" required placeholder="Phone Number" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all placeholder:text-gray-400">
-                <textarea id="c-address" required rows="3" placeholder="Delivery Address" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:ring-2 focus:ring-leaf/20 focus:border-leaf transition-all resize-none placeholder:text-gray-400"></textarea>
-                
-                <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl mt-4 shadow-xl tap-active hover:bg-[#1e3f2d] transition-colors">
-                    Confirm Order
-                </button>
-            </form>
-        </div>
-    </div>
-
     <!-- SEARCH MODAL -->
-    <div id="search-modal" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl modal-enter flex flex-col">
-        <div class="pt-12 px-4 pb-4 border-b border-gray-100 flex items-center gap-3">
+    <div id="search-modal" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl opacity-0 invisible transition-all duration-300 flex flex-col">
+        <div class="pt-16 px-4 pb-4 border-b border-gray-100 flex items-center gap-3">
             <i data-lucide="search" class="text-gray-400 w-5 h-5"></i>
-            <input type="text" id="search-input" placeholder="Search for seeds..." class="flex-grow bg-transparent text-lg font-medium text-forest placeholder:text-gray-300 focus:outline-none" oninput="handleSearch(this.value)">
-            <button onclick="closeModal('search-modal')" class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">Cancel</button>
+            <input type="text" id="search-input" placeholder="Search for seeds..." class="flex-grow bg-transparent text-lg font-medium text-forest placeholder:text-gray-300 focus:outline-none touch-target" oninput="handleSearch(this.value)">
+            <button onclick="closeModal('search-modal')" class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-full touch-target">Cancel</button>
         </div>
         <div id="search-results" class="flex-grow overflow-y-auto p-4 grid grid-cols-2 gap-3 content-start">
             <!-- Results -->
@@ -607,6 +658,23 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHrBE3doAhDni4mcNhylJD8o3r5cNZYSI",
+            authDomain: "ls-mannage.firebaseapp.com",
+            databaseURL: "https://ls-mannage-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "ls-mannage",
+            storageBucket: "ls-mannage.firebasestorage.app",
+            messagingSenderId: "115534926798",
+            appId: "1:115534926798:web:4ea3ab3c1a2d44e2e1d19f",
+            measurementId: "G-P2JQH8M41Y"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
         // --- DATA ---
         const products = [
             { id: 1, type: 'fruit-seeds', name: "Heirloom Tomato", price: 120, originalPrice: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "Juicy, rich-flavored tomatoes perfect for salads and sauces.", germ: "98%", time: "60 Days", rating: 4.8 },
@@ -622,98 +690,406 @@
         // --- STATE ---
         let state = {
             cart: JSON.parse(localStorage.getItem('ls_cart')) || [],
-            wishlist: JSON.parse(localStorage.getItem('ls_wishlist')) || [],
-            soundEnabled: JSON.parse(localStorage.getItem('ls_sound')) !== false,
+            user: JSON.parse(localStorage.getItem('ls_user')) || null,
+            userDetails: JSON.parse(localStorage.getItem('ls_user_details')) || null,
             currentItem: null,
             tempQty: 1
         };
 
-        // --- SOUND ENGINE ---
+        // --- IMPROVED SOUND ENGINE ---
         const soundEffects = {
             click: () => {
-                if (!state.soundEnabled) return;
                 try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.frequency.value = 800;
-                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.1);
-                } catch(e){}
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    
+                    // Clean up
+                    setTimeout(() => {
+                        oscillator.disconnect();
+                        gainNode.disconnect();
+                    }, 100);
+                } catch (e) {
+                    // Fallback to silent if AudioContext fails
+                }
             },
             success: () => {
-                if (!state.soundEnabled) return;
                 try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.3);
-                } catch(e){}
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.type = 'sine';
+                    
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    
+                    setTimeout(() => {
+                        oscillator.disconnect();
+                        gainNode.disconnect();
+                    }, 300);
+                } catch (e) {
+                    // Fallback silent
+                }
             }
         };
 
         function playSound(type) {
-            if(soundEffects[type]) soundEffects[type]();
+            if (soundEffects[type]) {
+                soundEffects[type]();
+            }
         }
 
-        function toggleSound() {
-            state.soundEnabled = !state.soundEnabled;
-            localStorage.setItem('ls_sound', JSON.stringify(state.soundEnabled));
-            updateSoundIcons();
-            showToast(state.soundEnabled ? 'Sound On' : 'Sound Off', 'Audio effects updated');
-        }
-
-        function updateSoundIcons() {
-            const iconD = document.getElementById('sound-icon-desktop');
-            const iconM = document.getElementById('sound-icon-mobile');
-            const iconName = state.soundEnabled ? 'volume-2' : 'volume-x';
+        // --- AUTH FUNCTIONS ---
+        function openAuthModal() {
+            playSound('click');
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            modal.classList.add('opacity-100');
             
-            if(iconD) {
-                iconD.setAttribute('data-lucide', iconName);
-                if(!state.soundEnabled) iconD.classList.add('text-gray-400');
-                else iconD.classList.remove('text-gray-400');
-            }
-            if(iconM) {
-                iconM.setAttribute('data-lucide', iconName);
-            }
-            lucide.createIcons();
+            const content = modal.querySelector('div.relative');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
         }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if(modal) {
+                const content = modal.querySelector('div.relative');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('invisible', 'pointer-events-none');
+                }, 300);
+                playSound('click');
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            
+            if(tab === 'login') {
+                loginTab.classList.add('text-forest', 'border-forest');
+                loginTab.classList.remove('text-gray-400');
+                registerTab.classList.remove('text-forest', 'border-forest');
+                registerTab.classList.add('text-gray-400');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                registerTab.classList.add('text-forest', 'border-forest');
+                registerTab.classList.remove('text-gray-400');
+                loginTab.classList.remove('text-forest', 'border-forest');
+                loginTab.classList.add('text-gray-400');
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+            playSound('click');
+        }
+
+        function signInWithPhone() {
+            playSound('click');
+            closeAuthModal();
+            
+            const modal = document.getElementById('phone-modal');
+            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            
+            const content = modal.querySelector('div.relative');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closePhoneModal() {
+            const modal = document.getElementById('phone-modal');
+            if(modal) {
+                const content = modal.querySelector('div.relative');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('invisible', 'pointer-events-none');
+                }, 300);
+                playSound('click');
+            }
+        }
+
+        async function signInWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                
+                // Try to get existing user details
+                const userRef = database.ref('users/' + user.uid);
+                const snapshot = await userRef.once('value');
+                const existingDetails = snapshot.val();
+                
+                state.user = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL
+                };
+                
+                state.userDetails = existingDetails || {
+                    name: user.displayName || '',
+                    phone: '',
+                    address: '',
+                    email: user.email
+                };
+                
+                localStorage.setItem('ls_user', JSON.stringify(state.user));
+                localStorage.setItem('ls_user_details', JSON.stringify(state.userDetails));
+                
+                // Save to Firebase if new user
+                if (!existingDetails) {
+                    await userRef.set(state.userDetails);
+                }
+                
+                updateUIForUser();
+                closeAuthModal();
+                showToast('Welcome!', `Hello ${user.displayName || user.email}`);
+                playSound('success');
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showToast('Error', error.message);
+            }
+        }
+
+        async function sendOTP(event) {
+            event.preventDefault();
+            const phoneNumber = document.getElementById('phone-number').value;
+            
+            // In a real app, you would use Firebase Phone Auth here
+            // For demo purposes, we'll simulate OTP
+            showToast('OTP Sent', `OTP sent to ${phoneNumber}`);
+            playSound('success');
+            
+            // Close modal and open a verification modal in real implementation
+            closePhoneModal();
+        }
+
+        async function loginWithEmail(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Load user details from database
+                const userRef = database.ref('users/' + user.uid);
+                const snapshot = await userRef.once('value');
+                const userDetails = snapshot.val();
+                
+                state.user = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || email.split('@')[0]
+                };
+                
+                state.userDetails = userDetails || {
+                    name: '',
+                    phone: '',
+                    address: '',
+                    email: user.email
+                };
+                
+                localStorage.setItem('ls_user', JSON.stringify(state.user));
+                localStorage.setItem('ls_user_details', JSON.stringify(state.userDetails));
+                
+                updateUIForUser();
+                closeAuthModal();
+                showToast('Welcome Back!', `Good to see you again`);
+                playSound('success');
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Login Failed', error.message);
+            }
+        }
+
+        async function registerWithEmail(event) {
+            event.preventDefault();
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const firstName = document.getElementById('register-firstname').value;
+            const lastName = document.getElementById('register-lastname').value;
+            const phone = document.getElementById('register-phone').value;
+            const address = document.getElementById('register-address').value;
+            
+            if (password.length < 6) {
+                showToast('Error', 'Password must be at least 6 characters');
+                return;
+            }
+            
+            try {
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                await user.updateProfile({
+                    displayName: `${firstName} ${lastName}`
+                });
+                
+                // Save user details to Firebase
+                const userDetails = {
+                    name: `${firstName} ${lastName}`,
+                    phone: phone,
+                    address: address,
+                    email: email,
+                    createdAt: new Date().toISOString()
+                };
+                
+                await database.ref('users/' + user.uid).set(userDetails);
+                
+                state.user = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: `${firstName} ${lastName}`
+                };
+                
+                state.userDetails = userDetails;
+                
+                localStorage.setItem('ls_user', JSON.stringify(state.user));
+                localStorage.setItem('ls_user_details', JSON.stringify(userDetails));
+                
+                updateUIForUser();
+                closeAuthModal();
+                showToast('Welcome!', `Account created successfully`);
+                playSound('success');
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('Registration Failed', error.message);
+            }
+        }
+
+        async function logout() {
+            try {
+                await auth.signOut();
+                state.user = null;
+                state.userDetails = null;
+                localStorage.removeItem('ls_user');
+                localStorage.removeItem('ls_user_details');
+                updateUIForUser();
+                showToast('Logged Out', 'See you soon!');
+                playSound('click');
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        function updateUIForUser() {
+            const userProfile = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            const userIconMobile = document.getElementById('user-icon-mobile');
+            
+            if (state.user) {
+                userProfile.classList.remove('hidden');
+                loginButton.classList.add('hidden');
+                
+                document.getElementById('user-name').textContent = 
+                    state.user.displayName || state.user.email.split('@')[0];
+                
+                const avatar = document.getElementById('user-avatar');
+                if (state.user.photoURL) {
+                    avatar.innerHTML = `<img src="${state.user.photoURL}" class="w-full h-full rounded-full object-cover">`;
+                } else {
+                    const initials = state.user.displayName ? 
+                        state.user.displayName.split(' ').map(n => n[0]).join('').toUpperCase() :
+                        state.user.email[0].toUpperCase();
+                    avatar.textContent = initials;
+                }
+                
+                if (userIconMobile) {
+                    userIconMobile.setAttribute('data-lucide', 'user-check');
+                    lucide.createIcons();
+                }
+            } else {
+                userProfile.classList.add('hidden');
+                loginButton.classList.remove('hidden');
+                
+                if (userIconMobile) {
+                    userIconMobile.setAttribute('data-lucide', 'user');
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        // Check auth state on page load
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                state.user = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL
+                };
+                
+                // Load user details from database
+                database.ref('users/' + user.uid).once('value').then((snapshot) => {
+                    const userDetails = snapshot.val();
+                    state.userDetails = userDetails;
+                    localStorage.setItem('ls_user', JSON.stringify(state.user));
+                    localStorage.setItem('ls_user_details', JSON.stringify(userDetails || {}));
+                    updateUIForUser();
+                });
+            } else {
+                state.user = null;
+                state.userDetails = null;
+                localStorage.removeItem('ls_user');
+                localStorage.removeItem('ls_user_details');
+                updateUIForUser();
+            }
+        });
 
         // --- INIT ---
         window.addEventListener('load', () => {
-            // GIF Preloader logic
-            const gif = new Image();
-            gif.src = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3Q1NnZyN21kMm1yNTJ2aGdwdDltcmlxamtqNDYxMzZmM2xrYngzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B2bZ5FhOnTRvvkOIZn/giphy.gif";
-
+            // Quick loader timeout
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').remove(), 1000);
-            }, 2500);
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            }, 1500);
             
+            // Render grid
             setTimeout(() => {
                 renderGrid('all');
-            }, 500);
+            }, 200);
 
             updateBadges();
-            updateSoundIcons();
+            updateUIForUser();
             
-            // Marquee Hover Pause
-            document.querySelectorAll('.marquee-track').forEach(track => {
-                track.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
-                track.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
-            });
-
             lucide.createIcons();
         });
 
@@ -722,7 +1098,6 @@
             const grid = document.getElementById('product-grid');
             const data = filter === 'all' ? products : products.filter(p => p.type === filter);
             
-            // Update counts
             const countBadge = document.getElementById('item-count-badge');
             if(countBadge) countBadge.innerText = data.length;
 
@@ -746,33 +1121,24 @@
             });
 
             grid.innerHTML = data.map((p, idx) => `
-                <div class="group bg-white rounded-2xl p-2 md:p-3 border border-transparent hover:border-leaf/30 shadow-sm hover:shadow-soft transition-all duration-300 cursor-pointer animate-slide-up" 
-                     style="animation-delay: ${idx * 0.05}s"
+                <div class="group bg-white rounded-2xl p-3 border border-gray-100 hover:border-leaf/30 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in" 
+                     style="animation-delay: ${idx * 0.03}s"
                      onclick="openProduct(${p.id})">
                     <div class="aspect-[4/5] rounded-xl overflow-hidden relative bg-gray-100 mb-3">
-                        <img src="${p.img}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        ${p.originalPrice ? `<div class="absolute top-2 left-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">- ${(100 - (p.price/p.originalPrice)*100).toFixed(0)}%</div>` : ''}
-                        <button onclick="event.stopPropagation(); toggleWishlistItem(${p.id})" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-forest hover:bg-white transition-all tap-active hover:scale-110 shadow-sm">
-                            <i data-lucide="heart" class="w-3.5 h-3.5 ${state.wishlist.includes(p.id) ? 'fill-red-500 text-red-500' : ''}"></i>
-                        </button>
-                        
-                        <div class="absolute bottom-2 right-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hidden md:block">
-                             <button class="w-8 h-8 rounded-full bg-white text-forest shadow-md flex items-center justify-center hover:bg-leaf hover:text-white transition-colors">
-                                <i data-lucide="plus" class="w-4 h-4"></i>
-                             </button>
-                        </div>
+                        <img src="${p.img}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        ${p.originalPrice ? `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-sm">- ${(100 - (p.price/p.originalPrice)*100).toFixed(0)}%</div>` : ''}
                     </div>
                     <div class="px-1">
                         <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-bold text-forest text-sm md:text-base leading-tight line-clamp-1 group-hover:text-leaf transition-colors">${p.name}</h3>
-                            <div class="flex items-center gap-0.5 text-[10px] font-bold text-yellow-500 bg-yellow-50 px-1 rounded">
-                                <i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i> ${p.rating}
+                            <h3 class="font-bold text-forest text-base leading-tight line-clamp-1 group-hover:text-leaf transition-colors">${p.name}</h3>
+                            <div class="flex items-center gap-0.5 text-xs font-bold text-yellow-500 bg-yellow-50 px-1.5 py-0.5 rounded">
+                                <i data-lucide="star" class="w-3 h-3 fill-current"></i> ${p.rating}
                             </div>
                         </div>
-                        <p class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">${p.type.replace('-', ' ')}</p>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">${p.type.replace('-', ' ')}</p>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-base md:text-lg font-bold text-forest">₹${p.price}</span>
-                            ${p.originalPrice ? `<span class="text-[10px] text-gray-400 line-through">₹${p.originalPrice}</span>` : ''}
+                            <span class="text-lg font-bold text-forest">₹${p.price}</span>
+                            ${p.originalPrice ? `<span class="text-xs text-gray-400 line-through">₹${p.originalPrice}</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -781,7 +1147,7 @@
             lucide.createIcons();
         }
 
-        // --- ACTIONS ---
+        // --- PRODUCT MODAL FUNCTIONS ---
         function openProduct(id) {
             playSound('click');
             const p = products.find(x => x.id === id);
@@ -797,18 +1163,7 @@
             document.getElementById('modal-desc').innerText = p.desc;
             document.getElementById('modal-harvest').innerText = p.time;
             document.getElementById('qty-display').innerText = "1";
-            document.getElementById('modal-rating-text').innerText = p.rating;
             
-            // Heart state
-            const heartBtn = document.getElementById('modal-heart-btn');
-            if(state.wishlist.includes(p.id)) {
-                heartBtn.innerHTML = `<i data-lucide="heart" class="w-5 h-5 fill-red-500 text-red-500"></i>`;
-                heartBtn.classList.add('bg-red-50', 'border-red-200');
-            } else {
-                heartBtn.innerHTML = `<i data-lucide="heart" class="w-5 h-5"></i>`;
-                heartBtn.classList.remove('bg-red-50', 'border-red-200');
-            }
-
             if(p.originalPrice) {
                 document.getElementById('modal-original-price').innerText = `₹${p.originalPrice}`;
                 document.getElementById('modal-original-price').classList.remove('hidden');
@@ -817,19 +1172,35 @@
             }
 
             const modal = document.getElementById('product-modal');
-            modal.classList.add('active');
-            lucide.createIcons();
+            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            
+            const content = modal.querySelector('.modal-content');
+            content.classList.remove('translate-y-full', 'md:scale-95');
+            content.classList.add('translate-y-0', 'md:scale-100');
         }
 
         function closeModal(id) {
             playSound('click');
             const modal = document.getElementById(id);
-            modal.classList.remove('active');
             
-            const sheet = modal.querySelector('.sheet-content');
-            if(sheet && id === 'cart-drawer') {
-                sheet.style.transform = 'translateX(100%)';
+            if (id === 'product-modal') {
+                const content = modal.querySelector('.modal-content');
+                content.classList.remove('translate-y-0', 'md:scale-100');
+                content.classList.add('translate-y-full', 'md:scale-95');
+            } else if (id === 'cart-drawer') {
+                const content = modal.querySelector('.modal-content');
+                content.classList.remove('translate-x-0');
+                content.classList.add('translate-x-full');
+            } else if (id === 'search-modal') {
+                // No transform for search modal
             }
+            
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('invisible', 'pointer-events-none');
+            }, 300);
         }
 
         function adjustQty(delta) {
@@ -857,40 +1228,18 @@
             playSound('success');
         }
 
-        function toggleWishlistItem(id) {
-            playSound('click');
-            const idx = state.wishlist.indexOf(id);
-            if(idx > -1) {
-                state.wishlist.splice(idx, 1);
-                showToast('Removed', 'Item removed from favorites');
-            } else {
-                state.wishlist.push(id);
-                showToast('Saved', 'Item saved to favorites');
-                playSound('success');
-            }
-            saveState();
-            
-            if(document.getElementById('product-modal').classList.contains('active')) {
-                openProduct(id);
-            }
-            // Update grid without full re-render if possible, or simple re-render
-            // For simplicity, re-render currently active view
-            const activePill = document.querySelector('.cat-pill.bg-forest');
-            const filter = activePill ? activePill.textContent.toLowerCase().includes('all') ? 'all' : 
-                          (activePill.textContent.includes('Fruit') ? 'fruit-seeds' : 
-                          (activePill.textContent.includes('Veg') ? 'vegetable-seeds' : 'plant-seeds')) : 'all';
-            renderGrid(filter);
-        }
-
         function openCart() {
             playSound('click');
             const drawer = document.getElementById('cart-drawer');
             const container = document.getElementById('cart-items-container');
-            const sheet = drawer.querySelector('.sheet-content');
             
-            drawer.classList.add('active');
+            drawer.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            drawer.classList.add('opacity-100');
+            
             setTimeout(() => {
-                sheet.style.transform = 'translateX(0)';
+                const content = drawer.querySelector('.modal-content');
+                content.classList.remove('translate-x-full');
+                content.classList.add('translate-x-0');
             }, 10);
 
             if(state.cart.length === 0) {
@@ -900,7 +1249,7 @@
                             <i data-lucide="shopping-bag" class="w-8 h-8"></i>
                         </div>
                         <p class="font-bold text-gray-500">Your basket is empty</p>
-                        <p class="text-xs mt-1 text-gray-400">Time to add some green friends!</p>
+                        <p class="text-sm mt-1 text-gray-400">Add some seeds to get started!</p>
                     </div>
                 `;
                 document.getElementById('cart-total-price').innerText = '₹0.00';
@@ -909,18 +1258,18 @@
                 container.innerHTML = state.cart.map((item, idx) => {
                     total += item.price * item.qty;
                     return `
-                        <div class="flex gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm animate-fade-in relative overflow-hidden group">
-                            <img src="${item.img}" class="w-20 h-20 rounded-xl object-cover bg-gray-100">
+                        <div class="flex gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm animate-fade-in">
+                            <img src="${item.img}" loading="lazy" class="w-20 h-20 rounded-lg object-cover bg-gray-100">
                             <div class="flex-grow flex flex-col justify-between">
                                 <div>
                                     <h4 class="font-bold text-forest leading-tight">${item.name}</h4>
-                                    <p class="text-xs text-gray-400 mt-0.5">₹${item.price} / pack</p>
+                                    <p class="text-sm text-gray-400 mt-0.5">₹${item.price} / pack</p>
                                 </div>
                                 <div class="flex items-center justify-between mt-2">
-                                    <div class="flex items-center bg-gray-50 rounded-lg h-7 border border-gray-100">
-                                        <button onclick="updateCartItem(${idx}, -1)" class="w-7 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-l-lg"><i data-lucide="minus" class="w-3 h-3"></i></button>
-                                        <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
-                                        <button onclick="updateCartItem(${idx}, 1)" class="w-7 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-r-lg"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                                    <div class="flex items-center bg-gray-50 rounded-lg h-8 border border-gray-100">
+                                        <button onclick="updateCartItem(${idx}, -1)" class="w-8 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-l-lg tap-active touch-target"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                                        <span class="text-sm font-bold w-6 text-center">${item.qty}</span>
+                                        <button onclick="updateCartItem(${idx}, 1)" class="w-8 h-full flex items-center justify-center text-forest hover:bg-gray-100 rounded-r-lg tap-active touch-target"><i data-lucide="plus" class="w-3 h-3"></i></button>
                                     </div>
                                     <span class="font-bold text-forest">₹${item.price * item.qty}</span>
                                 </div>
@@ -944,41 +1293,92 @@
             openCart();
         }
 
-        // --- SEARCH ---
-        function openSearch() {
-            playSound('click');
-            document.getElementById('search-modal').classList.add('active');
-            setTimeout(() => document.getElementById('search-input').focus(), 100);
-        }
-
-        function handleSearch(query) {
-            const container = document.getElementById('search-results');
-            if(!query) {
-                container.innerHTML = '';
+        // --- CHECKOUT (Direct to WhatsApp) ---
+        function processCheckout() {
+            if(state.cart.length === 0) return;
+            
+            if (!state.userDetails || !state.userDetails.phone || !state.userDetails.address) {
+                showToast('Info Required', 'Please update your profile with phone and address');
+                openAuthModal();
+                closeModal('cart-drawer');
                 return;
             }
             
-            const results = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+            let message = `*New Order from ${state.userDetails.name}*\n\n`;
+            let total = 0;
             
-            container.innerHTML = results.map(p => `
-                <div onclick="closeModal('search-modal'); openProduct(${p.id})" class="bg-gray-50 rounded-xl p-2 flex items-center gap-3 cursor-pointer active:scale-95 transition-transform hover:bg-gray-100 border border-gray-100">
-                    <img src="${p.img}" class="w-12 h-12 object-cover rounded-lg">
-                    <div>
-                        <p class="font-bold text-sm text-forest">${p.name}</p>
-                        <p class="text-xs text-gray-500">₹${p.price}</p>
+            state.cart.forEach(item => {
+                message += `${item.qty}x ${item.name} - ₹${item.price * item.qty}\n`;
+                total += item.price * item.qty;
+            });
+            
+            message += `\n*Total: ₹${total}*\n\n`;
+            message += `*Customer Details:*\n`;
+            message += `Name: ${state.userDetails.name}\n`;
+            message += `Phone: ${state.userDetails.phone}\n`;
+            message += `Email: ${state.userDetails.email}\n`;
+            message += `Address: ${state.userDetails.address}\n\n`;
+            message += `---\nOrder ID: ${Date.now()}`;
+            
+            const whatsappNumber = '919876543210'; // Replace with your WhatsApp number
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+            
+            // Clear cart after checkout
+            state.cart = [];
+            saveState();
+            closeModal('cart-drawer');
+            showToast('Order Sent', 'Redirecting to WhatsApp...');
+            playSound('success');
+        }
+
+        // --- SEARCH ---
+        function openSearch() {
+            playSound('click');
+            const modal = document.getElementById('search-modal');
+            modal.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            setTimeout(() => document.getElementById('search-input').focus(), 100);
+        }
+
+        let searchTimeout;
+        function handleSearch(query) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const container = document.getElementById('search-results');
+                if(!query || query.length < 2) {
+                    container.innerHTML = '<p class="text-gray-400 text-center col-span-2 py-8">Type at least 2 characters to search</p>';
+                    return;
+                }
+                
+                const results = products.filter(p => 
+                    p.name.toLowerCase().includes(query.toLowerCase()) ||
+                    p.desc.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                if(results.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400 text-center col-span-2 py-8">No products found</p>';
+                    return;
+                }
+                
+                container.innerHTML = results.map(p => `
+                    <div onclick="closeModal('search-modal'); openProduct(${p.id})" class="bg-gray-50 rounded-xl p-3 flex items-center gap-3 cursor-pointer tap-active hover:bg-gray-100 border border-gray-100">
+                        <img src="${p.img}" loading="lazy" class="w-12 h-12 object-cover rounded-lg">
+                        <div class="flex-grow">
+                            <p class="font-bold text-sm text-forest">${p.name}</p>
+                            <p class="text-xs text-gray-500">₹${p.price}</p>
+                        </div>
                     </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-gray-300"></i>
-                </div>
-            `).join('');
-            lucide.createIcons();
+                `).join('');
+                lucide.createIcons();
+            }, 300);
         }
 
         // --- UTILS ---
         function updateBadges() {
             const cartCount = state.cart.reduce((a,b) => a + b.qty, 0);
-            const wishCount = state.wishlist.length;
-            
-            // Cart Badge
             const cartBadge = document.getElementById('cart-badge');
             cartBadge.innerText = cartCount;
             if(cartCount > 0) {
@@ -986,23 +1386,10 @@
             } else {
                 cartBadge.classList.add('opacity-0', 'scale-0');
             }
-
-            // Wishlist Badge
-            const wishBadgeD = document.getElementById('wishlist-badge-desktop');
-            const wishBadgeM = document.getElementById('wishlist-badge-mobile');
-            
-            if(wishCount > 0) {
-                wishBadgeD.classList.remove('opacity-0');
-                wishBadgeM.classList.remove('opacity-0');
-            } else {
-                wishBadgeD.classList.add('opacity-0');
-                wishBadgeM.classList.add('opacity-0');
-            }
         }
 
         function saveState() {
             localStorage.setItem('ls_cart', JSON.stringify(state.cart));
-            localStorage.setItem('ls_wishlist', JSON.stringify(state.wishlist));
             updateBadges();
         }
 
@@ -1014,7 +1401,7 @@
             toast.style.transform = 'translateX(0)';
             setTimeout(() => {
                 toast.style.transform = 'translateX(150%)';
-            }, 3000);
+            }, 2000);
         }
 
         function scrollToGrid() {
@@ -1028,52 +1415,23 @@
             scrollToGrid();
         }
 
-        function toggleWishlist() {
-            playSound('click');
-            const count = state.wishlist.length;
-            if(count === 0) showToast('Wishlist', 'Your wishlist is empty');
-            else showToast('Wishlist', `You have ${count} saved items`);
+        // Prevent multiple rapid clicks
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
         }
 
-        function initCheckout() {
-            if(state.cart.length === 0) return;
-            closeModal('cart-drawer');
-            document.getElementById('checkout-modal').classList.add('active');
-            playSound('click');
-            setTimeout(() => {
-                document.querySelector('#checkout-modal .sheet-content').classList.remove('scale-95', 'opacity-0');
-            }, 50);
-        }
-
-        function processOrder(e) {
-            e.preventDefault();
-            const name = document.getElementById('c-name').value;
-            const address = document.getElementById('c-address').value;
-            
-            let msg = `*New Order from ${name}*\n\n`;
-            let total = 0;
-            state.cart.forEach(i => {
-                msg += `${i.qty}x ${i.name} - ₹${i.price*i.qty}\n`;
-                total += i.price*i.qty;
-            });
-            msg += `\n*Total: ₹${total}*\n\nAddress: ${address}`;
-            
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-            
-            state.cart = [];
-            saveState();
-            closeModal('checkout-modal');
-            showToast('Order Sent', 'Redirecting to WhatsApp...');
-            playSound('success');
-        }
-        
-        function switchTab(tab) {
-             playSound('click');
-             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('text-forest'));
-             event.currentTarget.classList.add('text-forest');
-             if(tab === 'home') window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
+        // Attach debounced scroll listener
+        window.addEventListener('scroll', debounce(() => {
+            // Performance optimization: only run heavy operations when needed
+        }, 100));
     </script>
 </body>
 </html>

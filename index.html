@@ -11,6 +11,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -48,12 +49,14 @@
                     animation: {
                         'fade-in': 'fadeIn 0.4s ease-out forwards',
                         'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'slide-in-right': 'slideInRight 0.3s ease-out forwards',
                         'leaf-wiggle': 'leafWiggle 2s ease-in-out infinite',
                         'gentle-pulse': 'gentlePulse 3s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
                         slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        slideInRight: { 'from': { transform: 'translateX(100%)', opacity: '0' }, 'to': { transform: 'translateX(0)', opacity: '1' } },
                         leafWiggle: { 
                             '0%, 100%': { transform: 'rotate(-5deg) scale(1)' }, 
                             '50%': { transform: 'rotate(5deg) scale(1.05)' } 
@@ -163,6 +166,20 @@
         
         .removing {
             animation: slideOut 0.3s ease forwards;
+        }
+
+        /* For You badge styling */
+        .for-you-badge {
+            background: linear-gradient(135deg, #7ED957 0%, #2A593E 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            z-index: 10;
         }
     </style>
 </head>
@@ -548,11 +565,12 @@
         
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const database = firebase.database();
 
         // WhatsApp Number Configuration
-        const WHATSAPP_NUMBER = '9526725376'; // Updated WhatsApp number
+        const WHATSAPP_NUMBER = '9526725376';
 
-        // Updated Product Data with Flowers and Plants categories
+        // Product Data
         const products = [
             // Fruits Seeds
             { id: 1, type: 'fruit-seeds', name: "Heirloom Tomato", price: 120, originalPrice: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "Juicy, rich-flavored tomatoes." },
@@ -587,7 +605,8 @@
             user: JSON.parse(localStorage.getItem('ls_user_profile')) || null,
             currentItem: null,
             tempQty: 1,
-            purchaseHistory: JSON.parse(localStorage.getItem('ls_purchase_history')) || {}
+            purchaseHistory: JSON.parse(localStorage.getItem('ls_purchase_history')) || {},
+            userBehavior: JSON.parse(localStorage.getItem('ls_user_behavior')) || {}
         };
 
         // --- SOUND ENGINE ---
@@ -615,7 +634,6 @@
                 playTone(659.25, 0.1);
                 playTone(783.99, 0.2);
             } else if (type === 'remove') {
-                // Special sound for removing items
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(500, ctx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.1);
@@ -637,6 +655,199 @@
             gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.4);
             osc.start(ctx.currentTime + delay);
             osc.stop(ctx.currentTime + delay + 0.5);
+        }
+
+        // --- USER BEHAVIOR TRACKING ---
+        function trackUserBehavior(action, data) {
+            if (!state.user || !state.user.email) return;
+            
+            const userId = state.user.email;
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (!state.userBehavior[userId]) {
+                state.userBehavior[userId] = {
+                    searches: [],
+                    views: [],
+                    purchases: [],
+                    categories: {},
+                    interests: {},
+                    lastUpdated: today
+                };
+            }
+            
+            state.userBehavior[userId].lastUpdated = today;
+            
+            switch(action) {
+                case 'search':
+                    if (data && !state.userBehavior[userId].searches.includes(data.toLowerCase())) {
+                        state.userBehavior[userId].searches.push(data.toLowerCase());
+                        if (state.userBehavior[userId].searches.length > 20) {
+                            state.userBehavior[userId].searches.shift();
+                        }
+                    }
+                    break;
+                    
+                case 'view':
+                    const viewData = {
+                        productId: data.id,
+                        category: data.type,
+                        name: data.name,
+                        timestamp: Date.now()
+                    };
+                    state.userBehavior[userId].views.unshift(viewData);
+                    if (state.userBehavior[userId].views.length > 50) {
+                        state.userBehavior[userId].views.pop();
+                    }
+                    break;
+                    
+                case 'category_click':
+                    const category = data;
+                    if (!state.userBehavior[userId].categories[category]) {
+                        state.userBehavior[userId].categories[category] = 0;
+                    }
+                    state.userBehavior[userId].categories[category] += 1;
+                    break;
+                    
+                case 'purchase':
+                    data.items.forEach(item => {
+                        if (!state.userBehavior[userId].interests[item.type]) {
+                            state.userBehavior[userId].interests[item.type] = 0;
+                        }
+                        state.userBehavior[userId].interests[item.type] += item.qty;
+                    });
+                    
+                    state.userBehavior[userId].purchases.unshift({
+                        orderId: data.orderId,
+                        items: data.items,
+                        total: data.total,
+                        timestamp: Date.now()
+                    });
+                    
+                    if (state.userBehavior[userId].purchases.length > 50) {
+                        state.userBehavior[userId].purchases.pop();
+                    }
+                    break;
+            }
+            
+            localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
+            saveUserBehaviorToFirebase();
+        }
+
+        async function saveUserBehaviorToFirebase() {
+            if (!state.user || !state.user.email) return;
+            
+            try {
+                const userId = state.user.email.replace(/[.#$\[\]]/g, '_');
+                await database.ref('userBehavior/' + userId).set(state.userBehavior[state.user.email]);
+            } catch (error) {
+                console.log('Firebase offline', error);
+            }
+        }
+
+        async function loadUserBehaviorFromFirebase() {
+            if (!state.user || !state.user.email) return;
+            
+            try {
+                const userId = state.user.email.replace(/[.#$\[\]]/g, '_');
+                const snapshot = await database.ref('userBehavior/' + userId).once('value');
+                const firebaseData = snapshot.val();
+                
+                if (firebaseData) {
+                    if (!state.userBehavior[state.user.email]) {
+                        state.userBehavior[state.user.email] = firebaseData;
+                    } else {
+                        // Merge searches
+                        const localSearches = state.userBehavior[state.user.email].searches || [];
+                        const firebaseSearches = firebaseData.searches || [];
+                        state.userBehavior[state.user.email].searches = [...new Set([...localSearches, ...firebaseSearches])];
+                        
+                        // Merge views
+                        const localViews = state.userBehavior[state.user.email].views || [];
+                        const firebaseViews = firebaseData.views || [];
+                        state.userBehavior[state.user.email].views = [...localViews, ...firebaseViews]
+                            .sort((a, b) => b.timestamp - a.timestamp)
+                            .slice(0, 50);
+                        
+                        // Merge categories
+                        state.userBehavior[state.user.email].categories = {
+                            ...(firebaseData.categories || {}),
+                            ...(state.userBehavior[state.user.email].categories || {})
+                        };
+                        
+                        // Merge interests
+                        state.userBehavior[state.user.email].interests = {
+                            ...(firebaseData.interests || {}),
+                            ...(state.userBehavior[state.user.email].interests || {})
+                        };
+                        
+                        // Merge purchases
+                        const localPurchases = state.userBehavior[state.user.email].purchases || [];
+                        const firebasePurchases = firebaseData.purchases || [];
+                        state.userBehavior[state.user.email].purchases = [...localPurchases, ...firebasePurchases]
+                            .sort((a, b) => b.timestamp - a.timestamp)
+                            .slice(0, 50);
+                    }
+                    
+                    localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
+                }
+            } catch (error) {
+                console.log('Could not load from Firebase', error);
+            }
+        }
+
+        // --- PERSONALIZED RECOMMENDATION ALGORITHM ---
+        function getPersonalizedProductOrder(products) {
+            if (!state.user || !state.userBehavior[state.user.email]) {
+                return products;
+            }
+            
+            const userData = state.userBehavior[state.user.email];
+            const scoredProducts = products.map(product => {
+                let score = 0;
+                
+                // 1. Category preference (30% weight)
+                const categoryWeight = userData.categories[product.type] || 0;
+                score += categoryWeight * 30;
+                
+                // 2. Search relevance (25% weight)
+                userData.searches.forEach(searchTerm => {
+                    if (product.name.toLowerCase().includes(searchTerm) || 
+                        product.type.toLowerCase().includes(searchTerm)) {
+                        score += 25;
+                    }
+                });
+                
+                // 3. Purchase interest (20% weight)
+                const interestWeight = userData.interests[product.type] || 0;
+                score += interestWeight * 20;
+                
+                // 4. Recent views (15% weight)
+                const recentView = userData.views.find(view => view.productId === product.id);
+                if (recentView) {
+                    const daysAgo = (Date.now() - recentView.timestamp) / (1000 * 60 * 60 * 24);
+                    if (daysAgo < 7) score += 15;
+                    else if (daysAgo < 30) score += 8;
+                }
+                
+                // 5. Purchase history similarity (10% weight)
+                userData.purchases.forEach(purchase => {
+                    purchase.items.forEach(item => {
+                        if (item.type === product.type) score += 10;
+                    });
+                });
+                
+                return { ...product, score };
+            });
+            
+            scoredProducts.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return b.price - a.price;
+            });
+            
+            return scoredProducts.map(p => {
+                const { score, ...product } = p;
+                return product;
+            });
         }
 
         // --- AUTH & USER LOGIC ---
@@ -677,14 +888,15 @@
         function updateProfileModal() {
             if (!state.user) return;
             
+            const userEmail = state.user.email;
             document.getElementById('profile-name').textContent = state.user.name || 'User Name';
-            document.getElementById('profile-email').textContent = state.user.email || 'user@email.com';
+            document.getElementById('profile-email').textContent = userEmail || 'user@email.com';
             document.getElementById('profile-phone').textContent = state.user.phone || '+91 00000 00000';
             document.getElementById('profile-address').textContent = state.user.address || 'No address saved';
             document.getElementById('profile-avatar').textContent = state.user.name ? state.user.name[0].toUpperCase() : 'U';
             
-            // Load purchase history for this user
-            const userId = state.user.uid || state.user.email;
+            // Load purchase history
+            const userId = state.user.uid || userEmail;
             const userHistory = state.purchaseHistory[userId] || [];
             const historyContainer = document.getElementById('purchase-history');
             
@@ -706,6 +918,73 @@
                         </div>
                     </div>
                 `).join('');
+            }
+            
+            // Show preferences section
+            if (state.userBehavior[userEmail]) {
+                const userData = state.userBehavior[userEmail];
+                const topCategories = Object.entries(userData.categories || {})
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3);
+                
+                const topInterests = Object.entries(userData.interests || {})
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3);
+                
+                const preferencesHTML = `
+                    <div class="preferences-section mt-6 pt-6 border-t border-gray-100">
+                        <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
+                            <i data-lucide="brain" class="w-5 h-5"></i>
+                            Your Preferences
+                        </h4>
+                        <div class="space-y-3">
+                            ${topCategories.length > 0 ? `
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Top Categories:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${topCategories.map(([cat, count]) => `
+                                            <span class="px-3 py-1 bg-mint text-forest text-xs rounded-full">
+                                                ${cat.replace('-', ' ')} (${count})
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${topInterests.length > 0 ? `
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Frequent Buys:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${topInterests.map(([type, qty]) => `
+                                            <span class="px-3 py-1 bg-leaf/20 text-forest text-xs rounded-full">
+                                                ${type.replace('-', ' ')} (${qty} items)
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${userData.searches && userData.searches.length > 0 ? `
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Recent Searches:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${userData.searches.slice(-5).map(term => `
+                                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                                ${term}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                const modalContent = document.querySelector('#profile-modal .p-6');
+                const existingPrefs = modalContent.querySelector('.preferences-section');
+                if (existingPrefs) existingPrefs.remove();
+                modalContent.insertAdjacentHTML('beforeend', preferencesHTML);
+                lucide.createIcons();
             }
         }
 
@@ -747,6 +1026,19 @@
                 localStorage.setItem('ls_user_profile', JSON.stringify(profile));
                 state.user = profile;
                 
+                // Initialize user behavior
+                if (!state.userBehavior[email]) {
+                    state.userBehavior[email] = {
+                        searches: [],
+                        views: [],
+                        purchases: [],
+                        categories: {},
+                        interests: {},
+                        lastUpdated: new Date().toISOString().split('T')[0]
+                    };
+                    localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
+                }
+                
                 updateUI();
                 closeAuthModal();
                 playSound('success');
@@ -770,9 +1062,20 @@
                     localStorage.setItem('ls_user_profile', JSON.stringify(savedProfile));
                 }
                 state.user = savedProfile;
+                
+                // Load user behavior from Firebase
+                await loadUserBehaviorFromFirebase();
+                
                 updateUI();
                 closeAuthModal();
                 playSound('success');
+                
+                // Show personalized welcome
+                setTimeout(() => {
+                    if (state.userBehavior[email] && state.userBehavior[email].searches.length > 0) {
+                        showNotification(`Welcome back! We've personalized products based on your interest in "${state.userBehavior[email].searches.slice(-1)[0]}"`);
+                    }
+                }, 1000);
             } catch (err) {
                 alert(err.message);
             }
@@ -789,10 +1092,26 @@
                     localStorage.setItem('ls_user_profile', JSON.stringify(savedProfile));
                 }
                 state.user = savedProfile;
+                
+                // Load user behavior from Firebase
+                await loadUserBehaviorFromFirebase();
+                
                 updateUI();
                 closeAuthModal();
                 playSound('success');
-            } catch(err) { console.error(err); }
+                
+                // Show personalized welcome
+                setTimeout(() => {
+                    if (state.userBehavior[u.email] && state.userBehavior[u.email].searches.length > 0) {
+                        showNotification(`Welcome back ${u.displayName}! Personalized picks ready for you.`);
+                    } else {
+                        showNotification(`Welcome ${u.displayName}! Start exploring and we'll learn your preferences.`);
+                    }
+                }, 1000);
+            } catch(err) { 
+                console.error(err);
+                alert('Google sign in failed. Please try again.');
+            }
         }
 
         function logout() {
@@ -812,6 +1131,24 @@
             }
         }
 
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-24 right-4 bg-forest text-white px-6 py-3 rounded-xl shadow-lg z-[1000] animate-slide-up flex items-center gap-2 max-w-xs';
+            notification.innerHTML = `
+                <i data-lucide="sparkles" class="w-5 h-5 text-leaf flex-shrink-0"></i>
+                <span class="text-sm">${message}</span>
+            `;
+            document.body.appendChild(notification);
+            
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         // --- PURCHASE HISTORY MANAGEMENT ---
         function savePurchase(orderData) {
             if (!state.user) return;
@@ -823,15 +1160,17 @@
             
             state.purchaseHistory[userId].unshift(orderData);
             
-            // Keep only last 10 orders
             if (state.purchaseHistory[userId].length > 10) {
                 state.purchaseHistory[userId].pop();
             }
             
             localStorage.setItem('ls_purchase_history', JSON.stringify(state.purchaseHistory));
+            
+            // Track purchase behavior
+            trackUserBehavior('purchase', orderData);
         }
 
-        // --- GRID & PRODUCTS ---
+        // --- PRODUCT GRID & FILTERING ---
         function filterProducts(type) {
             playSound('click');
             const btns = document.querySelectorAll('.cat-pill, .nav-pill');
@@ -839,6 +1178,11 @@
                 b.classList.remove('bg-forest', 'text-white');
                 b.classList.add('bg-white', 'text-gray-500', 'text-forest');
             });
+
+            // Track category click
+            if (type !== 'all') {
+                trackUserBehavior('category_click', type);
+            }
 
             // Highlight active button
             const activeBtn = Array.from(btns).find(btn => 
@@ -850,13 +1194,24 @@
             }
 
             const grid = document.getElementById('product-grid');
-            const data = type === 'all' ? products : products.filter(p => p.type === type);
+            let data = type === 'all' ? products : products.filter(p => p.type === type);
+            
+            // Apply personalization for 'all' category
+            if (type === 'all') {
+                data = getPersonalizedProductOrder(data);
+            }
             
             document.getElementById('item-count').innerText = `${data.length} Items`;
             
             grid.innerHTML = data.map((p, i) => `
-                <div class="group bg-white rounded-2xl p-2 border border-transparent shadow-sm hover:shadow-soft transition-all duration-300 tap-active animate-slide-up img-wrapper" 
+                <div class="group bg-white rounded-2xl p-2 border border-transparent shadow-sm hover:shadow-soft transition-all duration-300 tap-active animate-slide-up img-wrapper relative" 
                      style="animation-delay: ${i*0.05}s" onclick="openProduct(${p.id})">
+                    ${type === 'all' && state.user && i < 3 && state.userBehavior[state.user.email] && 
+                     state.userBehavior[state.user.email].searches.length > 0 ? `
+                        <div class="for-you-badge flex items-center gap-1">
+                            <i data-lucide="sparkles" class="w-3 h-3"></i> For You
+                        </div>
+                    ` : ''}
                     <div class="aspect-[4/5] rounded-xl overflow-hidden relative bg-gray-100 mb-3">
                         <img src="${p.img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         ${p.originalPrice ? `
@@ -875,13 +1230,20 @@
                     </div>
                 </div>
             `).join('');
+            
+            lucide.createIcons();
         }
 
         function openProduct(id) {
             playSound('click');
             const p = products.find(x => x.id === id);
+            if (!p) return;
+            
             state.currentItem = p;
             state.tempQty = 1;
+
+            // Track product view
+            trackUserBehavior('view', p);
 
             document.getElementById('modal-img').src = p.img;
             document.getElementById('modal-title').innerText = p.name;
@@ -897,6 +1259,8 @@
 
         // --- CART & CHECKOUT LOGIC ---
         function addToCart() {
+            if (!state.currentItem) return;
+            
             const existing = state.cart.find(i => i.id === state.currentItem.id);
             if(existing) existing.qty += state.tempQty;
             else state.cart.push({...state.currentItem, qty: state.tempQty});
@@ -912,6 +1276,8 @@
         }
 
         function directBuy() {
+            if (!state.currentItem) return;
+            
             const existing = state.cart.find(i => i.id === state.currentItem.id);
             if(existing) existing.qty += state.tempQty;
             else state.cart.push({...state.currentItem, qty: state.tempQty});
@@ -922,14 +1288,19 @@
 
         function handleCheckout() {
             playSound('click');
-            if(state.cart.length === 0) return alert('Cart empty!');
+            if(state.cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
 
             if(state.user && state.user.name && state.user.phone && state.user.address) {
                 sendToWhatsApp(state.user.name, state.user.phone, state.user.address);
             } else {
                 const m = document.getElementById('delivery-modal');
-                m.classList.remove('opacity-0', 'pointer-events-none');
-                m.querySelector('.sheet-content').classList.remove('scale-95', 'opacity-0');
+                m.classList.add('active');
+                setTimeout(() => {
+                    m.querySelector('.sheet-content').classList.remove('scale-95', 'opacity-0');
+                }, 10);
             }
         }
 
@@ -995,22 +1366,19 @@
             closeModal('cart-drawer');
             playSound('success');
             
-            // Redirect to WhatsApp - USING UPDATED NUMBER
-            window.location.href = `https://wa.me/91${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+            // Redirect to WhatsApp
+            window.open(`https://wa.me/91${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- CART ITEM MANAGEMENT ---
         function removeFromCart(productId, element) {
             playSound('remove');
             
-            // Add removal animation
             element.closest('.cart-item').classList.add('removing');
             
-            // Remove from cart after animation
             setTimeout(() => {
                 state.cart = state.cart.filter(item => item.id !== productId);
                 saveCart();
-                openCart(); // Refresh cart display
+                openCart();
             }, 300);
         }
 
@@ -1050,7 +1418,6 @@
                     </div>`;
                 }).join('');
                 
-                // Add icons for new elements
                 lucide.createIcons();
             }
             
@@ -1063,17 +1430,16 @@
             if (item) {
                 const newQty = item.qty + delta;
                 if (newQty < 1) {
-                    // If quantity becomes 0, remove the item
                     removeFromCart(productId, button);
                 } else {
                     item.qty = newQty;
                     saveCart();
-                    openCart(); // Refresh cart display
+                    openCart();
                 }
             }
         }
 
-        // --- UTILS ---
+        // --- UTILITY FUNCTIONS ---
         function adjustQty(d) {
             if(state.tempQty + d > 0) {
                 state.tempQty += d;
@@ -1089,11 +1455,14 @@
                 m.querySelector('.sheet-content').classList.add('translate-x-full');
                 setTimeout(() => m.classList.remove('active'), 300);
             } else if (id === 'delivery-modal') {
-                m.classList.add('opacity-0', 'pointer-events-none');
                 m.querySelector('.sheet-content').classList.add('scale-95', 'opacity-0');
+                setTimeout(() => m.classList.remove('active'), 300);
             } else if (id === 'profile-modal' || id === 'auth-modal') {
                 m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
                 m.querySelector('div.relative').classList.add('scale-95');
+            } else if (id === 'search-modal') {
+                m.classList.remove('active');
+                document.getElementById('search-input').value = '';
             } else {
                 m.classList.remove('active');
             }
@@ -1106,6 +1475,9 @@
         }
 
         function handleSearch(q) {
+            // Track search query
+            trackUserBehavior('search', q);
+            
             const res = products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
             document.getElementById('search-results').innerHTML = res.map(p => `
                 <div onclick="closeModal('search-modal'); openProduct(${p.id})" class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl tap-active">
@@ -1144,22 +1516,57 @@
             lucide.createIcons();
         }
 
-        // Initialize
+        // --- INITIALIZATION ---
         window.addEventListener('load', () => {
-            // Load purchase history
+            // Load saved data
             const savedHistory = localStorage.getItem('ls_purchase_history');
             if (savedHistory) {
                 state.purchaseHistory = JSON.parse(savedHistory);
             }
             
+            const savedBehavior = localStorage.getItem('ls_user_behavior');
+            if (savedBehavior) {
+                state.userBehavior = JSON.parse(savedBehavior);
+            }
+            
             setTimeout(() => {
                 document.getElementById('loader').classList.add('opacity-0', 'pointer-events-none');
-            }, 2000);
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 700);
+            }, 1500);
             
             filterProducts('all');
             saveCart();
             updateUI();
+            lucide.createIcons();
         });
+
+        // Make functions globally available
+        window.openAuthModal = openAuthModal;
+        window.closeAuthModal = closeAuthModal;
+        window.openProfileModal = openProfileModal;
+        window.closeProfileModal = closeProfileModal;
+        window.switchAuthTab = switchAuthTab;
+        window.loginWithEmail = loginWithEmail;
+        window.registerWithEmail = registerWithEmail;
+        window.signInWithGoogle = signInWithGoogle;
+        window.logout = logout;
+        window.openAccount = openAccount;
+        window.filterProducts = filterProducts;
+        window.openProduct = openProduct;
+        window.addToCart = addToCart;
+        window.directBuy = directBuy;
+        window.handleCheckout = handleCheckout;
+        window.saveAndProceedCheckout = saveAndProceedCheckout;
+        window.removeFromCart = removeFromCart;
+        window.openCart = openCart;
+        window.updateCartQty = updateCartQty;
+        window.adjustQty = adjustQty;
+        window.closeModal = closeModal;
+        window.openSearch = openSearch;
+        window.handleSearch = handleSearch;
+        window.playSound = playSound;
     </script>
 </body>
 </html>

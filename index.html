@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#2A593E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Lightsprouts | Premium Seeds</title>
+    <title>Lightsprouts | Premium Seeds & Plants</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
@@ -66,7 +66,6 @@
     </script>
 
     <style>
-        /* BASE STYLES & PROTECTION */
         :root {
             --safe-bottom: env(safe-area-inset-bottom);
         }
@@ -76,7 +75,6 @@
             color: #2A593E;
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
-            /* DISABLE SELECTION */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -84,16 +82,14 @@
             overflow-x: hidden;
         }
 
-        /* DISABLE IMAGE DRAG */
         img {
             -webkit-user-drag: none;
             -khtml-user-drag: none;
             -moz-user-drag: none;
             -o-user-drag: none;
-            pointer-events: none; /* Passes clicks to parent */
+            pointer-events: none;
         }
         
-        /* Utility to allow clicking on wrappers of images */
         .img-wrapper {
             position: relative;
         }
@@ -110,24 +106,20 @@
 
         .tap-active:active { transform: scale(0.96); transition: transform 0.1s; }
 
-        /* INPUT STYLES */
         input, textarea {
-            -webkit-user-select: text; /* Allow typing */
+            -webkit-user-select: text;
             user-select: text;
         }
 
-        /* LOADER */
         .loader-container {
             background: #F0FFE9;
         }
         
-        /* Mobile Improvements */
         .big-btn {
             min-height: 56px;
             font-size: 1.1rem;
         }
 
-        /* Modal Transitions */
         .modal-enter {
             opacity: 0;
             visibility: hidden;
@@ -144,11 +136,29 @@
         .modal-enter.active .sheet-content {
             transform: translateY(0);
         }
+
+        .order-badge {
+            background: linear-gradient(135deg, #7ED957 0%, #2A593E 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .history-item {
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+            background: rgba(240, 255, 233, 0.5);
+        }
     </style>
 </head>
 <body class="font-sans antialiased min-h-screen relative flex flex-col pb-24 md:pb-0" oncontextmenu="return false;">
 
-    <!-- NEW LOADING SCREEN -->
+    <!-- LOADING SCREEN -->
     <div id="loader" class="fixed inset-0 z-[100] bg-[#fcfdfa] flex flex-col items-center justify-center transition-opacity duration-700">
         <div class="relative w-24 h-24 mb-6">
             <svg class="w-full h-full text-forest animate-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -167,7 +177,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (Login/Register with Detailed Fields) -->
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm" onclick="closeAuthModal()"></div>
         
@@ -177,7 +187,6 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <!-- Tabs -->
             <div class="flex border-b border-gray-100 sticky top-0 bg-white z-20">
                 <button id="login-tab" class="flex-1 py-5 text-center font-bold text-lg text-forest border-b-4 border-forest transition-all" onclick="switchAuthTab('login')">
                     Login
@@ -216,14 +225,13 @@
                 </button>
             </div>
 
-            <!-- Register Form (EXTENDED) -->
+            <!-- Register Form -->
             <div id="register-form" class="p-8 hidden">
                 <div class="text-center mb-6">
                     <h3 class="text-2xl font-serif font-bold text-forest">Create Account</h3>
                 </div>
 
                 <form onsubmit="registerWithEmail(event)" class="space-y-4">
-                    <!-- Default details asked immediately -->
                     <input type="text" id="reg-name" required placeholder="Full Name" 
                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf">
                     
@@ -253,6 +261,62 @@
         </div>
     </div>
 
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm" onclick="closeProfileModal()"></div>
+        
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto flex flex-col max-h-[90vh] overflow-y-auto">
+            
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-forest hover:bg-forest hover:text-white transition-all tap-active">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Profile Header -->
+            <div class="bg-gradient-to-r from-forest to-leaf p-8 text-white">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold border-4 border-white/30" id="profile-avatar">
+                        U
+                    </div>
+                    <div>
+                        <h3 id="profile-name" class="text-2xl font-bold">User Name</h3>
+                        <p id="profile-email" class="text-white/80 text-sm">user@email.com</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="mt-4 px-4 py-2 bg-white/20 rounded-full text-sm font-bold hover:bg-white/30 transition-colors">
+                    Logout
+                </button>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="p-6">
+                <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    Personal Information
+                </h4>
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                        <span id="profile-phone" class="text-gray-600">+91 00000 00000</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-gray-400 mt-1"></i>
+                        <span id="profile-address" class="text-gray-600">Delivery address will appear here</span>
+                    </div>
+                </div>
+
+                <!-- Purchase History -->
+                <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
+                    <i data-lucide="history" class="w-5 h-5"></i>
+                    Purchase History
+                </h4>
+                <div id="purchase-history" class="space-y-3 max-h-60 overflow-y-auto">
+                    <!-- History items will be inserted here -->
+                    <p class="text-gray-400 text-center py-4">No purchases yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- APP HEADER -->
     <header class="fixed top-0 left-0 w-full z-40 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center relative">
@@ -268,16 +332,15 @@
                 <button onclick="filterProducts('all')" class="nav-pill px-5 py-2 rounded-full text-sm font-bold bg-white text-forest shadow-sm">All</button>
                 <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Fruits</button>
                 <button onclick="filterProducts('vegetable-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Veg</button>
-                <button onclick="filterProducts('plant-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Herbs</button>
+                <button onclick="filterProducts('flower-plants')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Flowers</button>
+                <button onclick="filterProducts('plants')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Plants</button>
                 <button onclick="filterProducts('spices')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Spices</button>
-                <button onclick="filterProducts('hybrid')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Hybrid</button>
             </nav>
 
-            <!-- Actions (Top Wishlist REMOVED) -->
+            <!-- Actions -->
             <div class="flex items-center gap-3">
                 <div id="user-profile" class="hidden items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-mint flex items-center justify-center text-leaf font-bold" id="user-avatar">U</div>
-                    <button onclick="logout()" class="text-xs text-red-400 font-bold hidden md:block">Logout</button>
+                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-mint flex items-center justify-center text-leaf font-bold hover:bg-leaf hover:text-white transition-colors" id="user-avatar">U</button>
                 </div>
 
                 <button id="login-button" onclick="openAuthModal()" class="px-4 py-2 rounded-full text-sm font-bold bg-forest/5 text-forest hover:bg-forest hover:text-white transition-colors">
@@ -296,8 +359,9 @@
             <button onclick="filterProducts('all')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-forest text-white shadow-sm transition-all">All</button>
             <button onclick="filterProducts('fruit-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Fruits</button>
             <button onclick="filterProducts('vegetable-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Veg</button>
+            <button onclick="filterProducts('flower-plants')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Flowers</button>
+            <button onclick="filterProducts('plants')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Plants</button>
             <button onclick="filterProducts('spices')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Spices</button>
-            <button onclick="filterProducts('hybrid')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Hybrid</button>
         </div>
     </header>
 
@@ -314,13 +378,13 @@
                 <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2 leading-tight">
                     Grow your own <br><span class="text-lime italic">paradise.</span>
                 </h1>
-                <p class="text-white/80 text-sm mb-4">Fast delivery. 95% Germination Rate.</p>
+                <p class="text-white/80 text-sm mb-4">Premium Plants & Seeds • 95% Germination • Fast Delivery</p>
             </div>
         </section>
 
         <!-- Product Grid -->
         <div id="grid-header" class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-forest">Fresh Seeds</h2>
+            <h2 class="text-xl font-bold text-forest">Fresh Plants & Seeds</h2>
             <span id="item-count" class="text-xs font-bold text-gray-400">Loading...</span>
         </div>
 
@@ -330,8 +394,7 @@
 
     </main>
 
-    <!-- MOBILE BOTTOM NAVIGATION (Wishlist Removed from Top, kept here for quick access if needed, or remove completely) -->
-    <!-- Requirement: "remove the top whishlist thing". Keeping bottom nav standard. -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 z-40 pb-[calc(10px+var(--safe-bottom))] pt-3 flex justify-around items-center shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
         <button onclick="window.scrollTo({top:0, behavior:'smooth'}); playSound('click')" class="flex flex-col items-center gap-1 text-forest w-16 tap-active">
             <i data-lucide="home" class="w-6 h-6"></i>
@@ -341,13 +404,13 @@
             <i data-lucide="search" class="w-6 h-6"></i>
             <span class="text-[10px] font-bold">Search</span>
         </button>
-        <button onclick="openAuthModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active">
+        <button onclick="openAccount()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active">
             <i id="user-icon-mobile" data-lucide="user" class="w-6 h-6"></i>
             <span class="text-[10px] font-bold">Account</span>
         </button>
     </nav>
 
-    <!-- PRODUCT DETAIL MODAL (Buy Button Enhanced) -->
+    <!-- PRODUCT DETAIL MODAL -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none modal-enter">
         <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm transition-opacity" onclick="closeModal('product-modal')"></div>
         
@@ -427,7 +490,7 @@
         </div>
     </div>
 
-    <!-- DELIVERY DETAILS MODAL (Only shows if details missing) -->
+    <!-- DELIVERY DETAILS MODAL -->
     <div id="delivery-modal" class="fixed inset-0 z-[80] flex items-center justify-center p-4 pointer-events-none modal-enter">
         <div class="absolute inset-0 bg-forest/90 backdrop-blur-md transition-opacity" onclick="closeModal('delivery-modal')"></div>
         <div class="sheet-content pointer-events-auto bg-white rounded-3xl w-full max-w-md p-8 relative shadow-2xl scale-95 opacity-0 transition-all duration-300">
@@ -437,7 +500,7 @@
             </button>
 
             <h3 class="text-2xl font-serif font-bold text-forest mb-2">One Last Thing</h3>
-            <p class="text-gray-400 mb-6">Where should we send your seeds?</p>
+            <p class="text-gray-400 mb-6">Where should we send your plants?</p>
 
             <form onsubmit="saveAndProceedCheckout(event)" class="space-y-4">
                 <input type="text" id="d-name" required placeholder="Full Name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg">
@@ -462,7 +525,6 @@
 
     <script>
         // --- CONFIG & DATA ---
-        // Reuse provided config (assuming it works for user)
         const firebaseConfig = {
             apiKey: "AIzaSyAHrBE3doAhDni4mcNhylJD8o3r5cNZYSI",
             authDomain: "ls-mannage.firebaseapp.com",
@@ -477,28 +539,45 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // Updated Product Data with Spices and Hybrids
+        // Updated Product Data with Flowers and Plants categories
         const products = [
+            // Fruits Seeds
             { id: 1, type: 'fruit-seeds', name: "Heirloom Tomato", price: 120, originalPrice: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "Juicy, rich-flavored tomatoes." },
-            { id: 2, type: 'vegetable-seeds', name: "Spicy Chilli", price: 80, originalPrice: 95, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600&auto=format&fit=crop", desc: "High heat variety." },
-            { id: 3, type: 'plant-seeds', name: "Fresh Coriander", price: 45, originalPrice: null, img: "https://images.unsplash.com/photo-1596043225276-2afc36c2d0b9?q=80&w=600&auto=format&fit=crop", desc: "Aromatic herb essential." },
-            { id: 4, type: 'spices', name: "Black Pepper", price: 200, originalPrice: 250, img: "https://images.unsplash.com/photo-1563503926-d34c11451381?q=80&w=600&auto=format&fit=crop", desc: "King of spices, vine plant." },
-            { id: 5, type: 'hybrid', name: "Hybrid Papaya", price: 150, originalPrice: 180, img: "https://images.unsplash.com/photo-1517260739337-6799d2ffdeee?q=80&w=600&auto=format&fit=crop", desc: "Fast growing, high yield." },
-            { id: 6, type: 'spices', name: "Cardamom", price: 300, originalPrice: 350, img: "https://images.unsplash.com/photo-1550399434-6c392c68f279?q=80&w=600&auto=format&fit=crop", desc: "The queen of spices." },
-            { id: 7, type: 'hybrid', name: "Hybrid Brinjal", price: 90, originalPrice: 110, img: "https://images.unsplash.com/photo-1621459570776-50a7c47d7926?q=80&w=600&auto=format&fit=crop", desc: "Resistant to pests." },
             { id: 8, type: 'fruit-seeds', name: "Strawberry", price: 180, originalPrice: 220, img: "https://images.unsplash.com/photo-1543528176-61b239494933?q=80&w=600&auto=format&fit=crop", desc: "Sweet red berries." },
+            { id: 9, type: 'fruit-seeds', name: "Watermelon", price: 150, originalPrice: 180, img: "https://images.unsplash.com/photo-1563241527-3004b7be0ff9?q=80&w=600&auto=format&fit=crop", desc: "Sweet summer fruit seeds." },
+            
+            // Vegetable Seeds
+            { id: 2, type: 'vegetable-seeds', name: "Spicy Chilli", price: 80, originalPrice: 95, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600&auto=format&fit=crop", desc: "High heat variety." },
+            { id: 10, type: 'vegetable-seeds', name: "Organic Spinach", price: 60, originalPrice: 75, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=600&auto=format&fit=crop", desc: "Iron-rich leafy green." },
+            
+            // Flowers (Live Plants)
+            { id: 11, type: 'flower-plants', name: "Rose Plant (Red)", price: 350, originalPrice: 450, img: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?q=80&w=600&auto=format&fit=crop", desc: "Beautiful red rose live plant." },
+            { id: 12, type: 'flower-plants', name: "Jasmine Plant", price: 280, originalPrice: 350, img: "https://images.unsplash.com/photo-1526913299589-b42ef5b26d2f?q=80&w=600&auto=format&fit=crop", desc: "Fragrant jasmine flowering plant." },
+            { id: 13, type: 'flower-plants', name: "Sunflower Plant", price: 220, originalPrice: 280, img: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=600&auto=format&fit=crop", desc: "Bright sunflower live plant." },
+            { id: 14, type: 'flower-plants', name: "Orchid Plant", price: 650, originalPrice: 850, img: "https://images.unsplash.com/photo-1545243421-89e4f7c9b9c1?q=80&w=600&auto=format&fit=crop", desc: "Exotic orchid flowering plant." },
+            
+            // Plants (Fruit/Vegetable Plants)
+            { id: 15, type: 'plants', name: "Mango Sapling", price: 450, originalPrice: 550, img: "https://images.unsplash.com/photo-1553279768-865429fa0078?q=80&w=600&auto=format&fit=crop", desc: "Dwarf mango fruit plant." },
+            { id: 16, type: 'plants', name: "Lemon Plant", price: 380, originalPrice: 450, img: "https://images.unsplash.com/photo-1547514701-42782101795e?q=80&w=600&auto=format&fit=crop", desc: "Lemon fruit bearing plant." },
+            { id: 17, type: 'plants', name: "Brinjal Plant", price: 180, originalPrice: 220, img: "https://images.unsplash.com/photo-1621459570776-50a7c47d7926?q=80&w=600&auto=format&fit=crop", desc: "Brinjal vegetable plant." },
+            { id: 7, type: 'plants', name: "Papaya Plant", price: 320, originalPrice: 400, img: "https://images.unsplash.com/photo-1517260739337-6799d2ffdeee?q=80&w=600&auto=format&fit=crop", desc: "Fast growing papaya plant." },
+            
+            // Spices
+            { id: 3, type: 'spices', name: "Fresh Coriander", price: 45, originalPrice: null, img: "https://images.unsplash.com/photo-1596043225276-2afc36c2d0b9?q=80&w=600&auto=format&fit=crop", desc: "Aromatic herb essential." },
+            { id: 4, type: 'spices', name: "Black Pepper", price: 200, originalPrice: 250, img: "https://images.unsplash.com/photo-1563503926-d34c11451381?q=80&w=600&auto=format&fit=crop", desc: "King of spices, vine plant." },
+            { id: 6, type: 'spices', name: "Cardamom", price: 300, originalPrice: 350, img: "https://images.unsplash.com/photo-1550399434-6c392c68f279?q=80&w=600&auto=format&fit=crop", desc: "The queen of spices." },
         ];
 
         // Global State
         let state = {
             cart: JSON.parse(localStorage.getItem('ls_cart')) || [],
-            user: JSON.parse(localStorage.getItem('ls_user_profile')) || null, // Stores {uid, name, phone, address}
+            user: JSON.parse(localStorage.getItem('ls_user_profile')) || null,
             currentItem: null,
-            tempQty: 1
+            tempQty: 1,
+            purchaseHistory: JSON.parse(localStorage.getItem('ls_purchase_history')) || {}
         };
 
-        // --- SOUND ENGINE (REFINED) ---
-        // Using Web Audio API for synthetic "perfect" clicks
+        // --- SOUND ENGINE ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const ctx = new AudioContext();
 
@@ -511,7 +590,6 @@
             gain.connect(ctx.destination);
 
             if(type === 'click') {
-                // Soft UI Click (High pitch, short decay)
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, ctx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.05);
@@ -520,10 +598,9 @@
                 osc.start();
                 osc.stop(ctx.currentTime + 0.06);
             } else if (type === 'success') {
-                // Success Chord
-                playTone(523.25, 0); // C
-                playTone(659.25, 0.1); // E
-                playTone(783.99, 0.2); // G
+                playTone(523.25, 0);
+                playTone(659.25, 0.1);
+                playTone(783.99, 0.2);
             }
         }
 
@@ -541,7 +618,6 @@
         }
 
         // --- AUTH & USER LOGIC ---
-        
         function openAuthModal() {
             playSound('click');
             const m = document.getElementById('auth-modal');
@@ -554,6 +630,61 @@
             const m = document.getElementById('auth-modal');
             m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
             m.querySelector('div.relative').classList.add('scale-95');
+        }
+
+        function openProfileModal() {
+            playSound('click');
+            if (!state.user) {
+                openAuthModal();
+                return;
+            }
+            
+            updateProfileModal();
+            const m = document.getElementById('profile-modal');
+            m.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            m.querySelector('div.relative').classList.remove('scale-95');
+        }
+
+        function closeProfileModal() {
+            playSound('click');
+            const m = document.getElementById('profile-modal');
+            m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
+            m.querySelector('div.relative').classList.add('scale-95');
+        }
+
+        function updateProfileModal() {
+            if (!state.user) return;
+            
+            document.getElementById('profile-name').textContent = state.user.name || 'User Name';
+            document.getElementById('profile-email').textContent = state.user.email || 'user@email.com';
+            document.getElementById('profile-phone').textContent = state.user.phone || '+91 00000 00000';
+            document.getElementById('profile-address').textContent = state.user.address || 'No address saved';
+            document.getElementById('profile-avatar').textContent = state.user.name ? state.user.name[0].toUpperCase() : 'U';
+            
+            // Load purchase history for this user
+            const userId = state.user.uid || state.user.email;
+            const userHistory = state.purchaseHistory[userId] || [];
+            const historyContainer = document.getElementById('purchase-history');
+            
+            if (userHistory.length === 0) {
+                historyContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No purchases yet</p>';
+            } else {
+                historyContainer.innerHTML = userHistory.map(order => `
+                    <div class="history-item bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h5 class="font-bold text-forest">Order #${order.orderId}</h5>
+                                <p class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleDateString()}</p>
+                            </div>
+                            <span class="order-badge">₹${order.total}</span>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            <p>${order.items.length} item(s) • ${order.status || 'Delivered'}</p>
+                            <p class="text-xs text-gray-400 mt-1">${order.address.substring(0, 50)}...</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         function switchAuthTab(tab) {
@@ -574,7 +705,6 @@
             }
         }
 
-        // Register Logic (With Auto-Save)
         async function registerWithEmail(e) {
             e.preventDefault();
             const email = document.getElementById('reg-email').value;
@@ -585,7 +715,6 @@
 
             try {
                 const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                // Save user profile to local storage (Simulating DB persist)
                 const profile = {
                     uid: cred.user.uid,
                     email: email,
@@ -599,20 +728,20 @@
                 updateUI();
                 closeAuthModal();
                 playSound('success');
-                alert(`Welcome ${name}! Your details are saved.`);
+                setTimeout(() => {
+                    openProfileModal();
+                }, 500);
             } catch (err) {
                 alert(err.message);
             }
         }
 
-        // Login Logic
         async function loginWithEmail(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
             try {
                 const cred = await auth.signInWithEmailAndPassword(email, pass);
-                // Try to retrieve profile from local storage, else minimal
                 let savedProfile = JSON.parse(localStorage.getItem('ls_user_profile'));
                 if(!savedProfile || savedProfile.email !== email) {
                     savedProfile = { uid: cred.user.uid, email: email, name: email.split('@')[0], phone: '', address: '' };
@@ -632,7 +761,6 @@
             try {
                 const result = await auth.signInWithPopup(provider);
                 const u = result.user;
-                // Check if we have details
                 let savedProfile = JSON.parse(localStorage.getItem('ls_user_profile'));
                 if(!savedProfile || savedProfile.email !== u.email) {
                     savedProfile = { uid: u.uid, email: u.email, name: u.displayName, phone: '', address: '' };
@@ -648,9 +776,37 @@
         function logout() {
             auth.signOut();
             state.user = null;
-            localStorage.removeItem('ls_user_profile'); // Clear local profile on logout
+            localStorage.removeItem('ls_user_profile');
             updateUI();
+            closeProfileModal();
             playSound('click');
+        }
+
+        function openAccount() {
+            if (state.user) {
+                openProfileModal();
+            } else {
+                openAuthModal();
+            }
+        }
+
+        // --- PURCHASE HISTORY MANAGEMENT ---
+        function savePurchase(orderData) {
+            if (!state.user) return;
+            
+            const userId = state.user.uid || state.user.email;
+            if (!state.purchaseHistory[userId]) {
+                state.purchaseHistory[userId] = [];
+            }
+            
+            state.purchaseHistory[userId].unshift(orderData);
+            
+            // Keep only last 10 orders
+            if (state.purchaseHistory[userId].length > 10) {
+                state.purchaseHistory[userId].pop();
+            }
+            
+            localStorage.setItem('ls_purchase_history', JSON.stringify(state.purchaseHistory));
         }
 
         // --- GRID & PRODUCTS ---
@@ -658,12 +814,18 @@
             playSound('click');
             const btns = document.querySelectorAll('.cat-pill, .nav-pill');
             btns.forEach(b => {
-                if(b.textContent.toLowerCase().includes(type === 'all' ? 'all' : type.split('-')[0])) {
-                    b.classList.add('bg-forest', 'text-white'); b.classList.remove('bg-white', 'text-forest', 'text-gray-500');
-                } else {
-                    b.classList.remove('bg-forest', 'text-white'); b.classList.add('bg-white', 'text-gray-500');
-                }
+                b.classList.remove('bg-forest', 'text-white');
+                b.classList.add('bg-white', 'text-gray-500', 'text-forest');
             });
+
+            // Highlight active button
+            const activeBtn = Array.from(btns).find(btn => 
+                btn.textContent.toLowerCase().includes(type === 'all' ? 'all' : type.split('-')[0].toLowerCase())
+            );
+            if (activeBtn) {
+                activeBtn.classList.add('bg-forest', 'text-white');
+                activeBtn.classList.remove('bg-white', 'text-gray-500', 'text-forest');
+            }
 
             const grid = document.getElementById('product-grid');
             const data = type === 'all' ? products : products.filter(p => p.type === type);
@@ -675,10 +837,15 @@
                      style="animation-delay: ${i*0.05}s" onclick="openProduct(${p.id})">
                     <div class="aspect-[4/5] rounded-xl overflow-hidden relative bg-gray-100 mb-3">
                         <img src="${p.img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        ${p.originalPrice ? `
+                            <div class="absolute top-2 right-2 bg-red-500 text-white text-[10px] px-2 py-1 rounded-full font-bold">
+                                SALE
+                            </div>
+                        ` : ''}
                     </div>
                     <div class="px-1">
                         <h3 class="font-bold text-forest text-sm truncate">${p.name}</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">${p.type}</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">${p.type.replace('-', ' ')}</p>
                         <div class="flex items-center gap-2">
                             <span class="text-base font-bold text-forest">₹${p.price}</span>
                             ${p.originalPrice ? `<span class="text-xs text-gray-300 line-through">₹${p.originalPrice}</span>` : ''}
@@ -699,14 +866,14 @@
             document.getElementById('modal-price').innerText = `₹${p.price}`;
             document.getElementById('modal-original-price').innerText = p.originalPrice ? `₹${p.originalPrice}` : '';
             document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-tag').innerText = p.type;
+            document.getElementById('modal-tag').innerText = p.type.replace('-', ' ');
             document.getElementById('qty-display').innerText = '1';
 
             const m = document.getElementById('product-modal');
             m.classList.add('active');
         }
 
-        // --- CART & CHECKOUT LOGIC (CRITICAL) ---
+        // --- CART & CHECKOUT LOGIC ---
         function addToCart() {
             const existing = state.cart.find(i => i.id === state.currentItem.id);
             if(existing) existing.qty += state.tempQty;
@@ -715,7 +882,7 @@
             saveCart();
             closeModal('product-modal');
             playSound('success');
-            // Show cart badge animation
+            
             const badge = document.getElementById('cart-badge');
             badge.classList.remove('scale-0');
             badge.classList.add('scale-125');
@@ -723,11 +890,6 @@
         }
 
         function directBuy() {
-            // Add current item to a temp cart logic or just bypass
-            // User requested: "buying somthing it not show the delivery details directly going to whats app"
-            // We'll treat this as single item checkout
-            state.cart = [{...state.currentItem, qty: state.tempQty}]; // Overwrite cart for direct buy or append? usually direct buy is specific. Let's append to be safe or handle single.
-            // Let's standardise: Direct Buy -> Add to cart -> Checkout immediately
             const existing = state.cart.find(i => i.id === state.currentItem.id);
             if(existing) existing.qty += state.tempQty;
             else state.cart.push({...state.currentItem, qty: state.tempQty});
@@ -740,12 +902,9 @@
             playSound('click');
             if(state.cart.length === 0) return alert('Cart empty!');
 
-            // Check if we have user details
             if(state.user && state.user.name && state.user.phone && state.user.address) {
-                // We have details, GO DIRECTLY TO WHATSAPP
                 sendToWhatsApp(state.user.name, state.user.phone, state.user.address);
             } else {
-                // We need details
                 const m = document.getElementById('delivery-modal');
                 m.classList.remove('opacity-0', 'pointer-events-none');
                 m.querySelector('.sheet-content').classList.remove('scale-95', 'opacity-0');
@@ -758,7 +917,6 @@
             const phone = document.getElementById('d-phone').value;
             const address = document.getElementById('d-address').value;
 
-            // If user is logged in but missing details, update local profile
             if(state.user) {
                 state.user.name = name;
                 state.user.phone = phone;
@@ -771,21 +929,51 @@
         }
 
         function sendToWhatsApp(name, phone, address) {
-            let msg = `*NEW ORDER* 🌱\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${address}\n\n*Items:*\n`;
+            let msg = `*NEW ORDER - LIGHTSPROUTS* 🌱\n`;
+            msg += `Customer: ${name}\n`;
+            msg += `Phone: ${phone}\n`;
+            msg += `Address: ${address}\n\n`;
+            msg += `*ORDER DETAILS:*\n`;
+            
             let total = 0;
-            state.cart.forEach(i => {
-                msg += `- ${i.qty}x ${i.name} (₹${i.price*i.qty})\n`;
-                total += i.price * i.qty;
+            state.cart.forEach((i, index) => {
+                const itemTotal = i.price * i.qty;
+                total += itemTotal;
+                msg += `${index + 1}. ${i.qty}x ${i.name} - ₹${itemTotal}\n`;
             });
-            msg += `\n*Total Value: ₹${total}*`;
+            
+            msg += `\n*Subtotal: ₹${total}*\n`;
+            msg += `*Shipping: FREE*\n`;
+            msg += `*Total: ₹${total}*\n\n`;
+            msg += `Please confirm this order.`;
 
-            // Clear cart after successful order gen
+            // Create order record for history
+            const orderData = {
+                orderId: 'LS' + Date.now().toString().slice(-8),
+                timestamp: new Date().toISOString(),
+                customerName: name,
+                customerPhone: phone,
+                address: address,
+                items: state.cart.map(item => ({
+                    name: item.name,
+                    quantity: item.qty,
+                    price: item.price,
+                    total: item.price * item.qty
+                })),
+                total: total,
+                status: 'Processing'
+            };
+
+            // Save to purchase history
+            savePurchase(orderData);
+
+            // Clear cart after successful order
             state.cart = [];
             saveCart();
             closeModal('cart-drawer');
             playSound('success');
             
-            // Redirect
+            // Redirect to WhatsApp - UPDATED NUMBER
             window.location.href = `https://wa.me/919526725376?text=${encodeURIComponent(msg)}`;
         }
 
@@ -807,6 +995,9 @@
             } else if (id === 'delivery-modal') {
                 m.classList.add('opacity-0', 'pointer-events-none');
                 m.querySelector('.sheet-content').classList.add('scale-95', 'opacity-0');
+            } else if (id === 'profile-modal' || id === 'auth-modal') {
+                m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
+                m.querySelector('div.relative').classList.add('scale-95');
             } else {
                 m.classList.remove('active');
             }
@@ -856,9 +1047,11 @@
 
         function saveCart() {
             localStorage.setItem('ls_cart', JSON.stringify(state.cart));
-            document.getElementById('cart-badge').innerText = state.cart.reduce((a,b)=>a+b.qty,0);
-            if(state.cart.length > 0) document.getElementById('cart-badge').classList.remove('scale-0');
-            else document.getElementById('cart-badge').classList.add('scale-0');
+            const totalItems = state.cart.reduce((a,b)=>a+b.qty,0);
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = totalItems;
+            if(totalItems > 0) badge.classList.remove('scale-0');
+            else badge.classList.add('scale-0');
         }
 
         function updateUI() {
@@ -881,16 +1074,21 @@
             lucide.createIcons();
         }
 
-        // Init
+        // Initialize
         window.addEventListener('load', () => {
-            // Fake loading delay to show off css animation
+            // Load purchase history
+            const savedHistory = localStorage.getItem('ls_purchase_history');
+            if (savedHistory) {
+                state.purchaseHistory = JSON.parse(savedHistory);
+            }
+            
             setTimeout(() => {
                 document.getElementById('loader').classList.add('opacity-0', 'pointer-events-none');
-            }, 2000); // 2s duration
+            }, 2000);
             
             filterProducts('all');
-            saveCart(); // Updates badge
-            updateUI(); // Updates auth state
+            saveCart();
+            updateUI();
         });
     </script>
 </body>

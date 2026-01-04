@@ -606,7 +606,9 @@
             currentItem: null,
             tempQty: 1,
             purchaseHistory: JSON.parse(localStorage.getItem('ls_purchase_history')) || {},
-            userBehavior: JSON.parse(localStorage.getItem('ls_user_behavior')) || {}
+            userBehavior: JSON.parse(localStorage.getItem('ls_user_behavior')) || {},
+            tempDirectOrder: null,
+            isDirectBuy: false
         };
 
         // --- SOUND ENGINE ---
@@ -1269,6 +1271,9 @@
             closeModal('product-modal');
             playSound('success');
             
+            // Show notification instead of redirecting
+            showNotification(`${state.tempQty} × ${state.currentItem.name} added to cart!`);
+            
             const badge = document.getElementById('cart-badge');
             badge.classList.remove('scale-0');
             badge.classList.add('scale-125');
@@ -1278,30 +1283,76 @@
         function directBuy() {
             if (!state.currentItem) return;
             
-            const existing = state.cart.find(i => i.id === state.currentItem.id);
-            if(existing) existing.qty += state.tempQty;
-            else state.cart.push({...state.currentItem, qty: state.tempQty});
-            saveCart();
+            // For direct buy, create a temporary order with ONLY the current item
+            // We don't add it to the cart permanently
+            state.tempDirectOrder = [{
+                ...state.currentItem, 
+                qty: state.tempQty
+            }];
+            state.isDirectBuy = true;
+            
             closeModal('product-modal');
-            handleCheckout();
-        }
-
-        function handleCheckout() {
-            playSound('click');
-            if(state.cart.length === 0) {
-                showNotification('Your cart is empty!');
-                return;
-            }
-
+            
             if(state.user && state.user.name && state.user.phone && state.user.address) {
-                sendToWhatsApp(state.user.name, state.user.phone, state.user.address);
+                // Send only the current item to WhatsApp, not the entire cart
+                sendDirectToWhatsApp(state.tempDirectOrder, state.user.name, state.user.phone, state.user.address);
+                // Clear temp data
+                state.tempDirectOrder = null;
+                state.isDirectBuy = false;
             } else {
+                // Open delivery modal to collect details
                 const m = document.getElementById('delivery-modal');
                 m.classList.add('active');
                 setTimeout(() => {
                     m.querySelector('.sheet-content').classList.remove('scale-95', 'opacity-0');
                 }, 10);
             }
+        }
+
+        function sendDirectToWhatsApp(items, name, phone, address) {
+            let msg = `*NEW ORDER - LIGHTSPROUTS* 🌱\n`;
+            msg += `Customer: ${name}\n`;
+            msg += `Phone: ${phone}\n`;
+            msg += `Address: ${address}\n\n`;
+            msg += `*ORDER DETAILS:*\n`;
+            
+            let total = 0;
+            items.forEach((i, index) => {
+                const itemTotal = i.price * i.qty;
+                total += itemTotal;
+                msg += `${index + 1}. ${i.qty}x ${i.name} - ₹${itemTotal}\n`;
+            });
+            
+            msg += `\n*Subtotal: ₹${total}*\n`;
+            msg += `*Shipping: FREE*\n`;
+            msg += `*Total: ₹${total}*\n\n`;
+            msg += `Please confirm this order.`;
+
+            // Create order record for history
+            if (state.user) {
+                const orderData = {
+                    orderId: 'LS' + Date.now().toString().slice(-8),
+                    timestamp: new Date().toISOString(),
+                    customerName: name,
+                    customerPhone: phone,
+                    address: address,
+                    items: items.map(item => ({
+                        name: item.name,
+                        quantity: item.qty,
+                        price: item.price,
+                        total: item.price * item.qty
+                    })),
+                    total: total,
+                    status: 'Processing',
+                    type: 'direct_buy'
+                };
+                savePurchase(orderData);
+            }
+
+            playSound('success');
+            
+            // Redirect to WhatsApp
+            window.open(`https://wa.me/91${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function saveAndProceedCheckout(e) {
@@ -1318,7 +1369,17 @@
             }
 
             closeModal('delivery-modal');
-            sendToWhatsApp(name, phone, address);
+            
+            if (state.isDirectBuy && state.tempDirectOrder) {
+                // Handle direct buy flow
+                sendDirectToWhatsApp(state.tempDirectOrder, name, phone, address);
+                // Clear temp data
+                state.tempDirectOrder = null;
+                state.isDirectBuy = false;
+            } else {
+                // Handle cart checkout flow
+                sendToWhatsApp(name, phone, address);
+            }
         }
 
         function sendToWhatsApp(name, phone, address) {

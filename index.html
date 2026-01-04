@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#2A593E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Lightsprouts | Premium Seeds & Plants</title>
+    <title>Lightsprouts | Premium Spice Plants</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
@@ -356,12 +356,8 @@
 
             <!-- Desktop Filter Menu -->
             <nav class="hidden lg:flex items-center gap-2 bg-gray-100/50 p-1.5 rounded-full border border-gray-200">
-                <button onclick="filterProducts('all')" class="nav-pill px-5 py-2 rounded-full text-sm font-bold bg-white text-forest shadow-sm">All</button>
-                <button onclick="filterProducts('fruit-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Fruits</button>
-                <button onclick="filterProducts('vegetable-seeds')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Veg</button>
-                <button onclick="filterProducts('flower-plants')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Flowers</button>
-                <button onclick="filterProducts('plants')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Plants</button>
-                <button onclick="filterProducts('spices')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Spices</button>
+                <button onclick="filterProducts('all')" class="nav-pill px-5 py-2 rounded-full text-sm font-bold bg-white text-forest shadow-sm">All Plants</button>
+                <button onclick="filterProducts('spices')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Spice Plants</button>
             </nav>
 
             <!-- Actions -->
@@ -383,12 +379,8 @@
 
         <!-- Mobile Sticky Categories -->
         <div class="lg:hidden w-full border-t border-gray-100 py-3 px-4 overflow-x-auto no-scrollbar flex gap-2">
-            <button onclick="filterProducts('all')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-forest text-white shadow-sm transition-all">All</button>
-            <button onclick="filterProducts('fruit-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Fruits</button>
-            <button onclick="filterProducts('vegetable-seeds')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Veg</button>
-            <button onclick="filterProducts('flower-plants')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Flowers</button>
-            <button onclick="filterProducts('plants')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Plants</button>
-            <button onclick="filterProducts('spices')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Spices</button>
+            <button onclick="filterProducts('all')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-forest text-white shadow-sm transition-all">All Plants</button>
+            <button onclick="filterProducts('spices')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Spice Plants</button>
         </div>
     </header>
 
@@ -401,17 +393,17 @@
             <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent"></div>
             
             <div class="absolute bottom-0 left-0 w-full p-8 flex flex-col items-start text-white">
-                <span class="bg-leaf text-forest text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">Organic</span>
+                <span class="bg-leaf text-forest text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">Premium</span>
                 <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2 leading-tight">
-                    Grow your own <br><span class="text-lime italic">paradise.</span>
+                    Grow exotic <br><span class="text-lime italic">spices.</span>
                 </h1>
-                <p class="text-white/80 text-sm mb-4">Premium Plants & Seeds • 95% Germination • Fast Delivery</p>
+                <p class="text-white/80 text-sm mb-4">Premium Spice Plants • 95% Germination • Fast Delivery</p>
             </div>
         </section>
 
         <!-- Product Grid -->
         <div id="grid-header" class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-forest">Fresh Plants & Seeds</h2>
+            <h2 class="text-xl font-bold text-forest">Premium Spice Plants</h2>
             <span id="item-count" class="text-xs font-bold text-gray-400">Loading...</span>
         </div>
 
@@ -570,33 +562,23 @@
         // WhatsApp Number Configuration
         const WHATSAPP_NUMBER = '9526725376';
 
-        // Product Data
+        // Product Data - Only Spice Plants
         const products = [
-            // Fruits Seeds
-            { id: 1, type: 'fruit-seeds', name: "Heirloom Tomato", price: 120, originalPrice: 150, img: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?q=80&w=600&auto=format&fit=crop", desc: "Juicy, rich-flavored tomatoes." },
-            { id: 8, type: 'fruit-seeds', name: "Strawberry", price: 180, originalPrice: 220, img: "https://images.unsplash.com/photo-1543528176-61b239494933?q=80&w=600&auto=format&fit=crop", desc: "Sweet red berries." },
-            { id: 9, type: 'fruit-seeds', name: "Watermelon", price: 150, originalPrice: 180, img: "https://images.unsplash.com/photo-1563241527-3004b7be0ff9?q=80&w=600&auto=format&fit=crop", desc: "Sweet summer fruit seeds." },
-            
-            // Vegetable Seeds
-            { id: 2, type: 'vegetable-seeds', name: "Spicy Chilli", price: 80, originalPrice: 95, img: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=600&auto=format&fit=crop", desc: "High heat variety." },
-            { id: 10, type: 'vegetable-seeds', name: "Organic Spinach", price: 60, originalPrice: 75, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=600&auto=format&fit=crop", desc: "Iron-rich leafy green." },
-            
-            // Flowers (Live Plants)
-            { id: 11, type: 'flower-plants', name: "Rose Plant (Red)", price: 350, originalPrice: 450, img: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?q=80&w=600&auto=format&fit=crop", desc: "Beautiful red rose live plant." },
-            { id: 12, type: 'flower-plants', name: "Jasmine Plant", price: 280, originalPrice: 350, img: "https://images.unsplash.com/photo-1526913299589-b42ef5b26d2f?q=80&w=600&auto=format&fit=crop", desc: "Fragrant jasmine flowering plant." },
-            { id: 13, type: 'flower-plants', name: "Sunflower Plant", price: 220, originalPrice: 280, img: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=600&auto=format&fit=crop", desc: "Bright sunflower live plant." },
-            { id: 14, type: 'flower-plants', name: "Orchid Plant", price: 650, originalPrice: 850, img: "https://images.unsplash.com/photo-1545243421-89e4f7c9b9c1?q=80&w=600&auto=format&fit=crop", desc: "Exotic orchid flowering plant." },
-            
-            // Plants (Fruit/Vegetable Plants)
-            { id: 15, type: 'plants', name: "Mango Sapling", price: 450, originalPrice: 550, img: "https://images.unsplash.com/photo-1553279768-865429fa0078?q=80&w=600&auto=format&fit=crop", desc: "Dwarf mango fruit plant." },
-            { id: 16, type: 'plants', name: "Lemon Plant", price: 380, originalPrice: 450, img: "https://images.unsplash.com/photo-1547514701-42782101795e?q=80&w=600&auto=format&fit=crop", desc: "Lemon fruit bearing plant." },
-            { id: 17, type: 'plants', name: "Brinjal Plant", price: 180, originalPrice: 220, img: "https://images.unsplash.com/photo-1621459570776-50a7c47d7926?q=80&w=600&auto=format&fit=crop", desc: "Brinjal vegetable plant." },
-            { id: 7, type: 'plants', name: "Papaya Plant", price: 320, originalPrice: 400, img: "https://images.unsplash.com/photo-1517260739337-6799d2ffdeee?q=80&w=600&auto=format&fit=crop", desc: "Fast growing papaya plant." },
-            
-            // Spices
-            { id: 3, type: 'spices', name: "Fresh Coriander", price: 45, originalPrice: null, img: "https://images.unsplash.com/photo-1596043225276-2afc36c2d0b9?q=80&w=600&auto=format&fit=crop", desc: "Aromatic herb essential." },
-            { id: 4, type: 'spices', name: "Black Pepper", price: 200, originalPrice: 250, img: "https://images.unsplash.com/photo-1563503926-d34c11451381?q=80&w=600&auto=format&fit=crop", desc: "King of spices, vine plant." },
-            { id: 6, type: 'spices', name: "Cardamom", price: 300, originalPrice: 350, img: "https://images.unsplash.com/photo-1550399434-6c392c68f279?q=80&w=600&auto=format&fit=crop", desc: "The queen of spices." },
+            { id: 1, type: 'spices', name: "Cocoa Chocolate Plant Theobroma cacao Plant", price: 320, originalPrice: 380, img: "https://mtechgardens.com/cdn/shop/products/cocoa-4.jpg?crop=center&height=600&v=1682060685&width=600", desc: "Cocoa plant for chocolate production." },
+            { id: 2, type: 'spices', name: "Hybrid Dwarf Coconut - Kerala Chowghat Orange Dwarf Plant", price: 560, originalPrice: 650, img: "https://mtechgardens.com/cdn/shop/files/ChowghatOrangeDwarf_COD.png?crop=center&height=600&v=1717143411&width=600", desc: "Kerala Chowghat Orange Dwarf Coconut." },
+            { id: 3, type: 'spices', name: "Hybrid Dwarf Coconut - Kalpasree Hybrid Plant", price: 450, originalPrice: 520, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Kalpasree-Hybrid_c9c663b4-e8b3-4edc-954d-674c2d9d62d3.png?crop=center&height=600&v=1717143280&width=600", desc: "Kalpasree Hybrid Dwarf Coconut." },
+            { id: 4, type: 'spices', name: "Hybrid Dwarf Coconut - Red Malayan Plant", price: 420, originalPrice: 490, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Red-Malayan-Hybrid.png?crop=center&height=600&v=1717143300&width=600", desc: "Red Malayan Hybrid Coconut." },
+            { id: 5, type: 'spices', name: "Hybrid Dwarf Coconut - 18th Patta Hybrid Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-18th-Patta-Dwarf_c3702be8-8c3e-459b-931c-b4ed167d087b.png?crop=center&height=600&v=1717143288&width=600", desc: "18th Patta Dwarf Coconut." },
+            { id: 6, type: 'spices', name: "Arabica Coffee Plant", price: 300, originalPrice: 350, img: "https://mtechgardens.com/cdn/shop/products/Coffee-Arabica.jpg?crop=center&height=600&v=1682060688&width=600", desc: "Arabica coffee plant." },
+            { id: 7, type: 'spices', name: "Tea Plant", price: 295, originalPrice: 340, img: "https://mtechgardens.com/cdn/shop/products/Csinensis.jpg?crop=center&height=600&v=1682060793&width=600", desc: "Tea plant for home cultivation." },
+            { id: 8, type: 'spices', name: "Hybrid Dwarf Coconut - Yellow Malayan Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Yellow-Malayan-Hybrid_e3c61467-63cd-4ad0-a35f-0e0ccbfa1615.png?crop=center&height=600&v=1717143272&width=600", desc: "Yellow Malayan Hybrid Coconut." },
+            { id: 9, type: 'spices', name: "Hybrid Dwarf Coconut - Andaman Dwarf Plant", price: 380, originalPrice: 440, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Andaman_e31fdbce-c9f1-4467-a76a-94bb18005954.png?crop=center&height=600&v=1717143286&width=600", desc: "Andaman Dwarf Coconut." },
+            { id: 10, type: 'spices', name: "Hybrid Coconut - East Coast Tall Plant", price: 380, originalPrice: 440, img: "https://mtechgardens.com/cdn/shop/files/Coconut-East-Coast-Tall_e60739be-22a5-41ec-b5f2-8b552659972e.png?crop=center&height=600&v=1717143276&width=600", desc: "East Coast Tall Coconut." },
+            { id: 11, type: 'spices', name: "Cauvery Coffee Plant", price: 300, originalPrice: 350, img: "https://mtechgardens.com/cdn/shop/products/Coffee-Cauvery.jpg?crop=center&height=600&v=1682060691&width=600", desc: "Cauvery variety coffee plant." },
+            { id: 12, type: 'spices', name: "Hybrid Dwarf Coconut - Orange Malayan Plant", price: 450, originalPrice: 520, img: "https://mtechgardens.com/cdn/shop/products/Orange-Malayan.jpg?crop=center&height=600&v=1682060762&width=600", desc: "Orange Malayan Hybrid Coconut." },
+            { id: 13, type: 'spices', name: "Black Pepper Plant", price: 290, originalPrice: 340, img: "https://mtechgardens.com/cdn/shop/products/pepper-bush-piper-nigrum-186250662-69da96bd3ca341baad1e4c9045850f49.jpg?crop=center&height=600&v=1682060731&width=600", desc: "Black pepper vine plant." },
+            { id: 14, type: 'spices', name: "Chandragiri Coffee Plant", price: 350, originalPrice: 400, img: "https://mtechgardens.com/cdn/shop/products/Coffee-chandragiri.jpg?crop=center&height=600&v=1682060694&width=600", desc: "Chandragiri coffee variety." },
+            { id: 15, type: 'spices', name: "Hybrid Dwarf Coconut - Gouley Dwarf Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-GouleyDwarf_Tender.png?crop=center&height=600&v=1717143390&width=600", desc: "Gouley Dwarf Coconut plant." }
         ];
 
         // Global State

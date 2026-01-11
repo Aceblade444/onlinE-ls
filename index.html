@@ -1,67 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="antialiased">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#2A593E">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Lightsprouts | Premium Spice Plants</title>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <title>LumaXplayer Premium</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        forest: '#2A593E',        
-                        leaf: '#7ED957',          
-                        lime: '#D1FFBD',          
-                        mint: '#F0FFE9',          
-                        sand: '#fcfdfa',
-                        dark: '#081C15',
-                    },
                     fontFamily: {
-                        sans: ['Manrope', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
-                    boxShadow: {
-                        'soft': '0 10px 40px -10px rgba(42, 89, 62, 0.15)',
-                        'glow': '0 0 20px rgba(126, 217, 87, 0.4)',
-                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
-                        'float': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    colors: {
+                        primary: '#00ff66',
+                        dark: '#050505',
+                        glass: 'rgba(255, 255, 255, 0.03)',
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.4s ease-out forwards',
-                        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'slide-in-right': 'slideInRight 0.3s ease-out forwards',
-                        'leaf-wiggle': 'leafWiggle 2s ease-in-out infinite',
-                        'gentle-pulse': 'gentlePulse 3s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                        slideInRight: { 'from': { transform: 'translateX(100%)', opacity: '0' }, 'to': { transform: 'translateX(0)', opacity: '1' } },
-                        leafWiggle: { 
-                            '0%, 100%': { transform: 'rotate(-5deg) scale(1)' }, 
-                            '50%': { transform: 'rotate(5deg) scale(1.05)' } 
-                        },
-                        gentlePulse: { '0%, 100%': { opacity: 0.8 }, '50%': { opacity: 1 } },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
                     }
                 }
             }
@@ -70,1546 +46,677 @@
 
     <style>
         :root {
-            --safe-bottom: env(safe-area-inset-bottom);
+            --primary: #00ff66;
+            --primary-glow: rgba(0, 255, 102, 0.5);
+            --safe-area-bottom: env(safe-area-inset-bottom);
         }
-        
+
         body {
-            background-color: #fcfdfa;
-            color: #2A593E;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
             -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            overflow-x: hidden;
         }
 
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
+        /* Premium Noise Texture */
+        .noise-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             pointer-events: none;
+            z-index: 5;
+            mix-blend-mode: overlay;
+        }
+
+        /* Glassmorphism System */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        .img-wrapper {
-            position: relative;
+        .glass-card:active {
+            transform: scale(0.98);
+            background: rgba(255,255,255,0.08);
         }
 
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 4px;
+            width: 4px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: -100vw 0 0 100vw var(--primary); /* Fill trick */
+            border: none;
+        }
+
+        /* Scrollbar Hiding */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        /* Device Frame for Desktop View */
+        #device-frame {
+            position: relative;
+            background: #000;
+            width: 100vw;
+            height: 100dvh;
+            overflow: hidden;
         }
 
-        .tap-active:active { transform: scale(0.96); transition: transform 0.1s; }
-
-        input, textarea {
-            -webkit-user-select: text;
-            user-select: text;
+        @media (min-width: 768px) {
+            #device-frame {
+                width: 400px;
+                height: 850px;
+                margin: 2rem auto;
+                border-radius: 48px;
+                box-shadow: 
+                    0 0 0 12px #1a1a1a,
+                    0 0 0 14px #2a2a2a,
+                    0 50px 100px -20px rgba(0,0,0,0.8);
+            }
         }
 
-        .loader-container {
-            background: #F0FFE9;
+        /* Animations */
+        .page-enter {
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .playing-wave span {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--primary);
+            border-radius: 99px;
+            animation: wave 1s ease-in-out infinite;
         }
         
-        .big-btn {
-            min-height: 56px;
-            font-size: 1.1rem;
-        }
-
-        .modal-enter {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        .modal-enter.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-enter .sheet-content {
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .modal-enter.active .sheet-content {
-            transform: translateY(0);
-        }
-
-        .order-badge {
-            background: linear-gradient(135deg, #7ED957 0%, #2A593E 100%);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .history-item {
-            transition: all 0.3s ease;
-        }
-
-        .history-item:hover {
-            transform: translateX(5px);
-            background: rgba(240, 255, 233, 0.5);
-        }
-
-        /* Slide out animation for cart item removal */
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        @keyframes wave {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
         }
         
-        .removing {
-            animation: slideOut 0.3s ease forwards;
-        }
+        .playing-wave span:nth-child(2) { animation-delay: 0.1s; }
+        .playing-wave span:nth-child(3) { animation-delay: 0.2s; }
+        .playing-wave span:nth-child(4) { animation-delay: 0.3s; }
 
-        /* For You badge styling */
-        .for-you-badge {
-            background: linear-gradient(135deg, #7ED957 0%, #2A593E 100%);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: bold;
+        .album-shadow {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            z-index: 10;
+            bottom: -20px;
+            left: 5%;
+            width: 90%;
+            height: 20px;
+            background: var(--primary);
+            filter: blur(30px);
+            opacity: 0.3;
+            z-index: -1;
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen relative flex flex-col pb-24 md:pb-0" oncontextmenu="return false;">
+<body class="flex items-center justify-center min-h-screen bg-[#111]">
 
-    <!-- LOADING SCREEN -->
-    <div id="loader" class="fixed inset-0 z-[100] bg-[#fcfdfa] flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="relative w-24 h-24 mb-6">
-            <svg class="w-full h-full text-forest animate-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22v-14" />
-                <path d="M12 8c0-3.3-2-6-5.5-6S1 4.7 1 8c0 2 1.3 3.8 3 4.8" />
-                <path d="M12 8c0-3.3 2-6 5.5-6S23 4.7 23 8c0 2-1.3 3.8-3 4.8" />
-                <path d="M12 22c4.3 0 8-2.5 8-7" />
-            </svg>
-            <div class="absolute inset-0 bg-gradient-to-tr from-transparent to-white/50 animate-pulse rounded-full"></div>
-        </div>
-        <h1 class="text-3xl font-serif font-bold text-forest tracking-tight">lightsprouts<span class="text-leaf text-3xl leading-none">.</span></h1>
-        <div class="mt-4 flex gap-2">
-            <span class="w-2 h-2 bg-forest rounded-full animate-bounce" style="animation-delay: 0ms"></span>
-            <span class="w-2 h-2 bg-leaf rounded-full animate-bounce" style="animation-delay: 150ms"></span>
-            <span class="w-2 h-2 bg-lime rounded-full animate-bounce" style="animation-delay: 300ms"></span>
-        </div>
+    <!-- Desktop wrapper background (only visible on large screens) -->
+    <div class="fixed inset-0 hidden md:block z-0">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-20 blur-xl scale-110"></div>
     </div>
 
-    <!-- AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
-        <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm" onclick="closeAuthModal()"></div>
-        
-        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto flex flex-col max-h-[90vh] overflow-y-auto">
-            
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-forest hover:bg-forest hover:text-white transition-all tap-active">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+    <!-- Main Device Frame -->
+    <div id="device-frame">
+        <!-- Noise Texture -->
+        <div class="noise-overlay"></div>
 
-            <div class="flex border-b border-gray-100 sticky top-0 bg-white z-20">
-                <button id="login-tab" class="flex-1 py-5 text-center font-bold text-lg text-forest border-b-4 border-forest transition-all" onclick="switchAuthTab('login')">
-                    Login
-                </button>
-                <button id="register-tab" class="flex-1 py-5 text-center font-bold text-lg text-gray-400 transition-all" onclick="switchAuthTab('register')">
-                    Register
-                </button>
+        <!-- Ambient Glows -->
+        <div class="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full animate-float pointer-events-none"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <!-- Audio Engine -->
+        <audio id="audio-engine" crossorigin="anonymous"></audio>
+
+        <!-- Loading View -->
+        <div id="loader" class="absolute inset-0 z-50 bg-black flex flex-col items-center justify-center transition-opacity duration-700">
+            <div class="relative w-20 h-20">
+                <div class="absolute inset-0 border-t-2 border-primary rounded-full animate-spin"></div>
+                <div class="absolute inset-2 border-r-2 border-white/20 rounded-full animate-spin-slow"></div>
+                <i class="ph-fill ph-waveform absolute inset-0 flex items-center justify-center text-3xl text-primary animate-pulse"></i>
             </div>
-
-            <!-- Login Form -->
-            <div id="login-form" class="p-8">
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-serif font-bold text-forest">Welcome Back</h3>
-                </div>
-
-                <form onsubmit="loginWithEmail(event)" class="space-y-4">
-                    <input type="email" id="login-email" required placeholder="Email Address" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg focus:outline-none focus:border-leaf transition-all placeholder:text-gray-400">
-                    <input type="password" id="login-password" required placeholder="Password" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg focus:outline-none focus:border-leaf transition-all placeholder:text-gray-400">
-                    
-                    <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl text-lg shadow-lg tap-active hover:bg-[#1e3f2d] big-btn">
-                        Sign In
-                    </button>
-                </form>
-
-                <div class="flex items-center my-6">
-                    <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="mx-4 text-gray-400 text-sm">OR</span>
-                    <div class="flex-grow border-t border-gray-200"></div>
-                </div>
-
-                <button onclick="signInWithGoogle()" class="w-full bg-white border border-gray-200 text-forest font-bold py-4 rounded-xl flex items-center justify-center gap-3 tap-active big-btn">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/></svg>
-                    Continue with Google
-                </button>
-            </div>
-
-            <!-- Register Form -->
-            <div id="register-form" class="p-8 hidden">
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-serif font-bold text-forest">Create Account</h3>
-                </div>
-
-                <form onsubmit="registerWithEmail(event)" class="space-y-4">
-                    <input type="text" id="reg-name" required placeholder="Full Name" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf">
-                    
-                    <input type="tel" id="reg-phone" required placeholder="Phone Number" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf">
-                    
-                    <textarea id="reg-address" required rows="2" placeholder="Delivery Address" 
-                              class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf resize-none"></textarea>
-
-                    <div class="border-t border-gray-100 my-2"></div>
-
-                    <input type="email" id="reg-email" required placeholder="Email Address" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf">
-                    
-                    <input type="password" id="reg-password" required placeholder="Create Password" 
-                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-forest focus:outline-none focus:border-leaf">
-                    
-                    <button type="submit" class="w-full bg-leaf text-forest font-bold py-4 rounded-xl text-lg shadow-lg tap-active hover:bg-[#6ec248] big-btn">
-                        Register & Save Details
-                    </button>
-                </form>
-
-                 <div class="mt-4 text-center">
-                    <button onclick="signInWithGoogle()" class="text-forest font-semibold text-sm underline">Or use Google</button>
-                </div>
-            </div>
+            <h1 class="mt-6 text-xl font-bold tracking-[0.3em] text-white/80">LUMAX</h1>
         </div>
-    </div>
 
-    <!-- PROFILE MODAL -->
-    <div id="profile-modal" class="fixed inset-0 z-[999] flex items-center justify-center px-4 pointer-events-none opacity-0 invisible transition-all duration-300">
-        <div class="absolute inset-0 bg-forest/90 backdrop-blur-sm" onclick="closeProfileModal()"></div>
-        
-        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 pointer-events-auto flex flex-col max-h-[90vh] overflow-y-auto">
+        <!-- Main Interface -->
+        <main class="relative h-full w-full overflow-hidden flex flex-col">
             
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-forest hover:bg-forest hover:text-white transition-all tap-active">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <!-- Profile Header -->
-            <div class="bg-gradient-to-r from-forest to-leaf p-8 text-white">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold border-4 border-white/30" id="profile-avatar">
-                        U
+            <!-- Top Header -->
+            <header class="flex justify-between items-center px-6 pt-12 pb-4 z-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-black border border-white/10 overflow-hidden">
+                        <img src="https://picsum.photos/seed/user/200" class="w-full h-full object-cover opacity-80">
                     </div>
-                    <div>
-                        <h3 id="profile-name" class="text-2xl font-bold">User Name</h3>
-                        <p id="profile-email" class="text-white/80 text-sm">user@email.com</p>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] uppercase text-white/50 tracking-wider font-bold">Good Evening</span>
+                        <span class="text-sm font-bold">Alex Chen</span>
                     </div>
                 </div>
-                <button onclick="logout()" class="mt-4 px-4 py-2 bg-white/20 rounded-full text-sm font-bold hover:bg-white/30 transition-colors">
-                    Logout
+                <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white/10 active:scale-95">
+                    <i class="ph ph-bell text-xl"></i>
                 </button>
-            </div>
+            </header>
 
-            <!-- Profile Details -->
-            <div class="p-6">
-                <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
-                    <i data-lucide="user" class="w-5 h-5"></i>
-                    Personal Information
-                </h4>
-                <div class="space-y-3 mb-6">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
-                        <span id="profile-phone" class="text-gray-600">+91 00000 00000</span>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-gray-400 mt-1"></i>
-                        <span id="profile-address" class="text-gray-600">Delivery address will appear here</span>
-                    </div>
-                </div>
-
-                <!-- Purchase History -->
-                <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
-                    <i data-lucide="history" class="w-5 h-5"></i>
-                    Purchase History
-                </h4>
-                <div id="purchase-history" class="space-y-3 max-h-60 overflow-y-auto">
-                    <!-- History items will be inserted here -->
-                    <p class="text-gray-400 text-center py-4">No purchases yet</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- APP HEADER -->
-    <header class="fixed top-0 left-0 w-full z-40 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-nav">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center relative">
-            
-            <!-- Logo -->
-            <a href="#" onclick="window.scrollTo(0,0); playSound('click'); return false;" class="text-2xl font-serif font-bold text-forest flex items-center gap-1 tap-active select-none">
-                <i data-lucide="sprout" class="w-6 h-6 text-leaf fill-current"></i>
-                lightsprouts
-            </a>
-
-            <!-- Desktop Filter Menu -->
-            <nav class="hidden lg:flex items-center gap-2 bg-gray-100/50 p-1.5 rounded-full border border-gray-200">
-                <button onclick="filterProducts('all')" class="nav-pill px-5 py-2 rounded-full text-sm font-bold bg-white text-forest shadow-sm">All Plants</button>
-                <button onclick="filterProducts('spices')" class="nav-pill px-5 py-2 rounded-full text-sm font-semibold text-gray-500 hover:bg-white/50">Spice Plants</button>
-            </nav>
-
-            <!-- Actions -->
-            <div class="flex items-center gap-3">
-                <div id="user-profile" class="hidden items-center gap-2">
-                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-mint flex items-center justify-center text-leaf font-bold hover:bg-leaf hover:text-white transition-colors" id="user-avatar">U</button>
-                </div>
-
-                <button id="login-button" onclick="openAuthModal()" class="px-4 py-2 rounded-full text-sm font-bold bg-forest/5 text-forest hover:bg-forest hover:text-white transition-colors">
-                    Login
-                </button>
-
-                <button onclick="openCart()" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-forest text-white shadow-glow tap-active">
-                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-leaf text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center scale-0 transition-transform">0</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Sticky Categories -->
-        <div class="lg:hidden w-full border-t border-gray-100 py-3 px-4 overflow-x-auto no-scrollbar flex gap-2">
-            <button onclick="filterProducts('all')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-forest text-white shadow-sm transition-all">All Plants</button>
-            <button onclick="filterProducts('spices')" class="cat-pill shrink-0 px-5 py-2 rounded-full text-sm font-bold bg-white text-forest border border-gray-200">Spice Plants</button>
-        </div>
-    </header>
-
-    <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-32 lg:pt-24 px-4 sm:px-6 w-full max-w-7xl mx-auto z-10 relative">
-        
-        <!-- Hero Section -->
-        <section class="relative w-full h-[40vh] md:h-[400px] rounded-[2rem] overflow-hidden mb-8 shadow-float group img-wrapper">
-            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent"></div>
-            
-            <div class="absolute bottom-0 left-0 w-full p-8 flex flex-col items-start text-white">
-                <span class="bg-leaf text-forest text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">Premium</span>
-                <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2 leading-tight">
-                    Grow exotic <br><span class="text-lime italic">spices.</span>
-                </h1>
-                <p class="text-white/80 text-sm mb-4">Premium Spice Plants • 95% Germination • Fast Delivery</p>
-            </div>
-        </section>
-
-        <!-- Product Grid -->
-        <div id="grid-header" class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-forest">Premium Spice Plants</h2>
-            <span id="item-count" class="text-xs font-bold text-gray-400">Loading...</span>
-        </div>
-
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-24">
-            <!-- Items injected via JS -->
-        </div>
-
-    </main>
-
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 z-40 pb-[calc(10px+var(--safe-bottom))] pt-3 flex justify-around items-center shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'}); playSound('click')" class="flex flex-col items-center gap-1 text-forest w-16 tap-active">
-            <i data-lucide="home" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">Home</span>
-        </button>
-        <button onclick="openSearch()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active">
-            <i data-lucide="search" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">Search</span>
-        </button>
-        <button onclick="openAccount()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-forest w-16 tap-active">
-            <i id="user-icon-mobile" data-lucide="user" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">Account</span>
-        </button>
-    </nav>
-
-    <!-- PRODUCT DETAIL MODAL -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm transition-opacity" onclick="closeModal('product-modal')"></div>
-        
-        <div class="sheet-content pointer-events-auto bg-[#FAFAF9] w-full md:w-[900px] rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[90vh]">
-            
-            <button onclick="closeModal('product-modal')" class="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full text-forest shadow-sm tap-active">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-
-            <!-- Image Side -->
-            <div class="w-full md:w-1/2 h-72 md:h-auto bg-gray-100 relative img-wrapper">
-                <img id="modal-img" src="" class="w-full h-full object-cover">
-            </div>
-
-            <!-- Content Side -->
-            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col bg-white overflow-y-auto pb-10">
-                <div class="mb-2">
-                    <span id="modal-tag" class="text-xs font-bold uppercase tracking-widest text-leaf">Category</span>
-                </div>
+            <!-- Scrollable Content -->
+            <div id="content-scroll" class="flex-1 overflow-y-auto no-scrollbar pb-32 px-6 relative z-10 space-y-8">
                 
-                <h2 id="modal-title" class="text-3xl font-serif font-bold text-forest mb-2">Product Name</h2>
-                <div class="flex items-baseline gap-3 mb-6">
-                    <span id="modal-price" class="text-3xl font-bold text-forest">₹0</span>
-                    <span id="modal-original-price" class="text-gray-400 line-through decoration-red-400">₹0</span>
-                </div>
-
-                <p id="modal-desc" class="text-gray-500 text-sm leading-relaxed mb-8 font-medium">Description...</p>
-
-                <!-- Actions -->
-                <div class="mt-auto space-y-3">
-                    <div class="flex items-center gap-3">
-                        <div class="flex items-center bg-gray-50 border border-gray-200 rounded-2xl px-2 h-14 shrink-0">
-                            <button onclick="adjustQty(-1)" class="w-10 h-full flex items-center justify-center text-forest text-xl font-bold">-</button>
-                            <span id="qty-display" class="w-8 text-center font-bold text-forest text-lg">1</span>
-                            <button onclick="adjustQty(1)" class="w-10 h-full flex items-center justify-center text-forest text-xl font-bold">+</button>
+                <!-- Home View -->
+                <div id="view-home" class="page-enter">
+                    <!-- Featured Card -->
+                    <div class="relative w-full aspect-[16/10] rounded-3xl overflow-hidden group cursor-pointer shadow-2xl" onclick="playTrack(0)">
+                        <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2340&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6">
+                            <span class="px-2 py-1 rounded bg-primary text-black text-[10px] font-bold uppercase tracking-widest mb-2 inline-block">New Release</span>
+                            <h2 class="text-3xl font-bold leading-tight mb-1">Neon Nights</h2>
+                            <p class="text-white/70 text-sm">The Synthwave Collective</p>
                         </div>
-                        
-                        <!-- Add to Cart -->
-                        <button onclick="addToCart()" class="flex-grow h-14 bg-forest text-white font-bold rounded-2xl shadow-lg shadow-forest/20 tap-active text-lg flex items-center justify-center gap-2">
-                            Add to Cart
+                        <button class="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:bg-primary group-hover:text-black group-hover:border-primary transition-all duration-300">
+                            <i class="ph-fill ph-play text-xl ml-1"></i>
                         </button>
                     </div>
 
-                    <!-- Direct Buy Button -->
-                    <button onclick="directBuy()" class="w-full h-14 bg-leaf text-forest font-extrabold rounded-2xl shadow-lg shadow-leaf/20 tap-active text-lg flex items-center justify-center gap-2 uppercase tracking-wide">
-                        Buy Now (WhatsApp) <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    <!-- Horizontal Section -->
+                    <div class="mt-8">
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="text-lg font-bold">Jump Back In</h3>
+                            <span class="text-xs text-primary cursor-pointer hover:underline">See all</span>
+                        </div>
+                        <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-6 px-6">
+                            <!-- Card 1 -->
+                            <div class="min-w-[140px] group cursor-pointer" onclick="playTrack(1)">
+                                <div class="w-full aspect-square rounded-2xl overflow-hidden mb-3 relative">
+                                    <img src="https://picsum.photos/seed/album1/300" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <i class="ph-fill ph-play-circle text-4xl text-white"></i>
+                                    </div>
+                                </div>
+                                <h4 class="font-bold text-sm truncate">Midnight City</h4>
+                                <p class="text-xs text-white/50 truncate">M83 • Electronic</p>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="min-w-[140px] group cursor-pointer" onclick="playTrack(2)">
+                                <div class="w-full aspect-square rounded-2xl overflow-hidden mb-3 relative">
+                                    <img src="https://picsum.photos/seed/album2/300" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <i class="ph-fill ph-play-circle text-4xl text-white"></i>
+                                    </div>
+                                </div>
+                                <h4 class="font-bold text-sm truncate">Starboy</h4>
+                                <p class="text-xs text-white/50 truncate">The Weeknd</p>
+                            </div>
+                             <!-- Card 3 -->
+                             <div class="min-w-[140px] group cursor-pointer" onclick="playTrack(3)">
+                                <div class="w-full aspect-square rounded-2xl overflow-hidden mb-3 relative">
+                                    <img src="https://picsum.photos/seed/album3/300" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <i class="ph-fill ph-play-circle text-4xl text-white"></i>
+                                    </div>
+                                </div>
+                                <h4 class="font-bold text-sm truncate">Currents</h4>
+                                <p class="text-xs text-white/50 truncate">Tame Impala</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- List Section -->
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold mb-4">Trending Now</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card p-3 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-white/5" onclick="playTrack(1)">
+                                <span class="text-white/30 text-xs font-bold w-4">01</span>
+                                <img src="https://picsum.photos/seed/trend1/100" class="w-12 h-12 rounded-lg object-cover">
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-sm">Levitating</h4>
+                                    <p class="text-[10px] text-white/50 uppercase">Dua Lipa</p>
+                                </div>
+                                <button class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                                    <i class="ph ph-dots-three text-lg"></i>
+                                </button>
+                            </div>
+                             <div class="glass-card p-3 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-white/5" onclick="playTrack(2)">
+                                <span class="text-white/30 text-xs font-bold w-4">02</span>
+                                <img src="https://picsum.photos/seed/trend2/100" class="w-12 h-12 rounded-lg object-cover">
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-sm">After Hours</h4>
+                                    <p class="text-[10px] text-white/50 uppercase">The Weeknd</p>
+                                </div>
+                                <button class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                                    <i class="ph ph-dots-three text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search View (Hidden by default) -->
+                <div id="view-search" class="hidden page-enter">
+                    <h2 class="text-3xl font-bold mb-6">Discover</h2>
+                    <div class="glass-panel p-4 rounded-2xl flex items-center gap-3 mb-8 sticky top-0 z-20">
+                        <i class="ph ph-magnifying-glass text-xl text-white/50"></i>
+                        <input type="text" placeholder="Artists, Songs, Lyrics..." class="bg-transparent w-full outline-none text-white placeholder-white/30 font-medium">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="aspect-[1.5] rounded-2xl bg-gradient-to-br from-pink-600 to-purple-800 p-4 font-bold text-lg relative overflow-hidden">
+                            Pop <img src="https://picsum.photos/seed/pop/200" class="absolute -bottom-4 -right-4 w-20 h-20 rotate-[25deg] shadow-lg rounded-lg">
+                        </div>
+                        <div class="aspect-[1.5] rounded-2xl bg-gradient-to-br from-green-600 to-teal-800 p-4 font-bold text-lg relative overflow-hidden">
+                            Hip-Hop <img src="https://picsum.photos/seed/hip/200" class="absolute -bottom-4 -right-4 w-20 h-20 rotate-[25deg] shadow-lg rounded-lg">
+                        </div>
+                        <div class="aspect-[1.5] rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 p-4 font-bold text-lg relative overflow-hidden">
+                            Rock <img src="https://picsum.photos/seed/rock/200" class="absolute -bottom-4 -right-4 w-20 h-20 rotate-[25deg] shadow-lg rounded-lg">
+                        </div>
+                        <div class="aspect-[1.5] rounded-2xl bg-gradient-to-br from-orange-600 to-red-800 p-4 font-bold text-lg relative overflow-hidden">
+                            Indie <img src="https://picsum.photos/seed/indie/200" class="absolute -bottom-4 -right-4 w-20 h-20 rotate-[25deg] shadow-lg rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Library View (Hidden by default) -->
+                 <div id="view-library" class="hidden page-enter">
+                    <h2 class="text-3xl font-bold mb-6">Library</h2>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-emerald-800 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(0,255,102,0.3)]">
+                            <i class="ph-fill ph-heart text-2xl text-black"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Liked Songs</h3>
+                            <p class="text-sm text-white/50">42 tracks</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <!-- Simulated List Items -->
+                        <div class="p-3 hover:bg-white/5 rounded-xl transition-colors flex justify-between items-center group">
+                            <span class="font-medium">Playlists</span>
+                            <i class="ph ph-caret-right text-white/30 group-hover:text-white transition-colors"></i>
+                        </div>
+                        <div class="h-[1px] bg-white/5 w-full"></div>
+                        <div class="p-3 hover:bg-white/5 rounded-xl transition-colors flex justify-between items-center group">
+                            <span class="font-medium">Albums</span>
+                            <i class="ph ph-caret-right text-white/30 group-hover:text-white transition-colors"></i>
+                        </div>
+                        <div class="h-[1px] bg-white/5 w-full"></div>
+                         <div class="p-3 hover:bg-white/5 rounded-xl transition-colors flex justify-between items-center group">
+                            <span class="font-medium">Artists</span>
+                            <i class="ph ph-caret-right text-white/30 group-hover:text-white transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="absolute bottom-0 w-full h-[90px] bg-black/40 backdrop-blur-xl border-t border-white/10 z-30 flex justify-around items-start pt-4 pb-[env(safe-area-inset-bottom)]">
+                <button onclick="switchView('home')" class="nav-btn group flex flex-col items-center gap-1 w-16 text-primary">
+                    <i class="ph-fill ph-house text-2xl group-active:scale-90 transition-transform"></i>
+                    <span class="text-[10px] font-bold tracking-wide">Home</span>
+                </button>
+                <button onclick="switchView('search')" class="nav-btn group flex flex-col items-center gap-1 w-16 text-white/40 hover:text-white transition-colors">
+                    <i class="ph ph-magnifying-glass text-2xl group-active:scale-90 transition-transform"></i>
+                    <span class="text-[10px] font-bold tracking-wide">Search</span>
+                </button>
+                <button onclick="switchView('library')" class="nav-btn group flex flex-col items-center gap-1 w-16 text-white/40 hover:text-white transition-colors">
+                    <i class="ph ph-books text-2xl group-active:scale-90 transition-transform"></i>
+                    <span class="text-[10px] font-bold tracking-wide">Library</span>
+                </button>
+            </nav>
+
+            <!-- Mini Player (Floating) -->
+            <div id="mini-player" onclick="toggleFullPlayer(true)" class="absolute bottom-[96px] left-4 right-4 h-16 glass-panel rounded-2xl flex items-center p-2 pr-4 gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)] z-40 transform translate-y-[200%] transition-transform duration-500 cursor-pointer overflow-hidden border border-white/10">
+                <div class="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden relative shadow-lg">
+                     <img id="mini-art" src="" class="w-full h-full object-cover animate-[spin_10s_linear_infinite]">
+                     <div class="absolute inset-0 bg-black/10"></div>
+                </div>
+                <div class="flex-1 min-w-0 flex flex-col justify-center">
+                    <h4 id="mini-title" class="text-sm font-bold truncate">Song Title</h4>
+                    <p id="mini-artist" class="text-[10px] text-primary truncate uppercase tracking-wider">Artist</p>
+                </div>
+                <div class="flex items-center gap-4 z-10">
+                     <!-- Visualizer bars -->
+                     <div class="playing-wave hidden" id="mini-wave">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                    <button id="mini-play-btn" onclick="event.stopPropagation(); togglePlay()" class="text-white hover:text-primary transition-colors">
+                        <i class="ph-fill ph-play text-2xl"></i>
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CART/CHECKOUT DRAWER -->
-    <div id="cart-drawer" class="fixed inset-0 z-[60] flex justify-end pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-dark/20 backdrop-blur-sm transition-opacity" onclick="closeModal('cart-drawer')"></div>
-        <div class="sheet-content bg-[#FAFAF9] w-full max-w-md h-full shadow-2xl pointer-events-auto flex flex-col translate-x-full transition-transform duration-300">
-            
-            <div class="p-5 flex justify-between items-center bg-white border-b border-gray-100">
-                <h3 class="text-xl font-bold text-forest">My Basket</h3>
-                <button onclick="closeModal('cart-drawer')" class="p-2 bg-gray-100 rounded-full hover:bg-red-50 hover:text-red-500 text-forest transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
-
-            <div class="p-6 bg-white border-t border-gray-100 pb-8">
-                <div class="flex justify-between items-baseline mb-4">
-                    <span class="text-gray-500 font-medium">Total</span>
-                    <span id="cart-total-price" class="text-3xl font-bold text-forest">₹0.00</span>
+                <!-- Progress Bar Background -->
+                <div class="absolute bottom-0 left-0 h-[2px] bg-white/10 w-full">
+                    <div id="mini-progress-bar" class="h-full bg-primary w-0 transition-[width] duration-100 ease-linear"></div>
                 </div>
-                <!-- Checkout with logic -->
-                <button onclick="handleCheckout()" class="w-full bg-leaf text-forest font-extrabold py-5 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-leaf/20 tap-active text-lg uppercase big-btn">
-                    Checkout on WhatsApp
-                </button>
+            </div>
+
+        </main>
+
+        <!-- Full Player Overlay -->
+        <div id="full-player" class="absolute inset-0 bg-[#0a0a0a]/95 backdrop-blur-3xl z-50 transform translate-y-[100%] transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col">
+            <!-- Background Blur Effect -->
+            <div class="absolute inset-0 z-0 overflow-hidden opacity-40">
+                <img id="blur-bg" src="" class="w-full h-full object-cover blur-[80px] scale-150">
+            </div>
+
+            <div class="relative z-10 flex flex-col h-full px-8 pb-8 pt-4">
+                <!-- Handle -->
+                <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6" onclick="toggleFullPlayer(false)"></div>
+
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <button onclick="toggleFullPlayer(false)" class="w-10 h-10 rounded-full glass-card flex items-center justify-center active:scale-95 transition-transform">
+                        <i class="ph ph-caret-down text-xl"></i>
+                    </button>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Now Playing</span>
+                    <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center active:scale-95 transition-transform">
+                        <i class="ph ph-dots-three text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Album Art Area -->
+                <div class="flex-1 flex flex-col justify-center items-center relative mb-8">
+                    <div class="relative w-full max-w-[320px] aspect-square">
+                        <div class="album-shadow" id="album-glow"></div>
+                        <div class="w-full h-full rounded-3xl overflow-hidden shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] border border-white/10">
+                            <img id="full-art" src="" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="flex justify-between items-end mb-8">
+                    <div class="flex-1 mr-4">
+                        <h2 id="full-title" class="text-2xl font-bold leading-tight mb-1 line-clamp-1">Song Title</h2>
+                        <p id="full-artist" class="text-lg text-primary font-medium opacity-90 line-clamp-1">Artist Name</p>
+                    </div>
+                    <button id="like-btn" onclick="toggleLike()" class="mb-1 text-white/30 hover:text-red-500 active:scale-125 transition-all duration-300">
+                        <i class="ph-fill ph-heart text-3xl"></i>
+                    </button>
+                </div>
+
+                <!-- Scrubber -->
+                <div class="mb-8 group">
+                    <input type="range" id="seek-slider" min="0" max="100" value="0" class="w-full relative z-20">
+                    <div class="flex justify-between text-[10px] font-bold text-white/40 mt-2 font-mono tracking-widest">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center justify-between px-2 mb-8">
+                    <button class="text-white/40 hover:text-white transition-colors"><i class="ph ph-shuffle text-2xl"></i></button>
+                    
+                    <div class="flex items-center gap-6">
+                        <button class="text-white hover:text-primary transition-colors active:scale-90 transform" onclick="skip(-10)">
+                            <i class="ph-fill ph-skip-back text-3xl"></i>
+                        </button>
+                        
+                        <button onclick="togglePlay()" class="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+                            <i id="main-play-icon" class="ph-fill ph-play text-4xl ml-1"></i>
+                        </button>
+                        
+                        <button class="text-white hover:text-primary transition-colors active:scale-90 transform" onclick="skip(10)">
+                            <i class="ph-fill ph-skip-forward text-3xl"></i>
+                        </button>
+                    </div>
+
+                    <button class="text-white/40 hover:text-white transition-colors"><i class="ph ph-repeat text-2xl"></i></button>
+                </div>
+                
+                <!-- Bottom Action -->
+                <div class="flex justify-center">
+                    <div class="glass-card px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer hover:bg-white/10">
+                        <i class="ph ph-speaker-hifi text-primary"></i>
+                        <span class="text-xs font-bold text-white/60">AirPlay & Bluetooth</span>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
 
-    <!-- DELIVERY DETAILS MODAL -->
-    <div id="delivery-modal" class="fixed inset-0 z-[80] flex items-center justify-center p-4 pointer-events-none modal-enter">
-        <div class="absolute inset-0 bg-forest/90 backdrop-blur-md transition-opacity" onclick="closeModal('delivery-modal')"></div>
-        <div class="sheet-content pointer-events-auto bg-white rounded-3xl w-full max-w-md p-8 relative shadow-2xl scale-95 opacity-0 transition-all duration-300">
-            
-            <button onclick="closeModal('delivery-modal')" class="absolute top-4 right-4 p-2 text-gray-400">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-
-            <h3 class="text-2xl font-serif font-bold text-forest mb-2">One Last Thing</h3>
-            <p class="text-gray-400 mb-6">Where should we send your plants?</p>
-
-            <form onsubmit="saveAndProceedCheckout(event)" class="space-y-4">
-                <input type="text" id="d-name" required placeholder="Full Name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg">
-                <input type="tel" id="d-phone" required placeholder="Phone Number" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg">
-                <textarea id="d-address" required rows="2" placeholder="Full Address" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-forest text-lg resize-none"></textarea>
-                
-                <button type="submit" class="w-full bg-forest text-white font-bold py-4 rounded-xl mt-4 text-lg shadow-lg tap-active">
-                    Confirm & Order
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- SEARCH MODAL -->
-    <div id="search-modal" class="fixed inset-0 z-[90] bg-white/95 backdrop-blur-xl modal-enter flex flex-col">
-        <div class="pt-6 px-4 pb-4 border-b border-gray-100 flex items-center gap-3">
-            <button onclick="closeModal('search-modal')" class="p-2"><i data-lucide="arrow-left" class="text-forest"></i></button>
-            <input type="text" id="search-input" placeholder="Search..." class="flex-grow bg-transparent text-xl font-bold text-forest placeholder:text-gray-300 focus:outline-none" oninput="handleSearch(this.value)">
-        </div>
-        <div id="search-results" class="flex-grow overflow-y-auto p-4 space-y-2"></div>
     </div>
 
     <script>
-        // --- CONFIG & DATA ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyAHrBE3doAhDni4mcNhylJD8o3r5cNZYSI",
-            authDomain: "ls-mannage.firebaseapp.com",
-            databaseURL: "https://ls-mannage-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "ls-mannage",
-            storageBucket: "ls-mannage.firebasestorage.app",
-            messagingSenderId: "115534926798",
-            appId: "1:115534926798:web:4ea3ab3c1a2d44e2e1d19f",
-            measurementId: "G-P2JQH8M41Y"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        // WhatsApp Number Configuration
-        const WHATSAPP_NUMBER = '9526725376';
-
-        // Product Data - Only Spice Plants
-        const products = [
-            { id: 1, type: 'spices', name: "Cocoa Chocolate Plant Theobroma cacao Plant", price: 320, originalPrice: 380, img: "https://mtechgardens.com/cdn/shop/products/cocoa-4.jpg?crop=center&height=600&v=1682060685&width=600", desc: "Cocoa plant for chocolate production." },
-            { id: 2, type: 'spices', name: "Hybrid Dwarf Coconut - Kerala Chowghat Orange Dwarf Plant", price: 560, originalPrice: 650, img: "https://mtechgardens.com/cdn/shop/files/ChowghatOrangeDwarf_COD.png?crop=center&height=600&v=1717143411&width=600", desc: "Kerala Chowghat Orange Dwarf Coconut." },
-            { id: 3, type: 'spices', name: "Hybrid Dwarf Coconut - Kalpasree Hybrid Plant", price: 450, originalPrice: 520, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Kalpasree-Hybrid_c9c663b4-e8b3-4edc-954d-674c2d9d62d3.png?crop=center&height=600&v=1717143280&width=600", desc: "Kalpasree Hybrid Dwarf Coconut." },
-            { id: 4, type: 'spices', name: "Hybrid Dwarf Coconut - Red Malayan Plant", price: 420, originalPrice: 490, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Red-Malayan-Hybrid.png?crop=center&height=600&v=1717143300&width=600", desc: "Red Malayan Hybrid Coconut." },
-            { id: 5, type: 'spices', name: "Hybrid Dwarf Coconut - 18th Patta Hybrid Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-18th-Patta-Dwarf_c3702be8-8c3e-459b-931c-b4ed167d087b.png?crop=center&height=600&v=1717143288&width=600", desc: "18th Patta Dwarf Coconut." },
-            { id: 6, type: 'spices', name: "Arabica Coffee Plant", price: 300, originalPrice: 350, img: "https://mtechgardens.com/cdn/shop/products/Coffee-Arabica.jpg?crop=center&height=600&v=1682060688&width=600", desc: "Arabica coffee plant." },
-            { id: 7, type: 'spices', name: "Tea Plant", price: 295, originalPrice: 340, img: "https://mtechgardens.com/cdn/shop/products/Csinensis.jpg?crop=center&height=600&v=1682060793&width=600", desc: "Tea plant for home cultivation." },
-            { id: 8, type: 'spices', name: "Hybrid Dwarf Coconut - Yellow Malayan Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Yellow-Malayan-Hybrid_e3c61467-63cd-4ad0-a35f-0e0ccbfa1615.png?crop=center&height=600&v=1717143272&width=600", desc: "Yellow Malayan Hybrid Coconut." },
-            { id: 9, type: 'spices', name: "Hybrid Dwarf Coconut - Andaman Dwarf Plant", price: 380, originalPrice: 440, img: "https://mtechgardens.com/cdn/shop/files/Coconut-Andaman_e31fdbce-c9f1-4467-a76a-94bb18005954.png?crop=center&height=600&v=1717143286&width=600", desc: "Andaman Dwarf Coconut." },
-            { id: 10, type: 'spices', name: "Hybrid Coconut - East Coast Tall Plant", price: 380, originalPrice: 440, img: "https://mtechgardens.com/cdn/shop/files/Coconut-East-Coast-Tall_e60739be-22a5-41ec-b5f2-8b552659972e.png?crop=center&height=600&v=1717143276&width=600", desc: "East Coast Tall Coconut." },
-            { id: 11, type: 'spices', name: "Cauvery Coffee Plant", price: 300, originalPrice: 350, img: "https://mtechgardens.com/cdn/shop/products/Coffee-Cauvery.jpg?crop=center&height=600&v=1682060691&width=600", desc: "Cauvery variety coffee plant." },
-            { id: 12, type: 'spices', name: "Hybrid Dwarf Coconut - Orange Malayan Plant", price: 450, originalPrice: 520, img: "https://mtechgardens.com/cdn/shop/products/Orange-Malayan.jpg?crop=center&height=600&v=1682060762&width=600", desc: "Orange Malayan Hybrid Coconut." },
-            { id: 13, type: 'spices', name: "Black Pepper Plant", price: 290, originalPrice: 340, img: "https://mtechgardens.com/cdn/shop/products/pepper-bush-piper-nigrum-186250662-69da96bd3ca341baad1e4c9045850f49.jpg?crop=center&height=600&v=1682060731&width=600", desc: "Black pepper vine plant." },
-            { id: 14, type: 'spices', name: "Chandragiri Coffee Plant", price: 350, originalPrice: 400, img: "https://mtechgardens.com/cdn/shop/products/Coffee-chandragiri.jpg?crop=center&height=600&v=1682060694&width=600", desc: "Chandragiri coffee variety." },
-            { id: 15, type: 'spices', name: "Hybrid Dwarf Coconut - Gouley Dwarf Plant", price: 390, originalPrice: 450, img: "https://mtechgardens.com/cdn/shop/files/Coconut-GouleyDwarf_Tender.png?crop=center&height=600&v=1717143390&width=600", desc: "Gouley Dwarf Coconut plant." }
+        // --- Data ---
+        const playlist = [
+            {
+                title: "Golden Brown",
+                artist: "The Stranglers",
+                src: "https://files.catbox.moe/5oidq1.m4a",
+                cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000"
+            },
+            {
+                title: "Midnight City",
+                artist: "M83",
+                src: "https://files.catbox.moe/5oidq1.m4a", // Using same placeholder audio
+                cover: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000"
+            },
+            {
+                title: "Starboy",
+                artist: "The Weeknd",
+                src: "https://files.catbox.moe/5oidq1.m4a",
+                cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1000"
+            },
+             {
+                title: "Currents",
+                artist: "Tame Impala",
+                src: "https://files.catbox.moe/5oidq1.m4a",
+                cover: "https://images.unsplash.com/photo-1459749411177-287ce35e8b4f?q=80&w=1000"
+            }
         ];
 
-        // Global State
-        let state = {
-            cart: JSON.parse(localStorage.getItem('ls_cart')) || [],
-            user: JSON.parse(localStorage.getItem('ls_user_profile')) || null,
-            currentItem: null,
-            tempQty: 1,
-            purchaseHistory: JSON.parse(localStorage.getItem('ls_purchase_history')) || {},
-            userBehavior: JSON.parse(localStorage.getItem('ls_user_behavior')) || {},
-            tempDirectOrder: null,
-            isDirectBuy: false
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isLiked = false;
+
+        // --- Elements ---
+        const audio = document.getElementById('audio-engine');
+        const miniPlayer = document.getElementById('mini-player');
+        const fullPlayer = document.getElementById('full-player');
+        const loader = document.getElementById('loader');
+        
+        // UI Elements
+        const els = {
+            miniTitle: document.getElementById('mini-title'),
+            miniArtist: document.getElementById('mini-artist'),
+            miniArt: document.getElementById('mini-art'),
+            miniPlayBtn: document.getElementById('mini-play-btn'),
+            miniProgress: document.getElementById('mini-progress-bar'),
+            miniWave: document.getElementById('mini-wave'),
+            
+            fullTitle: document.getElementById('full-title'),
+            fullArtist: document.getElementById('full-artist'),
+            fullArt: document.getElementById('full-art'),
+            blurBg: document.getElementById('blur-bg'),
+            mainPlayIcon: document.getElementById('main-play-icon'),
+            albumGlow: document.getElementById('album-glow'),
+            
+            seek: document.getElementById('seek-slider'),
+            currTime: document.getElementById('current-time'),
+            durTime: document.getElementById('duration'),
+            likeBtn: document.getElementById('like-btn')
         };
 
-        // --- SOUND ENGINE ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContext();
-
-        function playSound(type) {
-            if(ctx.state === 'suspended') ctx.resume();
-            
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            if(type === 'click') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.06);
-            } else if (type === 'success') {
-                playTone(523.25, 0);
-                playTone(659.25, 0.1);
-                playTone(783.99, 0.2);
-            } else if (type === 'remove') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(500, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.15);
-            }
-        }
-
-        function playTone(freq, delay) {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0, ctx.currentTime + delay);
-            gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + delay + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.4);
-            osc.start(ctx.currentTime + delay);
-            osc.stop(ctx.currentTime + delay + 0.5);
-        }
-
-        // --- USER BEHAVIOR TRACKING ---
-        function trackUserBehavior(action, data) {
-            if (!state.user || !state.user.email) return;
-            
-            const userId = state.user.email;
-            const today = new Date().toISOString().split('T')[0];
-            
-            if (!state.userBehavior[userId]) {
-                state.userBehavior[userId] = {
-                    searches: [],
-                    views: [],
-                    purchases: [],
-                    categories: {},
-                    interests: {},
-                    lastUpdated: today
-                };
-            }
-            
-            state.userBehavior[userId].lastUpdated = today;
-            
-            switch(action) {
-                case 'search':
-                    if (data && !state.userBehavior[userId].searches.includes(data.toLowerCase())) {
-                        state.userBehavior[userId].searches.push(data.toLowerCase());
-                        if (state.userBehavior[userId].searches.length > 20) {
-                            state.userBehavior[userId].searches.shift();
-                        }
-                    }
-                    break;
-                    
-                case 'view':
-                    const viewData = {
-                        productId: data.id,
-                        category: data.type,
-                        name: data.name,
-                        timestamp: Date.now()
-                    };
-                    state.userBehavior[userId].views.unshift(viewData);
-                    if (state.userBehavior[userId].views.length > 50) {
-                        state.userBehavior[userId].views.pop();
-                    }
-                    break;
-                    
-                case 'category_click':
-                    const category = data;
-                    if (!state.userBehavior[userId].categories[category]) {
-                        state.userBehavior[userId].categories[category] = 0;
-                    }
-                    state.userBehavior[userId].categories[category] += 1;
-                    break;
-                    
-                case 'purchase':
-                    data.items.forEach(item => {
-                        if (!state.userBehavior[userId].interests[item.type]) {
-                            state.userBehavior[userId].interests[item.type] = 0;
-                        }
-                        state.userBehavior[userId].interests[item.type] += item.qty;
-                    });
-                    
-                    state.userBehavior[userId].purchases.unshift({
-                        orderId: data.orderId,
-                        items: data.items,
-                        total: data.total,
-                        timestamp: Date.now()
-                    });
-                    
-                    if (state.userBehavior[userId].purchases.length > 50) {
-                        state.userBehavior[userId].purchases.pop();
-                    }
-                    break;
-            }
-            
-            localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
-            saveUserBehaviorToFirebase();
-        }
-
-        async function saveUserBehaviorToFirebase() {
-            if (!state.user || !state.user.email) return;
-            
-            try {
-                const userId = state.user.email.replace(/[.#$\[\]]/g, '_');
-                await database.ref('userBehavior/' + userId).set(state.userBehavior[state.user.email]);
-            } catch (error) {
-                console.log('Firebase offline', error);
-            }
-        }
-
-        async function loadUserBehaviorFromFirebase() {
-            if (!state.user || !state.user.email) return;
-            
-            try {
-                const userId = state.user.email.replace(/[.#$\[\]]/g, '_');
-                const snapshot = await database.ref('userBehavior/' + userId).once('value');
-                const firebaseData = snapshot.val();
-                
-                if (firebaseData) {
-                    if (!state.userBehavior[state.user.email]) {
-                        state.userBehavior[state.user.email] = firebaseData;
-                    } else {
-                        // Merge searches
-                        const localSearches = state.userBehavior[state.user.email].searches || [];
-                        const firebaseSearches = firebaseData.searches || [];
-                        state.userBehavior[state.user.email].searches = [...new Set([...localSearches, ...firebaseSearches])];
-                        
-                        // Merge views
-                        const localViews = state.userBehavior[state.user.email].views || [];
-                        const firebaseViews = firebaseData.views || [];
-                        state.userBehavior[state.user.email].views = [...localViews, ...firebaseViews]
-                            .sort((a, b) => b.timestamp - a.timestamp)
-                            .slice(0, 50);
-                        
-                        // Merge categories
-                        state.userBehavior[state.user.email].categories = {
-                            ...(firebaseData.categories || {}),
-                            ...(state.userBehavior[state.user.email].categories || {})
-                        };
-                        
-                        // Merge interests
-                        state.userBehavior[state.user.email].interests = {
-                            ...(firebaseData.interests || {}),
-                            ...(state.userBehavior[state.user.email].interests || {})
-                        };
-                        
-                        // Merge purchases
-                        const localPurchases = state.userBehavior[state.user.email].purchases || [];
-                        const firebasePurchases = firebaseData.purchases || [];
-                        state.userBehavior[state.user.email].purchases = [...localPurchases, ...firebasePurchases]
-                            .sort((a, b) => b.timestamp - a.timestamp)
-                            .slice(0, 50);
-                    }
-                    
-                    localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
-                }
-            } catch (error) {
-                console.log('Could not load from Firebase', error);
-            }
-        }
-
-        // --- PERSONALIZED RECOMMENDATION ALGORITHM ---
-        function getPersonalizedProductOrder(products) {
-            if (!state.user || !state.userBehavior[state.user.email]) {
-                return products;
-            }
-            
-            const userData = state.userBehavior[state.user.email];
-            const scoredProducts = products.map(product => {
-                let score = 0;
-                
-                // 1. Category preference (30% weight)
-                const categoryWeight = userData.categories[product.type] || 0;
-                score += categoryWeight * 30;
-                
-                // 2. Search relevance (25% weight)
-                userData.searches.forEach(searchTerm => {
-                    if (product.name.toLowerCase().includes(searchTerm) || 
-                        product.type.toLowerCase().includes(searchTerm)) {
-                        score += 25;
-                    }
-                });
-                
-                // 3. Purchase interest (20% weight)
-                const interestWeight = userData.interests[product.type] || 0;
-                score += interestWeight * 20;
-                
-                // 4. Recent views (15% weight)
-                const recentView = userData.views.find(view => view.productId === product.id);
-                if (recentView) {
-                    const daysAgo = (Date.now() - recentView.timestamp) / (1000 * 60 * 60 * 24);
-                    if (daysAgo < 7) score += 15;
-                    else if (daysAgo < 30) score += 8;
-                }
-                
-                // 5. Purchase history similarity (10% weight)
-                userData.purchases.forEach(purchase => {
-                    purchase.items.forEach(item => {
-                        if (item.type === product.type) score += 10;
-                    });
-                });
-                
-                return { ...product, score };
-            });
-            
-            scoredProducts.sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score;
-                return b.price - a.price;
-            });
-            
-            return scoredProducts.map(p => {
-                const { score, ...product } = p;
-                return product;
-            });
-        }
-
-        // --- AUTH & USER LOGIC ---
-        function openAuthModal() {
-            playSound('click');
-            const m = document.getElementById('auth-modal');
-            m.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            m.querySelector('div.relative').classList.remove('scale-95');
-        }
-
-        function closeAuthModal() {
-            playSound('click');
-            const m = document.getElementById('auth-modal');
-            m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-            m.querySelector('div.relative').classList.add('scale-95');
-        }
-
-        function openProfileModal() {
-            playSound('click');
-            if (!state.user) {
-                openAuthModal();
-                return;
-            }
-            
-            updateProfileModal();
-            const m = document.getElementById('profile-modal');
-            m.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            m.querySelector('div.relative').classList.remove('scale-95');
-        }
-
-        function closeProfileModal() {
-            playSound('click');
-            const m = document.getElementById('profile-modal');
-            m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-            m.querySelector('div.relative').classList.add('scale-95');
-        }
-
-        function updateProfileModal() {
-            if (!state.user) return;
-            
-            const userEmail = state.user.email;
-            document.getElementById('profile-name').textContent = state.user.name || 'User Name';
-            document.getElementById('profile-email').textContent = userEmail || 'user@email.com';
-            document.getElementById('profile-phone').textContent = state.user.phone || '+91 00000 00000';
-            document.getElementById('profile-address').textContent = state.user.address || 'No address saved';
-            document.getElementById('profile-avatar').textContent = state.user.name ? state.user.name[0].toUpperCase() : 'U';
-            
-            // Load purchase history
-            const userId = state.user.uid || userEmail;
-            const userHistory = state.purchaseHistory[userId] || [];
-            const historyContainer = document.getElementById('purchase-history');
-            
-            if (userHistory.length === 0) {
-                historyContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No purchases yet</p>';
-            } else {
-                historyContainer.innerHTML = userHistory.map(order => `
-                    <div class="history-item bg-gray-50 p-4 rounded-xl border border-gray-100">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h5 class="font-bold text-forest">Order #${order.orderId}</h5>
-                                <p class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleDateString()}</p>
-                            </div>
-                            <span class="order-badge">₹${order.total}</span>
-                        </div>
-                        <div class="text-sm text-gray-600">
-                            <p>${order.items.length} item(s) • ${order.status || 'Delivered'}</p>
-                            <p class="text-xs text-gray-400 mt-1">${order.address.substring(0, 50)}...</p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            // Show preferences section
-            if (state.userBehavior[userEmail]) {
-                const userData = state.userBehavior[userEmail];
-                const topCategories = Object.entries(userData.categories || {})
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 3);
-                
-                const topInterests = Object.entries(userData.interests || {})
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 3);
-                
-                const preferencesHTML = `
-                    <div class="preferences-section mt-6 pt-6 border-t border-gray-100">
-                        <h4 class="text-lg font-bold text-forest mb-4 flex items-center gap-2">
-                            <i data-lucide="brain" class="w-5 h-5"></i>
-                            Your Preferences
-                        </h4>
-                        <div class="space-y-3">
-                            ${topCategories.length > 0 ? `
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Top Categories:</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        ${topCategories.map(([cat, count]) => `
-                                            <span class="px-3 py-1 bg-mint text-forest text-xs rounded-full">
-                                                ${cat.replace('-', ' ')} (${count})
-                                            </span>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                            ${topInterests.length > 0 ? `
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Frequent Buys:</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        ${topInterests.map(([type, qty]) => `
-                                            <span class="px-3 py-1 bg-leaf/20 text-forest text-xs rounded-full">
-                                                ${type.replace('-', ' ')} (${qty} items)
-                                            </span>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                            ${userData.searches && userData.searches.length > 0 ? `
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 mb-1">Recent Searches:</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        ${userData.searches.slice(-5).map(term => `
-                                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                                ${term}
-                                            </span>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-                
-                const modalContent = document.querySelector('#profile-modal .p-6');
-                const existingPrefs = modalContent.querySelector('.preferences-section');
-                if (existingPrefs) existingPrefs.remove();
-                modalContent.insertAdjacentHTML('beforeend', preferencesHTML);
-                lucide.createIcons();
-            }
-        }
-
-        function switchAuthTab(tab) {
-            playSound('click');
-            const lTab = document.getElementById('login-tab');
-            const rTab = document.getElementById('register-tab');
-            const lForm = document.getElementById('login-form');
-            const rForm = document.getElementById('register-form');
-
-            if(tab === 'login') {
-                lTab.classList.add('border-forest', 'text-forest'); lTab.classList.remove('text-gray-400');
-                rTab.classList.remove('border-forest', 'text-forest'); rTab.classList.add('text-gray-400');
-                lForm.classList.remove('hidden'); rForm.classList.add('hidden');
-            } else {
-                rTab.classList.add('border-forest', 'text-forest'); rTab.classList.remove('text-gray-400');
-                lTab.classList.remove('border-forest', 'text-forest'); lTab.classList.add('text-gray-400');
-                rForm.classList.remove('hidden'); lForm.classList.add('hidden');
-            }
-        }
-
-        async function registerWithEmail(e) {
-            e.preventDefault();
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-password').value;
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const address = document.getElementById('reg-address').value;
-
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                const profile = {
-                    uid: cred.user.uid,
-                    email: email,
-                    name: name,
-                    phone: phone,
-                    address: address
-                };
-                localStorage.setItem('ls_user_profile', JSON.stringify(profile));
-                state.user = profile;
-                
-                // Initialize user behavior
-                if (!state.userBehavior[email]) {
-                    state.userBehavior[email] = {
-                        searches: [],
-                        views: [],
-                        purchases: [],
-                        categories: {},
-                        interests: {},
-                        lastUpdated: new Date().toISOString().split('T')[0]
-                    };
-                    localStorage.setItem('ls_user_behavior', JSON.stringify(state.userBehavior));
-                }
-                
-                updateUI();
-                closeAuthModal();
-                playSound('success');
-                setTimeout(() => {
-                    openProfileModal();
-                }, 500);
-            } catch (err) {
-                alert(err.message);
-            }
-        }
-
-        async function loginWithEmail(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            try {
-                const cred = await auth.signInWithEmailAndPassword(email, pass);
-                let savedProfile = JSON.parse(localStorage.getItem('ls_user_profile'));
-                if(!savedProfile || savedProfile.email !== email) {
-                    savedProfile = { uid: cred.user.uid, email: email, name: email.split('@')[0], phone: '', address: '' };
-                    localStorage.setItem('ls_user_profile', JSON.stringify(savedProfile));
-                }
-                state.user = savedProfile;
-                
-                // Load user behavior from Firebase
-                await loadUserBehaviorFromFirebase();
-                
-                updateUI();
-                closeAuthModal();
-                playSound('success');
-                
-                // Show personalized welcome
-                setTimeout(() => {
-                    if (state.userBehavior[email] && state.userBehavior[email].searches.length > 0) {
-                        showNotification(`Welcome back! We've personalized products based on your interest in "${state.userBehavior[email].searches.slice(-1)[0]}"`);
-                    }
-                }, 1000);
-            } catch (err) {
-                alert(err.message);
-            }
-        }
-
-        async function signInWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                const result = await auth.signInWithPopup(provider);
-                const u = result.user;
-                let savedProfile = JSON.parse(localStorage.getItem('ls_user_profile'));
-                if(!savedProfile || savedProfile.email !== u.email) {
-                    savedProfile = { uid: u.uid, email: u.email, name: u.displayName, phone: '', address: '' };
-                    localStorage.setItem('ls_user_profile', JSON.stringify(savedProfile));
-                }
-                state.user = savedProfile;
-                
-                // Load user behavior from Firebase
-                await loadUserBehaviorFromFirebase();
-                
-                updateUI();
-                closeAuthModal();
-                playSound('success');
-                
-                // Show personalized welcome
-                setTimeout(() => {
-                    if (state.userBehavior[u.email] && state.userBehavior[u.email].searches.length > 0) {
-                        showNotification(`Welcome back ${u.displayName}! Personalized picks ready for you.`);
-                    } else {
-                        showNotification(`Welcome ${u.displayName}! Start exploring and we'll learn your preferences.`);
-                    }
-                }, 1000);
-            } catch(err) { 
-                console.error(err);
-                alert('Google sign in failed. Please try again.');
-            }
-        }
-
-        function logout() {
-            auth.signOut();
-            state.user = null;
-            localStorage.removeItem('ls_user_profile');
-            updateUI();
-            closeProfileModal();
-            playSound('click');
-        }
-
-        function openAccount() {
-            if (state.user) {
-                openProfileModal();
-            } else {
-                openAuthModal();
-            }
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'fixed top-24 right-4 bg-forest text-white px-6 py-3 rounded-xl shadow-lg z-[1000] animate-slide-up flex items-center gap-2 max-w-xs';
-            notification.innerHTML = `
-                <i data-lucide="sparkles" class="w-5 h-5 text-leaf flex-shrink-0"></i>
-                <span class="text-sm">${message}</span>
-            `;
-            document.body.appendChild(notification);
-            
-            lucide.createIcons();
-            
+        // --- Initialization ---
+        window.onload = () => {
             setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // --- PURCHASE HISTORY MANAGEMENT ---
-        function savePurchase(orderData) {
-            if (!state.user) return;
-            
-            const userId = state.user.uid || state.user.email;
-            if (!state.purchaseHistory[userId]) {
-                state.purchaseHistory[userId] = [];
-            }
-            
-            state.purchaseHistory[userId].unshift(orderData);
-            
-            if (state.purchaseHistory[userId].length > 10) {
-                state.purchaseHistory[userId].pop();
-            }
-            
-            localStorage.setItem('ls_purchase_history', JSON.stringify(state.purchaseHistory));
-            
-            // Track purchase behavior
-            trackUserBehavior('purchase', orderData);
-        }
-
-        // --- PRODUCT GRID & FILTERING ---
-        function filterProducts(type) {
-            playSound('click');
-            const btns = document.querySelectorAll('.cat-pill, .nav-pill');
-            btns.forEach(b => {
-                b.classList.remove('bg-forest', 'text-white');
-                b.classList.add('bg-white', 'text-gray-500', 'text-forest');
-            });
-
-            // Track category click
-            if (type !== 'all') {
-                trackUserBehavior('category_click', type);
-            }
-
-            // Highlight active button
-            const activeBtn = Array.from(btns).find(btn => 
-                btn.textContent.toLowerCase().includes(type === 'all' ? 'all' : type.split('-')[0].toLowerCase())
-            );
-            if (activeBtn) {
-                activeBtn.classList.add('bg-forest', 'text-white');
-                activeBtn.classList.remove('bg-white', 'text-gray-500', 'text-forest');
-            }
-
-            const grid = document.getElementById('product-grid');
-            let data = type === 'all' ? products : products.filter(p => p.type === type);
-            
-            // Apply personalization for 'all' category
-            if (type === 'all') {
-                data = getPersonalizedProductOrder(data);
-            }
-            
-            document.getElementById('item-count').innerText = `${data.length} Items`;
-            
-            grid.innerHTML = data.map((p, i) => `
-                <div class="group bg-white rounded-2xl p-2 border border-transparent shadow-sm hover:shadow-soft transition-all duration-300 tap-active animate-slide-up img-wrapper relative" 
-                     style="animation-delay: ${i*0.05}s" onclick="openProduct(${p.id})">
-                    ${type === 'all' && state.user && i < 3 && state.userBehavior[state.user.email] && 
-                     state.userBehavior[state.user.email].searches.length > 0 ? `
-                        <div class="for-you-badge flex items-center gap-1">
-                            <i data-lucide="sparkles" class="w-3 h-3"></i> For You
-                        </div>
-                    ` : ''}
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative bg-gray-100 mb-3">
-                        <img src="${p.img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        ${p.originalPrice ? `
-                            <div class="absolute top-2 right-2 bg-red-500 text-white text-[10px] px-2 py-1 rounded-full font-bold">
-                                SALE
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="px-1">
-                        <h3 class="font-bold text-forest text-sm truncate">${p.name}</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">${p.type.replace('-', ' ')}</p>
-                        <div class="flex items-center gap-2">
-                            <span class="text-base font-bold text-forest">₹${p.price}</span>
-                            ${p.originalPrice ? `<span class="text-xs text-gray-300 line-through">₹${p.originalPrice}</span>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            lucide.createIcons();
-        }
-
-        function openProduct(id) {
-            playSound('click');
-            const p = products.find(x => x.id === id);
-            if (!p) return;
-            
-            state.currentItem = p;
-            state.tempQty = 1;
-
-            // Track product view
-            trackUserBehavior('view', p);
-
-            document.getElementById('modal-img').src = p.img;
-            document.getElementById('modal-title').innerText = p.name;
-            document.getElementById('modal-price').innerText = `₹${p.price}`;
-            document.getElementById('modal-original-price').innerText = p.originalPrice ? `₹${p.originalPrice}` : '';
-            document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-tag').innerText = p.type.replace('-', ' ');
-            document.getElementById('qty-display').innerText = '1';
-
-            const m = document.getElementById('product-modal');
-            m.classList.add('active');
-        }
-
-        // --- CART & CHECKOUT LOGIC ---
-        function addToCart() {
-            if (!state.currentItem) return;
-            
-            const existing = state.cart.find(i => i.id === state.currentItem.id);
-            if(existing) existing.qty += state.tempQty;
-            else state.cart.push({...state.currentItem, qty: state.tempQty});
-            
-            saveCart();
-            closeModal('product-modal');
-            playSound('success');
-            
-            // Show notification instead of redirecting
-            showNotification(`${state.tempQty} × ${state.currentItem.name} added to cart!`);
-            
-            const badge = document.getElementById('cart-badge');
-            badge.classList.remove('scale-0');
-            badge.classList.add('scale-125');
-            setTimeout(() => badge.classList.remove('scale-125'), 200);
-        }
-
-        function directBuy() {
-            if (!state.currentItem) return;
-            
-            // For direct buy, create a temporary order with ONLY the current item
-            // We don't add it to the cart permanently
-            state.tempDirectOrder = [{
-                ...state.currentItem, 
-                qty: state.tempQty
-            }];
-            state.isDirectBuy = true;
-            
-            closeModal('product-modal');
-            
-            if(state.user && state.user.name && state.user.phone && state.user.address) {
-                // Send only the current item to WhatsApp, not the entire cart
-                sendDirectToWhatsApp(state.tempDirectOrder, state.user.name, state.user.phone, state.user.address);
-                // Clear temp data
-                state.tempDirectOrder = null;
-                state.isDirectBuy = false;
-            } else {
-                // Open delivery modal to collect details
-                const m = document.getElementById('delivery-modal');
-                m.classList.add('active');
-                setTimeout(() => {
-                    m.querySelector('.sheet-content').classList.remove('scale-95', 'opacity-0');
-                }, 10);
-            }
-        }
-
-        function sendDirectToWhatsApp(items, name, phone, address) {
-            let msg = `*NEW ORDER - LIGHTSPROUTS* 🌱\n`;
-            msg += `Customer: ${name}\n`;
-            msg += `Phone: ${phone}\n`;
-            msg += `Address: ${address}\n\n`;
-            msg += `*ORDER DETAILS:*\n`;
-            
-            let total = 0;
-            items.forEach((i, index) => {
-                const itemTotal = i.price * i.qty;
-                total += itemTotal;
-                msg += `${index + 1}. ${i.qty}x ${i.name} - ₹${itemTotal}\n`;
-            });
-            
-            msg += `\n*Subtotal: ₹${total}*\n`;
-            msg += `*Shipping: FREE*\n`;
-            msg += `*Total: ₹${total}*\n\n`;
-            msg += `Please confirm this order.`;
-
-            // Create order record for history
-            if (state.user) {
-                const orderData = {
-                    orderId: 'LS' + Date.now().toString().slice(-8),
-                    timestamp: new Date().toISOString(),
-                    customerName: name,
-                    customerPhone: phone,
-                    address: address,
-                    items: items.map(item => ({
-                        name: item.name,
-                        quantity: item.qty,
-                        price: item.price,
-                        total: item.price * item.qty
-                    })),
-                    total: total,
-                    status: 'Processing',
-                    type: 'direct_buy'
-                };
-                savePurchase(orderData);
-            }
-
-            playSound('success');
-            
-            // Redirect to WhatsApp
-            window.open(`https://wa.me/91${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function saveAndProceedCheckout(e) {
-            e.preventDefault();
-            const name = document.getElementById('d-name').value;
-            const phone = document.getElementById('d-phone').value;
-            const address = document.getElementById('d-address').value;
-
-            if(state.user) {
-                state.user.name = name;
-                state.user.phone = phone;
-                state.user.address = address;
-                localStorage.setItem('ls_user_profile', JSON.stringify(state.user));
-            }
-
-            closeModal('delivery-modal');
-            
-            if (state.isDirectBuy && state.tempDirectOrder) {
-                // Handle direct buy flow
-                sendDirectToWhatsApp(state.tempDirectOrder, name, phone, address);
-                // Clear temp data
-                state.tempDirectOrder = null;
-                state.isDirectBuy = false;
-            } else {
-                // Handle cart checkout flow
-                sendToWhatsApp(name, phone, address);
-            }
-        }
-
-        function sendToWhatsApp(name, phone, address) {
-            let msg = `*NEW ORDER - LIGHTSPROUTS* 🌱\n`;
-            msg += `Customer: ${name}\n`;
-            msg += `Phone: ${phone}\n`;
-            msg += `Address: ${address}\n\n`;
-            msg += `*ORDER DETAILS:*\n`;
-            
-            let total = 0;
-            state.cart.forEach((i, index) => {
-                const itemTotal = i.price * i.qty;
-                total += itemTotal;
-                msg += `${index + 1}. ${i.qty}x ${i.name} - ₹${itemTotal}\n`;
-            });
-            
-            msg += `\n*Subtotal: ₹${total}*\n`;
-            msg += `*Shipping: FREE*\n`;
-            msg += `*Total: ₹${total}*\n\n`;
-            msg += `Please confirm this order.`;
-
-            // Create order record for history
-            const orderData = {
-                orderId: 'LS' + Date.now().toString().slice(-8),
-                timestamp: new Date().toISOString(),
-                customerName: name,
-                customerPhone: phone,
-                address: address,
-                items: state.cart.map(item => ({
-                    name: item.name,
-                    quantity: item.qty,
-                    price: item.price,
-                    total: item.price * item.qty
-                })),
-                total: total,
-                status: 'Processing'
-            };
-
-            // Save to purchase history
-            savePurchase(orderData);
-
-            // Clear cart after successful order
-            state.cart = [];
-            saveCart();
-            closeModal('cart-drawer');
-            playSound('success');
-            
-            // Redirect to WhatsApp
-            window.open(`https://wa.me/91${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function removeFromCart(productId, element) {
-            playSound('remove');
-            
-            element.closest('.cart-item').classList.add('removing');
-            
-            setTimeout(() => {
-                state.cart = state.cart.filter(item => item.id !== productId);
-                saveCart();
-                openCart();
-            }, 300);
-        }
-
-        function openCart() {
-            playSound('click');
-            const m = document.getElementById('cart-drawer');
-            m.classList.add('active');
-            setTimeout(() => m.querySelector('.sheet-content').classList.remove('translate-x-full'), 10);
-            
-            const cont = document.getElementById('cart-items-container');
-            let total = 0;
-            
-            if(state.cart.length === 0) {
-                cont.innerHTML = '<div class="text-center py-10"><i data-lucide="shopping-bag" class="w-12 h-12 mx-auto text-gray-300 mb-4"></i><p class="text-gray-400">Your cart is empty</p></div>';
-            } else {
-                cont.innerHTML = state.cart.map(i => {
-                    const itemTotal = i.price * i.qty;
-                    total += itemTotal;
-                    return `
-                    <div class="cart-item flex gap-3 bg-white p-4 rounded-xl border border-gray-100 transition-all duration-300">
-                        <img src="${i.img}" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="flex-grow">
-                            <h4 class="font-bold text-forest text-sm mb-1">${i.name}</h4>
-                            <p class="text-xs text-gray-400 mb-2">${i.type.replace('-', ' ')}</p>
-                            <div class="flex items-center gap-3">
-                                <div class="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-2 h-8">
-                                    <button onclick="updateCartQty(${i.id}, -1, this)" class="w-6 h-full flex items-center justify-center text-forest text-sm">-</button>
-                                    <span class="w-6 text-center font-bold text-forest text-sm">${i.qty}</span>
-                                    <button onclick="updateCartQty(${i.id}, 1, this)" class="w-6 h-full flex items-center justify-center text-forest text-sm">+</button>
-                                </div>
-                                <span class="font-bold text-forest">₹${itemTotal}</span>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart(${i.id}, this)" class="text-red-400 hover:text-red-600 p-2 self-start transition-colors tap-active">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
-                    </div>`;
-                }).join('');
-                
-                lucide.createIcons();
-            }
-            
-            document.getElementById('cart-total-price').innerText = `₹${total}`;
-        }
-
-        function updateCartQty(productId, delta, button) {
-            playSound('click');
-            const item = state.cart.find(i => i.id === productId);
-            if (item) {
-                const newQty = item.qty + delta;
-                if (newQty < 1) {
-                    removeFromCart(productId, button);
-                } else {
-                    item.qty = newQty;
-                    saveCart();
-                    openCart();
-                }
-            }
-        }
-
-        // --- UTILITY FUNCTIONS ---
-        function adjustQty(d) {
-            if(state.tempQty + d > 0) {
-                state.tempQty += d;
-                document.getElementById('qty-display').innerText = state.tempQty;
-                playSound('click');
-            }
-        }
-
-        function closeModal(id) {
-            playSound('click');
-            const m = document.getElementById(id);
-            if(id === 'cart-drawer') {
-                m.querySelector('.sheet-content').classList.add('translate-x-full');
-                setTimeout(() => m.classList.remove('active'), 300);
-            } else if (id === 'delivery-modal') {
-                m.querySelector('.sheet-content').classList.add('scale-95', 'opacity-0');
-                setTimeout(() => m.classList.remove('active'), 300);
-            } else if (id === 'profile-modal' || id === 'auth-modal') {
-                m.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-                m.querySelector('div.relative').classList.add('scale-95');
-            } else if (id === 'search-modal') {
-                m.classList.remove('active');
-                document.getElementById('search-input').value = '';
-            } else {
-                m.classList.remove('active');
-            }
-        }
-
-        function openSearch() {
-            playSound('click');
-            document.getElementById('search-modal').classList.add('active');
-            setTimeout(() => document.getElementById('search-input').focus(), 100);
-        }
-
-        function handleSearch(q) {
-            // Track search query
-            trackUserBehavior('search', q);
-            
-            const res = products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
-            document.getElementById('search-results').innerHTML = res.map(p => `
-                <div onclick="closeModal('search-modal'); openProduct(${p.id})" class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl tap-active">
-                    <img src="${p.img}" class="w-12 h-12 rounded-lg object-cover">
-                    <div><h4 class="font-bold text-forest">${p.name}</h4><p class="text-xs text-gray-500">₹${p.price}</p></div>
-                </div>
-            `).join('');
-        }
-
-        function saveCart() {
-            localStorage.setItem('ls_cart', JSON.stringify(state.cart));
-            const totalItems = state.cart.reduce((a,b)=>a+b.qty,0);
-            const badge = document.getElementById('cart-badge');
-            badge.innerText = totalItems;
-            if(totalItems > 0) badge.classList.remove('scale-0');
-            else badge.classList.add('scale-0');
-        }
-
-        function updateUI() {
-            const btn = document.getElementById('login-button');
-            const profile = document.getElementById('user-profile');
-            const avatar = document.getElementById('user-avatar');
-            
-            if(state.user) {
-                btn.classList.add('hidden');
-                profile.classList.remove('hidden');
-                profile.classList.add('flex');
-                avatar.innerText = state.user.name ? state.user.name[0].toUpperCase() : 'U';
-                document.getElementById('user-icon-mobile').setAttribute('data-lucide', 'user-check');
-            } else {
-                btn.classList.remove('hidden');
-                profile.classList.add('hidden');
-                profile.classList.remove('flex');
-                document.getElementById('user-icon-mobile').setAttribute('data-lucide', 'user');
-            }
-            lucide.createIcons();
-        }
-
-        // --- INITIALIZATION ---
-        window.addEventListener('load', () => {
-            // Load saved data
-            const savedHistory = localStorage.getItem('ls_purchase_history');
-            if (savedHistory) {
-                state.purchaseHistory = JSON.parse(savedHistory);
-            }
-            
-            const savedBehavior = localStorage.getItem('ls_user_behavior');
-            if (savedBehavior) {
-                state.userBehavior = JSON.parse(savedBehavior);
-            }
-            
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                }, 700);
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 700);
             }, 1500);
-            
-            filterProducts('all');
-            saveCart();
-            updateUI();
-            lucide.createIcons();
-        });
+            loadTrack(0);
+        };
 
-        // Make functions globally available
-        window.openAuthModal = openAuthModal;
-        window.closeAuthModal = closeAuthModal;
-        window.openProfileModal = openProfileModal;
-        window.closeProfileModal = closeProfileModal;
-        window.switchAuthTab = switchAuthTab;
-        window.loginWithEmail = loginWithEmail;
-        window.registerWithEmail = registerWithEmail;
-        window.signInWithGoogle = signInWithGoogle;
-        window.logout = logout;
-        window.openAccount = openAccount;
-        window.filterProducts = filterProducts;
-        window.openProduct = openProduct;
-        window.addToCart = addToCart;
-        window.directBuy = directBuy;
-        window.handleCheckout = handleCheckout;
-        window.saveAndProceedCheckout = saveAndProceedCheckout;
-        window.removeFromCart = removeFromCart;
-        window.openCart = openCart;
-        window.updateCartQty = updateCartQty;
-        window.adjustQty = adjustQty;
-        window.closeModal = closeModal;
-        window.openSearch = openSearch;
-        window.handleSearch = handleSearch;
-        window.playSound = playSound;
+        // --- Logic ---
+        function loadTrack(index) {
+            currentIndex = index;
+            const track = playlist[index];
+            
+            audio.src = track.src;
+            
+            // Update UI Text
+            els.miniTitle.innerText = track.title;
+            els.miniArtist.innerText = track.artist;
+            els.fullTitle.innerText = track.title;
+            els.fullArtist.innerText = track.artist;
+            
+            // Update Images
+            els.miniArt.src = track.cover;
+            els.fullArt.src = track.cover;
+            els.blurBg.src = track.cover;
+            
+            updatePlayState(false);
+        }
+
+        function playTrack(index) {
+            if(index !== currentIndex) {
+                loadTrack(index);
+                togglePlay();
+                miniPlayer.classList.remove('translate-y-[200%]');
+                miniPlayer.classList.add('translate-y-0');
+            } else {
+                toggleFullPlayer(true);
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+                // Ensure mini player is visible if playing starts
+                miniPlayer.classList.remove('translate-y-[200%]');
+                miniPlayer.classList.add('translate-y-0');
+            }
+        }
+
+        function updatePlayState(playing) {
+            isPlaying = playing;
+            const icon = playing ? 'ph-pause' : 'ph-play';
+            
+            els.mainPlayIcon.className = `ph-fill ${icon} text-4xl ml-1`;
+            els.miniPlayBtn.innerHTML = `<i class="ph-fill ${icon} text-2xl"></i>`;
+            
+            // Animations
+            if(playing) {
+                els.miniArt.style.animationPlayState = 'running';
+                els.albumGlow.style.opacity = '0.6';
+                els.albumGlow.style.filter = 'blur(40px)';
+                els.miniWave.classList.remove('hidden');
+            } else {
+                els.miniArt.style.animationPlayState = 'paused';
+                els.albumGlow.style.opacity = '0.3';
+                els.albumGlow.style.filter = 'blur(30px)';
+                els.miniWave.classList.add('hidden');
+            }
+        }
+
+        // Audio Events
+        audio.onplay = () => updatePlayState(true);
+        audio.onpause = () => updatePlayState(false);
+        
+        audio.ontimeupdate = () => {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            els.miniProgress.style.width = `${pct}%`;
+            els.seek.value = pct || 0;
+            
+            els.currTime.innerText = formatTime(audio.currentTime);
+            els.durTime.innerText = formatTime(audio.duration);
+            
+            // Slider Track Fill
+            const val = els.seek.value;
+            els.seek.style.background = `linear-gradient(to right, #00ff66 ${val}%, rgba(255,255,255,0.1) ${val}%)`;
+        };
+
+        els.seek.oninput = () => {
+            const time = (els.seek.value / 100) * audio.duration;
+            audio.currentTime = time;
+        };
+
+        function skip(sec) {
+            audio.currentTime += sec;
+        }
+
+        function toggleFullPlayer(show) {
+            if(show) {
+                fullPlayer.classList.remove('translate-y-[100%]');
+            } else {
+                fullPlayer.classList.add('translate-y-[100%]');
+            }
+        }
+
+        function toggleLike() {
+            isLiked = !isLiked;
+            const icon = els.likeBtn.querySelector('i');
+            if(isLiked) {
+                els.likeBtn.classList.add('text-red-500');
+                els.likeBtn.classList.remove('text-white/30');
+            } else {
+                els.likeBtn.classList.remove('text-red-500');
+                els.likeBtn.classList.add('text-white/30');
+            }
+        }
+
+        function switchView(viewName) {
+            // Hide all views
+            ['home', 'search', 'library'].forEach(v => {
+                document.getElementById('view-' + v).classList.add('hidden');
+            });
+            // Show target view
+            document.getElementById('view-' + viewName).classList.remove('hidden');
+            
+            // Update Nav Icons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-primary');
+                btn.classList.add('text-white/40');
+                const i = btn.querySelector('i');
+                i.classList.remove('ph-fill');
+                i.classList.add('ph');
+            });
+            
+            const activeBtn = event.currentTarget;
+            activeBtn.classList.add('text-primary');
+            activeBtn.classList.remove('text-white/40');
+            const activeI = activeBtn.querySelector('i');
+            activeI.classList.remove('ph');
+            activeI.classList.add('ph-fill');
+        }
+
+        function formatTime(s) {
+            if(!s || isNaN(s)) return "0:00";
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+        }
     </script>
 </body>
 </html>
